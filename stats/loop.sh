@@ -1,0 +1,1 @@
+while true ; do php counter.php & sleep 5; done
