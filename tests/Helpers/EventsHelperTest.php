@@ -63,7 +63,7 @@ class EventsHelperTest extends TestCase
 
     public function testGetProbabilityForResult()
     {
-        $p = $this->eventsHelper->getProbabilityForResult(1, 'x', false);
+        $p = $this->eventsHelper->getProbabilityForResult(1, ['x'], false);
 
         $this->assertEquals(0.7, $p);
     }

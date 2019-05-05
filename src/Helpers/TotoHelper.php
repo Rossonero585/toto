@@ -60,6 +60,30 @@ class TotoHelper
         return $ratio;
     }
 
+    public function getRatioByCategory(int $cat, BreakDown $breakDown)
+    {
+        $winCounts = array_keys($this->toto->getWinnerCounts());
+
+        $maxWinCount = max($winCounts);
+
+        if ($cat <= 0 || $cat > $maxWinCount) {
+            throw new \Exception("The count of events is out of range");
+        }
+
+        if (!in_array($cat, $winCounts)) {
+            return 0;
+        }
+
+        $breakDownItem = $breakDown->getBreakDownItem($cat);
+
+        $betPot = $breakDownItem ? $breakDownItem->getPot() : 0;
+
+        $pot = $this->getPotForWinCount($cat);
+
+        return ($pot + $this->bet) / ($betPot + $this->bet);
+
+    }
+
     public function iterateWinnerCombinations(array $bet)
     {
         if (count($bet) != $this->toto->getEventCount()) {

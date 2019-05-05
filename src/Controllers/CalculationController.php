@@ -12,10 +12,8 @@ use drupol\phpermutations\Generators\Combinations;
 use Helpers\ArrayHelper;
 use Helpers\EventsHelper;
 use Helpers\TotoHelper;
-use Models\Event;
 use Repositories\EventRepository;
 use Repositories\PoolRepository;
-use Repositories\PreparedResultRepository;
 use Repositories\TotoRepository;
 
 class CalculationController
@@ -58,7 +56,7 @@ class CalculationController
     }
 
 
-    public function calculateRatioAction(array $results)
+    public function calculateRatioAction(array $results, int $cat)
     {
         $totoRepository = new TotoRepository();
 
@@ -76,9 +74,9 @@ class CalculationController
 
         $breakDown = $poolRepository->getWinnersBreakDown($results);
 
-        $totoHelper = new TotoHelper($toto, 58.12);
+        $totoHelper = new TotoHelper($toto, 50);
 
-        $ratio = $totoHelper->getRatioByWinCount(10, $breakDown);
+        $ratio = $totoHelper->getRatioByCategory($cat, $breakDown);
 
         return $ratio;
     }
@@ -147,4 +145,126 @@ class CalculationController
         return [$m, $pWin];
     }
 
+    public function calculateExpectedRatioForCategory(array $bet, float $betSize, int $cat)
+    {
+        $totoRepository = $this->getTotoRepository();
+
+        $totoHelper = new TotoHelper($totoRepository->getToto(), $betSize);
+
+        $eventRepository = $this->getEventsRepository();
+
+        $eventHelper = new EventsHelper($eventRepository->getAll());
+
+        $poolRepository = $this->getPoolRepository();
+
+        $toto = $totoRepository->getToto();
+
+        $range = range(1, $toto->getEventCount());
+
+        $combinations = new Combinations($range, $cat);
+
+        $sumP = 0;
+
+        $sumRatio = 0;
+
+        $map = [];
+
+        /** @var array $item */
+        foreach ($combinations->generator() as $comb) {
+
+            foreach (ArrayHelper::fillCombination($bet, $comb) as $betItem) {
+
+                $key = implode("", $betItem);
+
+                if (!isset($map[$key]) && ArrayHelper::countMatchResult($bet, $betItem) == $cat) {
+
+                    $p = $eventHelper->calculateProbabilityOfAllEvents($betItem);
+
+                    $breakDown = $poolRepository->getWinnersBreakDown($betItem);
+
+                    $ratio = $totoHelper->getRatioByCategory($cat, $breakDown);
+
+                    $sumRatio += $p*$ratio;
+
+                    $sumP += $p;
+
+                    $map[$key] = 1;
+                }
+
+            }
+        }
+
+        return [$sumP, $sumRatio / $sumP];
+
+    }
+
+    public function calculateProbabilityOfPackage($pathToFile)
+    {
+        $totoRepository = $this->getTotoRepository();
+
+        $toto = $totoRepository->getToto();
+
+        $eventRepository = $this->getEventsRepository();
+
+        $eventHelper = new EventsHelper($eventRepository->getAll());
+
+        $content = file_get_contents($pathToFile);
+
+        $lines = explode(PHP_EOL, $content);
+
+        $bets = array_map(
+            function($l) {
+                $items = explode(";", $l);
+                array_shift($items);
+                array_pop($items);
+                return array_map(function($item) {
+                    return explode("=", $item)[1];
+                }, $items);
+            },
+            $lines
+        );
+
+        $map = [];
+
+        $sumP = 0;
+
+        $winnerCounts = array_keys($toto->getWinnerCounts());
+
+        $winnerCounts = array_reverse($winnerCounts);
+
+        foreach ($bets as $bet) {
+
+            foreach ($winnerCounts as $count) {
+
+                $combinations = new Combinations(range(1, $toto->getEventCount()), $count);
+
+                foreach ($combinations->generator() as $combination) {
+
+                    foreach (ArrayHelper::fillCombination($bet, $combination) as $betItem) {
+
+                        $key = implode("", $betItem);
+
+                        if (!isset($map[$key])) {
+
+                            $p = $eventHelper->calculateProbabilityOfAllEvents($betItem);
+
+                            $sumP += $p;
+
+                            $map[$key] = 1;
+                        }
+
+                    }
+                }
+            }
+        }
+
+        return $sumP;
+    }
+
+    private function writeLog(string $file, $line)
+    {
+        $path = __DIR__."./../../stats/".$file;
+
+        file_put_contents($path, $line.PHP_EOL, FILE_APPEND);
+    }
 }

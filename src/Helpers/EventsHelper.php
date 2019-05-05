@@ -49,7 +49,7 @@ class EventsHelper
 
             $success = in_array($eventId, $win);
 
-            $p = $p * $this->getProbabilityForResult($eventId, $item, $success);
+            $p = $p * $this->getProbabilityForResult($eventId, [$item], $success);
         }
 
         return $p;
@@ -63,7 +63,7 @@ class EventsHelper
 
             $eventId = $key + 1;
 
-            $p = $p * $this->getProbabilityForResult($eventId, $item);
+            $p = $p * $this->getProbabilityForResult($eventId, [$item]);
         }
 
         return $p;
@@ -71,7 +71,7 @@ class EventsHelper
 
     /**
      * @param int $eventId
-     * @param mixed $result
+     * @param array $result
      * @param bool $success
      * @return float|int
      * @throws \Exception
@@ -84,18 +84,16 @@ class EventsHelper
             throw new \Exception("Unknown event with id $eventId");
         }
 
-        switch ($result) {
-            case '1':
-                return $success ? $event->getP1() : 1 - $event->getP1();
-                break;
-            case 'x':
-                return $success ? $event->getPx() : 1 - $event->getPx();
-                break;
-            case '2':
-                return $success ? $event->getP2() : 1 - $event->getP2();
-            default:
-                throw new \Exception("Incorrect result $result");
-        }
+        $p = 0;
+
+        if (in_array(1, $result))   $p = $p + $event->getP1();
+        if (in_array('x', $result) || in_array('X', $result)) $p = $p + $event->getPx();
+        if (in_array(2, $result))   $p = $p + $event->getP2();
+
+        if ($p == 0) throw new \Exception("Unknown result ".implode(",", $result));
+
+        return $success ? $p : 1 - $p;
+
     }
 
 

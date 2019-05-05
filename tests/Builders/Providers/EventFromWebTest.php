@@ -15,7 +15,7 @@ class EventFromWebTest extends TestCase
 {
     private function createMockEventFromWeb()
     {
-        return new EventFromWeb(json_decode(file_get_contents(__DIR__."./totoItem.json")), 0);
+        return new EventFromWeb(json_decode(file_get_contents(__DIR__."/totoItem.json")), 0);
     }
 
     public function testGetId()

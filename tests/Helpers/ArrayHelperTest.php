@@ -55,6 +55,32 @@ class ArrayHelperTest extends TestCase
         $this->assertEquals(9, $count);
     }
 
+    public function testCombineArrays()
+    {
+        $testedArr = [
+            [[1], [2], ['x']],
+            [['x'], [2], ['x']],
+            [[2], [1], ['x']],
+        ];
+
+        $outArr = ArrayHelper::array_combine($testedArr);
+
+        $this->assertTrue($this->areArraysSimilar(
+            [1,'x',2],
+           $outArr[0]
+        ));
+
+        $this->assertTrue($this->areArraysSimilar(
+            [2,1],
+            $outArr[1]
+        ));
+
+        $this->assertTrue($this->areArraysSimilar(
+            ['x'],
+            $outArr[2]
+        ));
+    }
+
     public function areArraysSimilar(array $arr1, array $arr2)
     {
         return count(array_diff($arr1, $arr2)) === 0;

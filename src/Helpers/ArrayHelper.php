@@ -57,7 +57,7 @@ class ArrayHelper
                 $out[] = $item;
             }
             else {
-                $out[] = array_diff(['1', 'x', '2'], [$item]);
+                $out[] = array_diff(['1', 'X', '2'], [$item]);
             }
         }
 
@@ -83,7 +83,7 @@ class ArrayHelper
             return;
         }
 
-        $permutation = new RepeatedPermutation(['1', 'x', '2'], $needToAdd);
+        $permutation = new RepeatedPermutation(['1', 'X', '2'], $needToAdd);
 
         foreach ($permutation->generator() as $perm)
         {
@@ -120,5 +120,39 @@ class ArrayHelper
         }
 
         return $k;
+    }
+
+    /**
+     * @param array $lines
+     * @return array
+     * @throws \Exception
+     */
+    public static function array_combine(array $lines)
+    {
+        if (!count($lines)) {
+            throw new \Exception("Incorrect argument");
+        }
+
+        $count = count($lines[0]);
+
+        foreach ($lines as $line) {
+            if ($count !== count($line)) {
+                throw new \Exception("Arrays should have equal size");
+            }
+        }
+
+        $firstLine = array_shift($lines);
+
+        foreach ($lines as $line) {
+            foreach ($line as $key => $item) {
+                foreach ($item as $value) {
+                    if (!in_array($value, $firstLine[$key])) {
+                        array_push($firstLine[$key], $value);
+                    }
+                }
+            }
+        }
+
+        return $firstLine;
     }
 }
