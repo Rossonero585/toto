@@ -298,7 +298,7 @@ class CalculationController
 
                             $totoHelper = new TotoHelper($toto, $betSize);
 
-                            $breakDown = $poolRepository->getWinnersBreakDown($betItem);
+                            $breakDown = $poolRepository->getWinnersBreakDownUsingCache($betItem);
 
                             $ratio = $totoHelper->getRatioByWinCount($count, $breakDown);
 
