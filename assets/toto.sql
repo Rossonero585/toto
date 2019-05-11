@@ -66,6 +66,34 @@ CREATE TABLE `toto` (
   `winner_counts` varchar(255) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+
+
+--
+-- Структура таблицы `bet_items`
+--
+
+DROP TABLE IF EXISTS `bet_items`;
+CREATE TABLE `bet_items` (
+  `bet_id` int(11) NOT NULL,
+  `bet` varchar(20) DEFAULT NULL,
+  `money` float(7,5) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+--
+-- Структура таблицы `bets`
+--
+
+DROP TABLE IF EXISTS `bets`;
+CREATE TABLE `bets` (
+  `id` int(11) NOT NULL,
+  `money` decimal(8,2) DEFAULT NULL,
+  `probability` float(7,5) DEFAULT NULL,
+  `expected_ev` float(7,5) DEFAULT NULL,
+  `income` float(7,5) DEFAULT NULL,
+  `bet_time` datetime DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+
 --
 -- Индексы сохранённых таблиц
 --

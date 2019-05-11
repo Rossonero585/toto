@@ -14,6 +14,7 @@ use Builders\TotoBuilder;
 use Helpers\ArrayHelper;
 use Models\BreakDown;
 use Models\BreakDownItem;
+use Repositories\BetsRepository;
 use Repositories\EventRepository;
 use Repositories\PoolRepository;
 use Repositories\PreparedResultRepository;
@@ -80,6 +81,21 @@ class UpdateController
         $totoRepository = new PoolRepository();
 
         $totoRepository->insertFromFile($text);
+    }
+
+    public function insertMyBetsAction($fileName)
+    {
+        $betsRepository = new BetsRepository();
+
+        //TODO calculate ev (too long)
+
+        $p = (new CalculationController())->calculateProbabilityOfPackage($fileName);
+
+        $betsRepository->insertFromBetsFile(
+            file_get_contents($fileName),
+            $p,
+            0.0
+        );
     }
 
     public function updateBreakDownsAction()

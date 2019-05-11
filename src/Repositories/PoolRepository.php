@@ -9,9 +9,14 @@
 namespace Repositories;
 use Builders\BreakDownBuilder;
 use Helpers\ArrayHelper;
+use Models\BreakDown;
 
 class PoolRepository extends Repository
 {
+    /** @var  BreakDown[] */
+    private $breakDowns = [];
+
+
     public function insertFromFile($str)
     {
         $sql = <<<EOD
@@ -114,6 +119,19 @@ EOT;
         $row = " ($row), ";
 
         return $row;
+    }
+
+    public function getWinnersBreakDownUsingCache(array $results)
+    {
+        $key = md5(json_encode($results));
+
+        if (isset($this->breakDowns[$key])) {
+            return $this->breakDowns[$key];
+        }
+
+        $this->breakDowns[$key] = $this->getWinnersBreakDown($results);
+
+        return $this->breakDowns[$key];
     }
 
 

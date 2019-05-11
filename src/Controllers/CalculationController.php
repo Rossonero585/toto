@@ -208,21 +208,7 @@ class CalculationController
 
         $eventHelper = new EventsHelper($eventRepository->getAll());
 
-        $content = file_get_contents($pathToFile);
-
-        $lines = explode(PHP_EOL, $content);
-
-        $bets = array_map(
-            function($l) {
-                $items = explode(";", $l);
-                array_shift($items);
-                array_pop($items);
-                return array_map(function($item) {
-                    return explode("=", $item)[1];
-                }, $items);
-            },
-            $lines
-        );
+        list($bets, $betSize, $money) = $this->getBetsFromFile($pathToFile);
 
         $map = [];
 
@@ -259,6 +245,103 @@ class CalculationController
         }
 
         return $sumP;
+    }
+
+    public function calculateEvOfPackage($pathToFile)
+    {
+        $totoRepository = $this->getTotoRepository();
+
+        $toto = $totoRepository->getToto();
+
+        $eventRepository = $this->getEventsRepository();
+
+        $poolRepository = $this->getPoolRepository();
+
+        $eventHelper = new EventsHelper($eventRepository->getAll());
+
+        list($bets, $betSize, $money) = $this->getBetsFromFile($pathToFile);
+
+        $commonMap = [];
+
+        $pWin = 0;
+
+        $m = 0;
+
+        $winnerCounts = array_keys($toto->getWinnerCounts());
+
+        $winnerCounts = array_reverse($winnerCounts);
+
+        foreach ($bets as $bet) {
+
+            $tempMap = [];
+
+            foreach ($winnerCounts as $count) {
+
+                $combinations = new Combinations(range(1, $toto->getEventCount()), $count);
+
+                foreach ($combinations->generator() as $combination) {
+
+                    foreach (ArrayHelper::fillCombination($bet, $combination) as $betItem) {
+
+                        $key = implode("", $betItem);
+
+                        if (!isset($commonMap[$key])) {
+
+                            $p = $eventHelper->calculateProbabilityOfAllEvents($betItem);
+
+                            $pWin += $p;
+
+                            $commonMap[$key] = $p;
+                        }
+
+                        if (!isset($tempMap[$key])) {
+
+                            $totoHelper = new TotoHelper($toto, $betSize);
+
+                            $breakDown = $poolRepository->getWinnersBreakDown($betItem);
+
+                            $ratio = $totoHelper->getRatioByWinCount($count, $breakDown);
+
+                            $m = $m + $commonMap[$key] * ($ratio - 1) * $betSize;
+
+                            $tempMap[$key] = 1;
+                        }
+
+                    }
+                }
+            }
+        }
+
+        $m = $m - $money*(1 - $pWin);
+
+        return [$pWin,$m];
+
+    }
+
+    private function getBetsFromFile($pathToFile)
+    {
+        $content = file_get_contents($pathToFile);
+
+        $lines = explode(PHP_EOL, $content);
+
+        $betSize = 0;
+
+        $money = 0;
+
+        $bets = array_map(
+            function($l) use(&$betSize, &$money) {
+                $items = explode(";", $l);
+                $betSize = (float)array_shift($items);
+                $money += $betSize;
+                array_pop($items);
+                return array_map(function($item) {
+                    return explode("=", $item)[1];
+                }, $items);
+            },
+            $lines
+        );
+
+        return [$bets, $betSize, $money];
     }
 
     private function writeLog(string $file, $line)
