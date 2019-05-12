@@ -346,7 +346,7 @@ class CalculationController
 
     private function writeLog(string $file, $line)
     {
-        $path = __DIR__."./../../stats/".$file;
+        $path = ROOT_DIR.DIRECTORY_SEPARATOR."stats".DIRECTORY_SEPARATOR.$file;
 
         file_put_contents($path, $line.PHP_EOL, FILE_APPEND);
     }

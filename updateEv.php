@@ -2,14 +2,14 @@
 /**
  * Created by PhpStorm.
  * User: dmitry
- * Date: 11/05/19
- * Time: 12:38
+ * Date: 12/05/19
+ * Time: 15:54
  */
 
 include "autoload.php";
 
-$options = getopt(null, ['file:']);
+$options = getopt(null, ['id:']);
 
 $cu = new \Controllers\UpdateController();
 
-$cu->insertMyBetsAction($options['file']);
+$cu->updateBetsEv($options['id']);

@@ -6,7 +6,7 @@
  * Time: 13:18
  */
 
-include "vendor/autoload.php";
+include "autoload.php";
 
 $option = getopt("t:");
 

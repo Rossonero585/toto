@@ -90,7 +90,8 @@ CREATE TABLE `bets` (
   `probability` float(7,5) DEFAULT NULL,
   `expected_ev` float(7,5) DEFAULT NULL,
   `income` float(7,5) DEFAULT NULL,
-  `bet_time` datetime DEFAULT NULL
+  `bet_time` datetime DEFAULT NULL,
+  `last_bet_ev` float(7,5) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 

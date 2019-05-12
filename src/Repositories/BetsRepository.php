@@ -8,7 +8,8 @@
 
 namespace Repositories;
 
-use Helpers\ArrayHelper;
+
+use Models\Bet;
 
 class BetsRepository extends Repository
 {
@@ -77,5 +78,51 @@ EOD;
                 'bet_id' => $betId
             ]);
         }
+    }
+
+    /**
+     * @param int $id
+     * @return Bet[]
+     */
+    public function geBetsOfPackage(int $id)
+    {
+        $sql = <<<EOD
+SELECT * FROM bets b
+LEFT JOIN bet_items bi ON bi.bet_id = b.id
+WHERE b.id = :id
+EOD;
+
+        $st = $this->pdo->prepare($sql);
+
+        $st->execute(['id' => $id]);
+
+        $betArr = $st->fetchAll(\PDO::FETCH_ASSOC);
+
+        return array_map(function ($arr) {
+            return new Bet(
+                (float)$arr['money'],
+                str_split($arr['bet'])
+            );
+        }, $betArr);
+
+    }
+
+
+    /**
+     * @param int $id
+     * @param float $ev
+     * @return bool
+     */
+    public function updateLastBetEv(int $id, float $ev)
+    {
+        $sql = <<<EOD
+UPDATE bets
+SET last_bet_ev = :ev
+WHERE id =:id
+EOD;
+
+        $st = $this->pdo->prepare($sql);
+
+        return $st->execute(['id' => $id, 'ev' => $ev]);
     }
 }

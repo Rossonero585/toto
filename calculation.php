@@ -6,7 +6,7 @@
  * Time: 16:25
  */
 
-include "vendor/autoload.php";
+include "autoload.php";
 
 $cc = new \Controllers\CalculationController();
 ////
@@ -33,4 +33,4 @@ $cc = new \Controllers\CalculationController();
 //file_put_contents(__DIR__."/stats/ev_5501373.log", $ev.": ".$p.PHP_EOL, FILE_APPEND);
 //
 
-echo $cc->calculateProbabilityOfPackage("bet.txt");
+echo $cc->calculateProbabilityOfPackage(ROOT_DIR.DIRECTORY_SEPARATOR."bet.txt");

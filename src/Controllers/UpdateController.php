@@ -23,7 +23,7 @@ use Utils\Pdo;
 
 class UpdateController
 {
-    const ASSET_PATH = "./assets";
+    const ASSET_PATH = "assets";
 
     const BET_CITY = "https://hdr.betcity.ru";
 
@@ -37,7 +37,7 @@ class UpdateController
 
         $dbName = "toto_".$totoId;
 
-        $query = file_get_contents(self::ASSET_PATH."/toto.sql");
+        $query = file_get_contents(ROOT_DIR.DIRECTORY_SEPARATOR.self::ASSET_PATH.DIRECTORY_SEPARATOR."toto.sql");
 
         $query = str_replace("%toto_db_name%", $dbName, $query);
 
@@ -96,6 +96,19 @@ class UpdateController
             $p,
             0.0
         );
+    }
+
+    public function updateBetsEv(int $id)
+    {
+        $betsRepository = new BetsRepository();
+
+        $bets = $betsRepository->geBetsOfPackage($id);
+
+        $bet = array_pop($bets);
+
+        list($ev, $p) = (new CalculationController())->calculateEV($bet->getResults(), $bet->getMoney());
+
+        $betsRepository->updateLastBetEv($id, $ev);
     }
 
     public function updateBreakDownsAction()
