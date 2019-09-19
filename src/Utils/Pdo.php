@@ -12,7 +12,7 @@ class Pdo
 {
     const USER = 'root';
 
-    const PASSWORD = 'fgtkmcby';
+    const PASSWORD = 'toor';
 
     /**
      * @var \PDO

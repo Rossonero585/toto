@@ -111,6 +111,13 @@ class UpdateController
         $betsRepository->updateLastBetEv($id, $ev);
     }
 
+    public function checkInPool(array $bet)
+    {
+        $poloRepository = new PoolRepository();
+
+        return $poloRepository->getPoolItem($bet);
+    }
+
     public function updateBreakDownsAction()
     {
         $testedPool = [

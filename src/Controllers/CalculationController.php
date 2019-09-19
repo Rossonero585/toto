@@ -145,6 +145,71 @@ class CalculationController
         return [$m, $pWin];
     }
 
+
+    /**
+     * @param array $bet
+     * @param float $betSize
+     * @return array
+     */
+    public function calculateEVUsingArray(array $bet, float $betSize)
+    {
+        $totoRepository = $this->getTotoRepository();
+
+        $totoHelper = new TotoHelper($totoRepository->getToto(), $betSize);
+
+        $eventRepository = $this->getEventsRepository();
+
+        $eventHelper = new EventsHelper($eventRepository->getAll());
+
+        $poolRepository = $this->getPoolRepository();
+
+        $toto = $totoRepository->getToto();
+
+        $winnerCounts = array_keys($toto->getWinnerCounts());
+
+        $range = range(1, $toto->getEventCount());
+
+        $pWin = 0;
+
+        $m = 0;
+
+        $map = [];
+
+        $winnerCounts = array_reverse($winnerCounts);
+
+        foreach ($winnerCounts as $count) {
+
+            $combinations = new Combinations($range, $count);
+
+            foreach ($combinations->generator() as $combination) {
+
+                foreach (ArrayHelper::fillCombination($bet, $combination) as $betItem) {
+
+                    $key = implode(",", $betItem);
+
+                    if (!isset($map[$key])) {
+
+                        $p = $eventHelper->calculateProbabilityOfAllEvents($betItem);
+
+                        $breakDown = $poolRepository->getWinnersBreakDownUsingArray($betItem);
+
+                        $ratio = $totoHelper->getRatioByWinCount($count, $breakDown);
+
+                        $m = $m + $p * ($ratio - 1) * $betSize;
+
+                        $pWin = $pWin + $p;
+
+                        $map[$key] = $pWin;
+                    }
+                }
+            }
+        }
+
+        $m = $m - $betSize*(1 - $pWin);
+
+        return [$m, $pWin];
+    }
+
     public function calculateExpectedRatioForCategory(array $bet, float $betSize, int $cat)
     {
         $totoRepository = $this->getTotoRepository();

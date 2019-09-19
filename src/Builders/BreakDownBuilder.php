@@ -15,6 +15,10 @@ class BreakDownBuilder
 {
     public static function createBreakDownFromArray(array $a)
     {
+        usort($a, function($item1, $item2) {
+            return $item2['amount'] - $item1['amount'];
+        });
+
         $breakDownItems = [];
 
         $pot = 0;

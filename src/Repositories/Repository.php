@@ -31,7 +31,7 @@ class Repository
     protected function getCachedStatement(string $query)
     {
         if (!isset($this->cachedStatements[$query])) {
-            $this->cachedStatements[$query] = $this->pdo->query($query);
+            $this->cachedStatements[$query] = $this->pdo->prepare($query);
         }
 
         return $this->cachedStatements[$query];
