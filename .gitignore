@@ -1,3 +1,5 @@
 /vendor/
 /.idea/
 *.log
+.env
+*.txt

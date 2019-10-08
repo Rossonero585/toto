@@ -12,4 +12,4 @@ $options = getopt(null, ['id:']);
 
 $cu = new \Controllers\UpdateController();
 
-$cu->updateBetsEv($options['id']);
+$cu->updateBetsEv();

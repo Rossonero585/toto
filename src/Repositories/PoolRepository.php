@@ -98,7 +98,7 @@ EOD;
 
         $items = $st->fetch();
 
-        return $items ? new Bet((float)$items['money'], $bet) : null;
+        return $items ? new Bet(0, (float)$items['money'], $bet) : null;
     }
 
     private function addSqlRow($money, $code, $results)

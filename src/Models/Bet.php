@@ -9,16 +9,28 @@ namespace  Models;
 
 class Bet
 {
+    /** @var int */
+    private $id;
+
     /** @var  array */
     private $results;
 
     /** @var  float */
     private $money;
 
-    public function __construct(float $money, array $results)
+    public function __construct(int $id, float $money, array $results)
     {
+        $this->id = $id;
         $this->results = $results;
         $this->money = $money;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
     }
 
     /**
@@ -52,5 +64,4 @@ class Bet
     {
         $this->money = $money;
     }
-
 }

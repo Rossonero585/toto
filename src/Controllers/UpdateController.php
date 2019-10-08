@@ -83,32 +83,36 @@ class UpdateController
         $totoRepository->insertFromFile($text);
     }
 
-    public function insertMyBetsAction($fileName)
+
+    public function updateBetsEv()
     {
+        $cc = new CalculationController();
+
         $betsRepository = new BetsRepository();
 
-        //TODO calculate ev (too long)
+        $betPackages = $betsRepository->getAllPackages();
 
-        $p = (new CalculationController())->calculateProbabilityOfPackage($fileName);
+        foreach ($betPackages as $package) {
 
-        $betsRepository->insertFromBetsFile(
-            file_get_contents($fileName),
-            $p,
-            0.0
-        );
-    }
+            $id = (int)$package['id'];
 
-    public function updateBetsEv(int $id)
-    {
-        $betsRepository = new BetsRepository();
+            $allBets = array();
 
-        $bets = $betsRepository->geBetsOfPackage($id);
+            $bets = $betsRepository->geBetsOfPackage($id);
 
-        $bet = array_pop($bets);
+            foreach ($bets as $bet) {
 
-        list($ev, $p) = (new CalculationController())->calculateEV($bet->getResults(), $bet->getMoney());
+                list($ev, $p) = $cc->calculateEV($bet->getResults(), $bet->getMoney());
 
-        $betsRepository->updateLastBetEv($id, $ev);
+                $betsRepository->updateBetItemEv($bet->getId(), $ev, $p);
+
+                array_push($allBets, $bet->getResults());
+            }
+
+            $p = $cc->calculateProbabilityOfPackage($allBets);
+
+            $betsRepository->updateBetEv($id, null, $p);
+        }
     }
 
     public function checkInPool(array $bet)

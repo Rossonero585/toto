@@ -10,9 +10,6 @@ namespace Utils;
 
 class Pdo
 {
-    const USER = 'root';
-
-    const PASSWORD = 'toor';
 
     /**
      * @var \PDO
@@ -61,15 +58,15 @@ class Pdo
     {
         $totoId = self::getTotoId();
 
-        $dsn = "mysql:dbname=toto_$totoId;host=127.0.0.1;charset=utf8;port=3306";
+        $dsn = "mysql:dbname=toto_$totoId;host=".$_ENV['DB_HOST'].";charset=utf8;port=".$_ENV['DB_PORT'];
 
-        self::$pdo = new \PDO($dsn, self::USER, self::PASSWORD);
+        self::$pdo = new \PDO($dsn, $_ENV['DB_USER'], $_ENV['DB_PASSWORD']);
     }
 
     private static function createRootConnection()
     {
-        $dsn = "mysql:host=127.0.0.1;charset=utf8";
+        $dsn = "mysql:host=".$_ENV['DB_HOST'].";charset=utf8";
 
-        self::$pdo = new \PDO($dsn, self::USER, self::PASSWORD);
+        self::$pdo = new \PDO($dsn, $_ENV['DB_USER'], $_ENV['DB_PASSWORD']);
     }
 }

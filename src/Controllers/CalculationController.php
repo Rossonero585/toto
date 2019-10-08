@@ -263,7 +263,7 @@ class CalculationController
 
     }
 
-    public function calculateProbabilityOfPackage($pathToFile)
+    public function calculateProbabilityOfPackage(array $bets)
     {
         $totoRepository = $this->getTotoRepository();
 
@@ -272,8 +272,6 @@ class CalculationController
         $eventRepository = $this->getEventsRepository();
 
         $eventHelper = new EventsHelper($eventRepository->getAll());
-
-        list($bets, $betSize, $money) = $this->getBetsFromFile($pathToFile);
 
         $map = [];
 

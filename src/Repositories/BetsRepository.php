@@ -13,71 +13,20 @@ use Models\Bet;
 
 class BetsRepository extends Repository
 {
-    public function insertFromBetsFile($content, $probability, $expectedEv)
+
+    /**
+     * @return array
+     */
+    public function getAllPackages()
     {
-        $lines = explode(PHP_EOL, $content);
-
-        $sum = 0;
-
-        $bets = array_map(
-            function($l) use(&$sum) {
-
-                $items = explode(";", $l);
-
-                $money = (float)array_shift($items);
-
-                $sum += $money;
-
-                array_pop($items);
-
-                $tempArr = [];
-
-                $tempArr['sum'] = $money;
-
-                $bet = implode("", array_map(function($item) {
-                    return explode("=", $item)[1];
-                }, $items));
-
-                $tempArr['bet'] = $bet;
-
-                return $tempArr;
-            },
-            $lines
-        );
-
-
         $sql = <<<EOD
-INSERT IGNORE INTO bets
-          (money, probability, expected_ev, income, bet_time)
-VALUES (:money, :probability, :expected_ev, :income, :bet_time)
+SELECT * FROM bets 
 EOD;
         $st = $this->pdo->prepare($sql);
 
-        $st->execute([
-            "money" => $sum,
-            "probability" => $probability,
-            "expected_ev" => $expectedEv,
-            "income" => 0,
-            "bet_time" => (new \DateTime())->format("Y-m-d H:i:s")
-        ]);
+        $st->execute();
 
-        $betId = $this->pdo->lastInsertId();
-
-        $sql = <<<EOD
-INSERT IGNORE INTO bet_items
-          (bet_id, bet, money)
-VALUES (:bet_id, :bet, :money)
-EOD;
-
-        $st = $this->pdo->prepare($sql);
-
-        foreach ($bets as $b) {
-            $st->execute([
-                'bet' => $b['bet'],
-                'money' => $b['sum'],
-                'bet_id' => $betId
-            ]);
-        }
+        return $st->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     /**
@@ -87,7 +36,7 @@ EOD;
     public function geBetsOfPackage(int $id)
     {
         $sql = <<<EOD
-SELECT * FROM bets b
+SELECT bi.id as id, bi.money as money, bi.bet as bet FROM bets b
 LEFT JOIN bet_items bi ON bi.bet_id = b.id
 WHERE b.id = :id
 EOD;
@@ -100,6 +49,7 @@ EOD;
 
         return array_map(function ($arr) {
             return new Bet(
+                (int)$arr['id'],
                 (float)$arr['money'],
                 str_split($arr['bet'])
             );
@@ -108,21 +58,38 @@ EOD;
     }
 
 
-    /**
-     * @param int $id
-     * @param float $ev
-     * @return bool
-     */
-    public function updateLastBetEv(int $id, float $ev)
+    public function updateBetItemEv(int $id, float $ev = null, float $p = null)
     {
         $sql = <<<EOD
-UPDATE bets
-SET last_bet_ev = :ev
+UPDATE bet_items
+SET ev = :ev,
+    probability = :p
 WHERE id =:id
 EOD;
 
-        $st = $this->pdo->prepare($sql);
+        $st = $this->getCachedStatement($sql);
 
-        return $st->execute(['id' => $id, 'ev' => $ev]);
+        return $st->execute(['id' => $id, 'ev' => $ev, 'p' => $p]);
+    }
+
+
+    /**
+     * @param int $id
+     * @param float $ev
+     * @param float $p
+     * @return bool
+     */
+    public function updateBetEv(int $id, float $ev = null, float $p = null)
+    {
+        $sql = <<<EOD
+UPDATE bets
+SET ev = :ev,
+    probability = :p
+WHERE id =:id
+EOD;
+
+        $st = $this->getCachedStatement($sql);
+
+        return $st->execute(['id' => $id, 'ev' => $ev, 'p' => $p]);
     }
 }
