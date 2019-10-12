@@ -65,7 +65,7 @@ class Pdo
 
     private static function createRootConnection()
     {
-        $dsn = "mysql:host=".$_ENV['DB_HOST'].";charset=utf8";
+        $dsn = "mysql:host=".$_ENV['DB_HOST'].";charset=utf8;port=".$_ENV['DB_PORT'];
 
         self::$pdo = new \PDO($dsn, $_ENV['DB_USER'], $_ENV['DB_PASSWORD']);
     }
