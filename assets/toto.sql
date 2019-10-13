@@ -29,8 +29,9 @@ CREATE TABLE IF NOT EXISTS `events` (
 --
 -- Структура таблицы `pool`
 --
+DROP TABLE IF EXISTS `pool`;
 
-CREATE TABLE IF NOT EXISTS `pool` (
+CREATE TABLE `pool` (
   `r1` enum('X','1','2') DEFAULT NULL,
   `r2` enum('X','1','2') NOT NULL,
   `r3` enum('X','1','2') NOT NULL,
@@ -54,6 +55,8 @@ CREATE TABLE IF NOT EXISTS `pool` (
 --
 -- Структура таблицы `toto`
 --
+
+DROP TABLE IF EXISTS `toto`;
 
 CREATE TABLE IF NOT EXISTS `toto` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
