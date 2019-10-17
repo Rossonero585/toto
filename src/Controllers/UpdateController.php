@@ -96,22 +96,28 @@ class UpdateController
 
             $id = (int)$package['id'];
 
-            $allBets = array();
+            if (!$package['probability'] && !$package['ev']) {
 
-            $bets = $betsRepository->geBetsOfPackage($id);
+                $allBets = array();
 
-            foreach ($bets as $bet) {
+                $bets = $betsRepository->geBetsOfPackage($id);
 
-                list($ev, $p) = $cc->calculateEV($bet->getResults(), $bet->getMoney());
+                foreach ($bets as $bet) {
 
-                $betsRepository->updateBetItemEv($bet->getId(), $ev, $p);
+                    if (null !== $bet->getEv()) {
 
-                array_push($allBets, $bet->getResults());
+                        list($ev, $p) = $cc->calculateEV($bet->getResults(), $bet->getMoney());
+
+                        $betsRepository->updateBetItemEv($bet->getId(), $ev, $p);
+
+                        array_push($allBets, $bet->getResults());
+                    }
+                }
+
+                $p = $cc->calculateProbabilityOfPackage($allBets);
+
+                $betsRepository->updateBetEv($id, null, $p);
             }
-
-            $p = $cc->calculateProbabilityOfPackage($allBets);
-
-            $betsRepository->updateBetEv($id, null, $p);
         }
     }
 

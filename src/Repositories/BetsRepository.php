@@ -36,7 +36,7 @@ EOD;
     public function geBetsOfPackage(int $id)
     {
         $sql = <<<EOD
-SELECT bi.id as id, bi.money as money, bi.bet as bet FROM bets b
+SELECT bi.id as id, bi.money as money, bi.bet as bet, bi.ev as ev FROM bets b
 LEFT JOIN bet_items bi ON bi.bet_id = b.id
 WHERE b.id = :id
 EOD;
@@ -51,6 +51,7 @@ EOD;
             return new Bet(
                 (int)$arr['id'],
                 (float)$arr['money'],
+                (float)$arr['ev'],
                 str_split($arr['bet'])
             );
         }, $betArr);

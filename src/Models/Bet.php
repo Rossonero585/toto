@@ -18,11 +18,15 @@ class Bet
     /** @var  float */
     private $money;
 
-    public function __construct(int $id, float $money, array $results)
+    /** @var  float */
+    private $ev;
+
+    public function __construct(int $id, float $money, float $ev, array $results)
     {
         $this->id = $id;
         $this->results = $results;
         $this->money = $money;
+        $this->ev = $ev;
     }
 
     /**
@@ -63,5 +67,21 @@ class Bet
     public function setMoney(float $money)
     {
         $this->money = $money;
+    }
+
+    /**
+     * @return float
+     */
+    public function getEv(): float
+    {
+        return $this->ev;
+    }
+
+    /**
+     * @param float $ev
+     */
+    public function setEv(float $ev)
+    {
+        $this->ev = $ev;
     }
 }

@@ -9,9 +9,7 @@
 namespace Repositories;
 use Builders\BreakDownBuilder;
 use Helpers\ArrayHelper;
-use Models\Bet;
 use Models\BreakDown;
-use Utils\Pdo;
 
 class PoolRepository extends Repository
 {
@@ -98,7 +96,7 @@ EOD;
 
         $items = $st->fetch();
 
-        return $items ? new Bet(0, (float)$items['money'], $bet) : null;
+        return (bool)count($items);
     }
 
     private function addSqlRow($money, $code, $results)
