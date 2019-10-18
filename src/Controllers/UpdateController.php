@@ -104,7 +104,7 @@ class UpdateController
 
                 foreach ($bets as $bet) {
 
-                    if (null !== $bet->getEv()) {
+                    if (null == $bet->getEv()) {
 
                         list($ev, $p) = $cc->calculateEV($bet->getResults(), $bet->getMoney());
 
