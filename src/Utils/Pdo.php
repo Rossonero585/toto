@@ -10,25 +10,26 @@ namespace Utils;
 
 class Pdo
 {
+    /**
+     * @var PdoWrapper
+     */
+    private static $rootPdo;
 
     /**
-     * @var \PDO
+     * @var PdoWrapper
      */
     private static $pdo;
 
-    public static function getPdo($root = false) : \PDO
+    public static function getPdo($root = false) : PdoWrapper
     {
         if ($root) {
-            self::createRootConnection();
+            if (!self::$rootPdo) self::createRootConnection();
+            return self::$rootPdo;
         }
         else {
-            self::createConnection();
+            if (!self::$pdo) self::createConnection();
+            return self::$pdo;
         }
-
-        self::$pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-        self::$pdo->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC);
-
-        return self::$pdo;
     }
 
     public static function closeConnection()
@@ -60,13 +61,24 @@ class Pdo
 
         $dsn = "mysql:dbname=toto_$totoId;host=".$_ENV['DB_HOST'].";charset=utf8;port=".$_ENV['DB_PORT'];
 
-        self::$pdo = new \PDO($dsn, $_ENV['DB_USER'], $_ENV['DB_PASSWORD']);
+        self::$pdo = new PdoWrapper($dsn, $_ENV['DB_USER'], $_ENV['DB_PASSWORD']);
+
+        self::applyAttributes(self::$pdo);
     }
 
     private static function createRootConnection()
     {
         $dsn = "mysql:host=".$_ENV['DB_HOST'].";charset=utf8;port=".$_ENV['DB_PORT'];
 
-        self::$pdo = new \PDO($dsn, $_ENV['DB_USER'], $_ENV['DB_PASSWORD']);
+        self::$rootPdo = new PdoWrapper($dsn, $_ENV['DB_USER'], $_ENV['DB_PASSWORD']);
+
+        self::applyAttributes(self::$rootPdo);
+    }
+
+
+    private static function applyAttributes(PdoWrapper $pdo)
+    {
+        $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+        $pdo->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC);
     }
 }
