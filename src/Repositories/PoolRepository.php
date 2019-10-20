@@ -144,10 +144,6 @@ EOT;
      */
     public function getWinnersBreakDown(array $results)
     {
-        $cachedBreakDown = $this->getCachedBreakDown($results);
-
-        if ($cachedBreakDown) return $cachedBreakDown;
-
         $ifBlock = "";
         $i = 0;
 
@@ -184,8 +180,6 @@ EOD;
 
         $breakDown = BreakDownBuilder::createBreakDownFromArray($arr);
 
-        $this->addCachedBreakDown($results, $breakDown);
-
         return $breakDown;
     }
 
@@ -197,10 +191,6 @@ EOD;
      */
     public function getWinnersBreakDownUsingArray(array $results)
     {
-        $cachedBreakDown = $this->getCachedBreakDown($results);
-
-        if ($cachedBreakDown) return $cachedBreakDown;
-
         $pool = $this->getAllPool();
 
         $outArray = [];
@@ -222,8 +212,6 @@ EOD;
         }
 
         $breakDown = BreakDownBuilder::createBreakDownFromArray($outArray);
-
-        $this->addCachedBreakDown($results, $breakDown);
 
         return $breakDown;
     }

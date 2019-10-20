@@ -117,6 +117,47 @@ class UpdateController
         }
     }
 
+    public function updateBetsEvUsingSeparateProcess($totoId)
+    {
+        $betsRepository = new BetsRepository();
+
+        $cc = new CalculationController();
+
+        $betPackages = $betsRepository->getAllPackages();
+
+        foreach ($betPackages as $package) {
+
+            $id = (int)$package['id'];
+
+            if (!$package['probability'] && !$package['ev']) {
+
+                $procArray = [];
+
+                $allBets = [];
+
+                $bets = $betsRepository->geBetsOfPackage($id);
+
+                foreach ($bets as $bet) {
+
+                    $allBets[] = $bet->getResults();
+
+                    if (null == $bet->getEv()) $procArray[] = popen(
+                        "php ".ROOT_DIR."/updateBetItemEv.php -t $totoId --id=".$bet->getId()." --type=array &",
+                        "w"
+                    );
+                }
+
+                foreach ($procArray as $proc) {
+                    pclose($proc);
+                }
+
+                $p = $cc->calculateProbabilityOfPackage($allBets);
+
+                $betsRepository->updateBetEv($id, null, $p);
+            }
+        }
+    }
+
 
     public function updateBetItemById($id, $type = 'array')
     {
