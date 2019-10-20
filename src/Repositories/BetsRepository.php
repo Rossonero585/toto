@@ -14,6 +14,24 @@ use Models\Bet;
 class BetsRepository extends Repository
 {
 
+    public function getBetItemById(int $id)
+    {
+        $sql = <<<EOD
+SELECT * FROM bet_items bi WHERE bi.id = :id
+EOD;
+
+        $st = $this->getCachedStatement($sql);
+
+        $st->execute(['id' => $id]);
+
+        $betArr = $st->fetchAll(\PDO::FETCH_ASSOC);
+
+        if (!count($betArr)) throw new \Exception("Bet item with $id is not found");
+
+        return $this->createBet(array_shift($betArr));
+    }
+
+
     /**
      * @return array
      */
@@ -48,12 +66,7 @@ EOD;
         $betArr = $st->fetchAll(\PDO::FETCH_ASSOC);
 
         return array_map(function ($arr) {
-            return new Bet(
-                (int)$arr['id'],
-                (float)$arr['money'],
-                (float)$arr['ev'],
-                str_split($arr['bet'])
-            );
+            return $this->createBet($arr);
         }, $betArr);
 
     }
@@ -92,5 +105,16 @@ EOD;
         $st = $this->getCachedStatement($sql);
 
         return $st->execute(['id' => $id, 'ev' => $ev, 'p' => $p]);
+    }
+
+
+    private function createBet(array $arr)
+    {
+        return new Bet(
+            (int)$arr['id'],
+            (float)$arr['money'],
+            (float)$arr['ev'],
+            str_split($arr['bet'])
+        );
     }
 }

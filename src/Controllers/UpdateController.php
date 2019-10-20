@@ -12,6 +12,7 @@ use Builders\Providers\EventFromWeb;
 use Builders\Providers\TotoFromWeb;
 use Builders\TotoBuilder;
 use Helpers\ArrayHelper;
+use Models\Bet;
 use Models\BreakDown;
 use Models\BreakDownItem;
 use Repositories\BetsRepository;
@@ -104,14 +105,9 @@ class UpdateController
 
                 foreach ($bets as $bet) {
 
-                    if (null == $bet->getEv()) {
+                    if (null == $bet->getEv()) $this->updateBetEv($bet);
 
-                        list($ev, $p) = $cc->calculateEV($bet->getResults(), $bet->getMoney());
-
-                        $betsRepository->updateBetItemEv($bet->getId(), $ev, $p);
-
-                        array_push($allBets, $bet->getResults());
-                    }
+                    array_push($allBets, $bet->getResults());
                 }
 
                 $p = $cc->calculateProbabilityOfPackage($allBets);
@@ -119,6 +115,32 @@ class UpdateController
                 $betsRepository->updateBetEv($id, null, $p);
             }
         }
+    }
+
+
+    public function updateBetItemById($id, $type = 'array')
+    {
+        $betsRepository = new BetsRepository();
+
+        $bet = $betsRepository->getBetItemById($id);
+
+        $this->updateBetEv($bet, $type);
+    }
+
+    private function updateBetEv(Bet $bet, $type = 'mysql')
+    {
+        $cc = new CalculationController();
+
+        $betsRepository = new BetsRepository();
+
+        if ($type == 'mysql') {
+            list($ev, $p) = $cc->calculateEV($bet->getResults(), $bet->getMoney());
+        }
+        else {
+            list($ev, $p) = $cc->calculateEVUsingArray($bet->getResults(), $bet->getMoney());
+        }
+
+        $betsRepository->updateBetItemEv($bet->getId(), $ev, $p);
     }
 
     public function checkInPool(array $bet)

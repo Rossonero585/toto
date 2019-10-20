@@ -8,8 +8,6 @@
 
 include "autoload.php";
 
-$options = getopt(null, ['id:']);
-
 $cu = new \Controllers\UpdateController();
 
 $cu->updateBetsEv();
