@@ -19,6 +19,7 @@ use Repositories\BetsRepository;
 use Repositories\EventRepository;
 use Repositories\PoolRepository;
 use Repositories\PreparedResultRepository;
+use Repositories\Repository;
 use Repositories\TotoRepository;
 use Utils\Pdo;
 
@@ -55,13 +56,15 @@ class UpdateController
 
         $totoEvents = $jsonToto->reply->toto->out;
 
-        $totoRepository = new TotoRepository();
+        /** @var TotoRepository $totoRepository */
+        $totoRepository = Repository::getRepository(TotoRepository::class);
 
         $toto = TotoBuilder::createToto(new TotoFromWeb($jsonToto));
 
         $totoRepository->addToto($toto);
 
-        $eventRepository = new EventRepository();
+        /** @var EventRepository $eventRepository */
+        $eventRepository = Repository::getRepository(EventRepository::class);
 
         foreach ($totoEvents as $key => $jsonEvent)
         {
@@ -79,9 +82,10 @@ class UpdateController
 
         $text = file_get_contents(self::BET_CITY."/supex/dump/$totoId.txt");
 
-        $totoRepository = new PoolRepository();
+        /** @var PoolRepository $poolRepository */
+        $poolRepository = Repository::getRepository(PoolRepository::class);
 
-        $totoRepository->insertFromFile($text);
+        $poolRepository->insertFromFile($text);
     }
 
 
@@ -89,7 +93,8 @@ class UpdateController
     {
         $cc = new CalculationController();
 
-        $betsRepository = new BetsRepository();
+        /** @var BetsRepository $betsRepository */
+        $betsRepository = Repository::getRepository(BetsRepository::class);
 
         $betPackages = $betsRepository->getAllPackages();
 
@@ -119,7 +124,8 @@ class UpdateController
 
     public function updateBetsEvUsingSeparateProcess($totoId)
     {
-        $betsRepository = new BetsRepository();
+        /** @var BetsRepository $betsRepository */
+        $betsRepository = Repository::getRepository(BetsRepository::class);
 
         $cc = new CalculationController();
 
@@ -161,7 +167,8 @@ class UpdateController
 
     public function updateBetItemById($id, $type = 'array')
     {
-        $betsRepository = new BetsRepository();
+        /** @var BetsRepository $betsRepository */
+        $betsRepository = Repository::getRepository(BetsRepository::class);
 
         $bet = $betsRepository->getBetItemById($id);
 
@@ -172,7 +179,8 @@ class UpdateController
     {
         $cc = new CalculationController();
 
-        $betsRepository = new BetsRepository();
+        /** @var BetsRepository $betsRepository */
+        $betsRepository = Repository::getRepository(BetsRepository::class);
 
         if ($type == 'mysql') {
             list($ev, $p) = $cc->calculateEV($bet->getResults(), $bet->getMoney());
@@ -186,7 +194,8 @@ class UpdateController
 
     public function checkInPool(array $bet)
     {
-        $poloRepository = new PoolRepository();
+        /** @var PoolRepository $poloRepository */
+        $poloRepository = PoolRepository::getRepository(PoolRepository::class);
 
         return $poloRepository->getPoolItem($bet);
     }
@@ -202,7 +211,8 @@ class UpdateController
 
         $preparedResultRepository = new PreparedResultRepository();
 
-        $totoRepository = new TotoRepository();
+        /** @var TotoRepository $totoRepository */
+        $totoRepository = Repository::getRepository(TotoRepository::class);
 
         $toto = $totoRepository->getToto();
 

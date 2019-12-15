@@ -14,51 +14,16 @@ use Helpers\EventsHelper;
 use Helpers\TotoHelper;
 use Repositories\EventRepository;
 use Repositories\PoolRepository;
+use Repositories\Repository;
 use Repositories\TotoRepository;
 
 class CalculationController
 {
-    /** @var  TotoRepository */
-    private $totoRepository;
-
-    /** @var  PoolRepository */
-    private $poolRepository;
-
-    /** @var  EventRepository */
-    private $eventsRepository;
-
-
-    private function getTotoRepository()
-    {
-        if (!$this->totoRepository) {
-            $this->totoRepository = new TotoRepository();
-        }
-
-        return $this->totoRepository;
-    }
-
-    private function getPoolRepository()
-    {
-        if (!$this->poolRepository) {
-            $this->poolRepository = new PoolRepository();
-        }
-
-        return $this->poolRepository;
-    }
-
-    private function getEventsRepository()
-    {
-        if (!$this->eventsRepository) {
-            $this->eventsRepository = new EventRepository();
-        }
-
-        return $this->eventsRepository;
-    }
-
 
     public function calculateRatioAction(array $results, int $cat)
     {
-        $totoRepository = new TotoRepository();
+        /** @var TotoRepository $totoRepository */
+        $totoRepository = Repository::getRepository(TotoRepository::class);
 
         $toto = $totoRepository->getToto();
 
@@ -70,7 +35,8 @@ class CalculationController
             throw new \Exception("Count results - $countResults don't conform the event's count - $countEvents");
         }
 
-        $poolRepository = new PoolRepository();
+        /** @var PoolRepository $poolRepository */
+        $poolRepository = Repository::getRepository(PoolRepository::class);
 
         $breakDown = $poolRepository->getWinnersBreakDown($results);
 
@@ -88,15 +54,18 @@ class CalculationController
      */
     public function calculateEV(array $bet, float $betSize)
     {
-        $totoRepository = $this->getTotoRepository();
+        /** @var TotoRepository $totoRepository */
+        $totoRepository = Repository::getRepository(TotoRepository::class);
 
         $totoHelper = new TotoHelper($totoRepository->getToto(), $betSize);
 
-        $eventRepository = $this->getEventsRepository();
+        /** @var EventRepository $eventRepository */
+        $eventRepository = Repository::getRepository(EventRepository::class);
 
         $eventHelper = new EventsHelper($eventRepository->getAll());
 
-        $poolRepository = $this->getPoolRepository();
+        /** @var PoolRepository $poolRepository */
+        $poolRepository = Repository::getRepository(PoolRepository::class);
 
         $toto = $totoRepository->getToto();
 
@@ -163,15 +132,18 @@ class CalculationController
      */
     public function calculateEVUsingArray(array $bet, float $betSize)
     {
-        $totoRepository = $this->getTotoRepository();
+        /** @var TotoRepository $totoRepository */
+        $totoRepository = Repository::getRepository(TotoRepository::class);
 
         $totoHelper = new TotoHelper($totoRepository->getToto(), $betSize);
 
-        $eventRepository = $this->getEventsRepository();
+        /** @var EventRepository $eventRepository */
+        $eventRepository = Repository::getRepository(EventRepository::class);
 
         $eventHelper = new EventsHelper($eventRepository->getAll());
 
-        $poolRepository = $this->getPoolRepository();
+        /** @var PoolRepository $poolRepository */
+        $poolRepository = Repository::getRepository(PoolRepository::class);
 
         $toto = $totoRepository->getToto();
 
@@ -232,15 +204,18 @@ class CalculationController
 
     public function calculateExpectedRatioForCategory(array $bet, float $betSize, int $cat)
     {
-        $totoRepository = $this->getTotoRepository();
+        /** @var TotoRepository $totoRepository */
+        $totoRepository = Repository::getRepository(TotoRepository::class);
 
         $totoHelper = new TotoHelper($totoRepository->getToto(), $betSize);
 
-        $eventRepository = $this->getEventsRepository();
+        /** @var EventRepository $eventRepository */
+        $eventRepository = Repository::getRepository(EventRepository::class);
 
         $eventHelper = new EventsHelper($eventRepository->getAll());
 
-        $poolRepository = $this->getPoolRepository();
+        /** @var PoolRepository $poolRepository */
+        $poolRepository = Repository::getRepository(PoolRepository::class);
 
         $toto = $totoRepository->getToto();
 
@@ -295,11 +270,13 @@ class CalculationController
 
     public function calculateProbabilityOfPackage(array $bets)
     {
-        $totoRepository = $this->getTotoRepository();
+        /** @var TotoRepository $totoRepository */
+        $totoRepository = Repository::getRepository(TotoRepository::class);
 
         $toto = $totoRepository->getToto();
 
-        $eventRepository = $this->getEventsRepository();
+        /** @var EventRepository $eventRepository */
+        $eventRepository = Repository::getRepository(EventRepository::class);
 
         $eventHelper = new EventsHelper($eventRepository->getAll());
 
@@ -342,13 +319,17 @@ class CalculationController
 
     public function calculateEvOfPackage($pathToFile)
     {
-        $totoRepository = $this->getTotoRepository();
+        /** @var TotoRepository $totoRepository */
+        $totoRepository = Repository::getRepository(TotoRepository::class);
 
         $toto = $totoRepository->getToto();
 
-        $eventRepository = $this->getEventsRepository();
+        /** @var EventRepository $eventRepository */
+        $eventRepository = Repository::getRepository(EventRepository::class);
 
-        $poolRepository = $this->getPoolRepository();
+        /** @var PoolRepository $poolRepository */
+        $poolRepository = Repository::getRepository(PoolRepository::class);
+
 
         $eventHelper = new EventsHelper($eventRepository->getAll());
 
