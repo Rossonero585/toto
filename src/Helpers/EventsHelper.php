@@ -84,17 +84,28 @@ class EventsHelper
             throw new \Exception("Unknown event with id $eventId");
         }
 
+        if ($event->isCanceled()) {
+            return 1;
+        }
+
         $p = 0;
 
         if (in_array(1, $result))   $p = $p + $event->getP1();
         if (in_array('x', $result) || in_array('X', $result)) $p = $p + $event->getPx();
         if (in_array(2, $result))   $p = $p + $event->getP2();
 
-        if ($p == 0) throw new \Exception("Unknown result ".implode(",", $result));
-
         return $success ? $p : 1 - $p;
 
     }
 
+
+    /**
+     * @param $id
+     * @return Event
+     */
+    public function getEvent($id)
+    {
+        return $this->events[$id];
+    }
 
 }

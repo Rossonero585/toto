@@ -115,8 +115,19 @@ class ArrayHelper
 
         $k = 0;
 
+        $matchValues = function ($a, $b) {
+            if (!is_array($a)) $a = [$a];
+            if (!is_array($b)) $b = [$b];
+
+            foreach ($a as $item) {
+                if (in_array($item, $b)) return true;
+            }
+
+            return false;
+        };
+
         foreach ($arr1 as $key => $value) {
-            if ($arr1[$key] == $arr2[$key]) $k++;
+            if ($matchValues($arr1[$key], $arr2[$key])) $k++;
         }
 
         return $k;

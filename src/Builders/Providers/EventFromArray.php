@@ -62,4 +62,9 @@ class EventFromArray implements EventInterface
     {
         return $this->assoc['title'];
     }
+
+    public function IsCanceled(): bool
+    {
+        return $this->assoc['is_canceled'];
+    }
 }

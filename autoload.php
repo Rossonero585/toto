@@ -11,7 +11,7 @@ include "vendor/autoload.php";
 const ROOT_DIR = __DIR__;
 
 
-$content = file_get_contents(".env");
+$content = file_get_contents(__DIR__."/.env");
 
 $lines = explode(PHP_EOL, $content);
 

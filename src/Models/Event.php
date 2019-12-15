@@ -36,6 +36,9 @@ class Event
     /** @var  string */
     private $title;
 
+    /** @var  boolean */
+    private $isCanceled = false;
+
     /**
      * Event constructor.
      * @param $id
@@ -47,8 +50,9 @@ class Event
      * @param $s2
      * @param $league
      * @param $title
+     * @param $isCanceled
      */
-    public function __construct($id, $p1, $px, $p2, $s1, $sx, $s2, $league, $title)
+    public function __construct($id, $p1, $px, $p2, $s1, $sx, $s2, $league, $title, $isCanceled = false)
     {
         $this->id = $id;
         $this->p1 = $p1;
@@ -59,6 +63,7 @@ class Event
         $this->s2 = $s2;
         $this->league = $league;
         $this->title = $title;
+        $this->isCanceled = $isCanceled;
     }
 
     /**
@@ -140,5 +145,22 @@ class Event
     {
         $this->title = $title;
     }
+
+    /**
+     * @return bool
+     */
+    public function isCanceled(): bool
+    {
+        return $this->isCanceled;
+    }
+
+    /**
+     * @param bool $isCanceled
+     */
+    public function setIsCanceled(bool $isCanceled)
+    {
+        $this->isCanceled = $isCanceled;
+    }
+
 
 }

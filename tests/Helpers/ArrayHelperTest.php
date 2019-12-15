@@ -30,11 +30,11 @@ class ArrayHelperTest extends TestCase
 
     public function testPrepareResult()
     {
-        $arr = ArrayHelper::prepareResult([1, 'x', 2, 'x', 1], [1,2,5]);
+        $arr = ArrayHelper::prepareResult([1, 'X', 2, 'X', 1], [1,2,5]);
 
         $this->assertEquals(1, $arr[0]);
-        $this->assertEquals('x', $arr[1]);
-        $this->assertTrue($this->areArraysSimilar([1, 'x'], $arr[2]));
+        $this->assertEquals('X', $arr[1]);
+        $this->assertTrue($this->areArraysSimilar([1, 'X'], $arr[2]));
         $this->assertTrue($this->areArraysSimilar([2, 1], $arr[3]));
         $this->assertEquals(1, $arr[4]);
     }
@@ -84,5 +84,23 @@ class ArrayHelperTest extends TestCase
     public function areArraysSimilar(array $arr1, array $arr2)
     {
         return count(array_diff($arr1, $arr2)) === 0;
+    }
+
+    public function testCountMatch()
+    {
+        $a = [1, 2, 3];
+
+        $b = [1, 2, 0];
+
+        $countMatch = ArrayHelper::countMatchResult($a, $b);
+
+        $this->assertEquals(2, $countMatch);
+
+        $b = [[1,2,3], [2], [0]];
+
+        $countMatch = ArrayHelper::countMatchResult($a, $b);
+
+        $this->assertEquals(2, $countMatch);
+
     }
 }

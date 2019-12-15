@@ -124,6 +124,16 @@ class CalculationController
 
                     if (!isset($map[$key])) {
 
+                        $betItem = array_map(function ($key, $value) use($eventHelper) {
+
+                            if ($eventHelper->getEvent($key + 1)->isCanceled()) {
+                                return [1, 'X', 2];
+                            }
+
+                            return $value;
+
+                        }, array_keys($betItem), $betItem);
+
                         $p = $eventHelper->calculateProbabilityOfAllEvents($betItem);
 
                         $breakDown = $poolRepository->getWinnersBreakDown($betItem);
@@ -189,6 +199,16 @@ class CalculationController
 
                     if (!isset($map[$key])) {
 
+                        $betItem = array_map(function ($key, $value) use($eventHelper) {
+
+                            if ($eventHelper->getEvent($key + 1)->isCanceled()) {
+                                return [1, 'X', 2];
+                            }
+
+                            return $value;
+
+                        }, array_keys($betItem), $betItem);
+
                         $p = $eventHelper->calculateProbabilityOfAllEvents($betItem);
 
                         $breakDown = $poolRepository->getWinnersBreakDownUsingArray($betItem);
@@ -242,6 +262,16 @@ class CalculationController
                 $key = implode("", $betItem);
 
                 if (!isset($map[$key]) && ArrayHelper::countMatchResult($bet, $betItem) == $cat) {
+
+                    $betItem = array_map(function ($key, $value) use($eventHelper) {
+
+                        if ($eventHelper->getEvent($key + 1)->isCanceled()) {
+                            return [1, 'X', 2];
+                        }
+
+                        return $value;
+
+                    }, array_keys($betItem), $betItem);
 
                     $p = $eventHelper->calculateProbabilityOfAllEvents($betItem);
 
@@ -348,6 +378,17 @@ class CalculationController
 
                         $key = implode("", $betItem);
 
+                        $betItem = array_map(function ($key, $value) use($eventHelper) {
+
+                            if ($eventHelper->getEvent($key + 1)->isCanceled()) {
+                                return [1, 'X', 2];
+                            }
+
+                            return $value;
+
+                        }, array_keys($betItem), $betItem);
+
+
                         if (!isset($commonMap[$key])) {
 
                             $p = $eventHelper->calculateProbabilityOfAllEvents($betItem);
@@ -361,7 +402,7 @@ class CalculationController
 
                             $totoHelper = new TotoHelper($toto, $betSize);
 
-                            $breakDown = $poolRepository->getWinnersBreakDownUsingCache($betItem);
+                            $breakDown = $poolRepository->getWinnersBreakDown($betItem);
 
                             $ratio = $totoHelper->getRatioByWinCount($count, $breakDown);
 
