@@ -48,13 +48,32 @@ class Repository
     public static function getRepository(string $className)
     {
         if (!isset(self::$instances[$className])) {
-            self::$instances[$className] = new $className();
-        }
 
-        if (!self::$instances[$className] instanceof Repository) throw new UnknownRepository($className);
+            $repository = new $className();
+
+            if (!$repository instanceof Repository) throw new UnknownRepository($className);
+
+            self::$instances[$className] = $repository;
+        }
 
         return self::$instances[$className];
     }
 
+
+    protected function updateFieldsById(string $tableName, int $id, array $fields)
+    {
+        $updatePart = array_reduce(array_keys($fields), function($carry, $field) {
+            $carry .= "$field = :$field, ";
+            return $carry;
+        }, "");
+
+        $updatePart = substr($updatePart, 0, -2);
+
+        $sql = "UPDATE $tableName SET $updatePart WHERE id =:id";
+
+        $st = $this->getCachedStatement($sql);
+
+        return $st->execute($fields + ['id' => $id]);
+    }
 
 }

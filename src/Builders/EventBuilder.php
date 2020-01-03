@@ -25,7 +25,7 @@ class EventBuilder
             $eventProvider->getS2(),
             $eventProvider->getLeague(),
             $eventProvider->getTile(),
-            $eventProvider->IsCanceled()
+            $eventProvider->getResult()
         );
     }
 

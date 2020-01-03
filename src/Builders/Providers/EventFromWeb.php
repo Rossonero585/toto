@@ -98,9 +98,27 @@ class EventFromWeb implements EventInterface
         return $this->totoItem->name_ev;
     }
 
-    public function IsCanceled(): bool
+
+    public function getResult(): ?string
     {
-        return $this->totoItem->win == 4;
+        $win = $this->totoItem->win;
+
+        if (!$win) return null;
+
+        switch ($win) {
+            case 1:
+                return '1';
+                break;
+            case 2:
+                return 'X';
+                break;
+            case 3:
+                return '2';
+                break;
+            case 4:
+                return '4';
+                break;
+        }
     }
 
 

@@ -21,8 +21,7 @@ CREATE TABLE IF NOT EXISTS `events` (
   `sx` float(7,5) DEFAULT NULL,
   `s2` float(7,5) DEFAULT NULL,
   `league` varchar(255) DEFAULT NULL,
-  `is_cancleled` TINYINT(1) NOT NULL,
-  `result` enum('X','1','2') DEFAULT NULL,
+  `result` VARCHAR(1) DEFAULT NULL,
   PRIMARY KEY (id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -80,11 +79,11 @@ CREATE TABLE IF NOT EXISTS `bet_items` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `bet_id` int(11) NOT NULL,
   `bet` varchar(20) DEFAULT NULL,
-  `money` float(7,5) DEFAULT NULL,
-  `ev` float(7,5) DEFAULT NULL,
+  `money` decimal(8,2) DEFAULT NULL,
+  `ev` float(10,2) DEFAULT NULL,
   `probability` float(7,5) DEFAULT NULL,
   `count_match` TINYINT(1) DEFAULT NULL,
-  `income` int(11) DEFAULT NULL,
+  `income` float(15,2) DEFAULT NULL,
   PRIMARY KEY (id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -96,10 +95,10 @@ CREATE TABLE IF NOT EXISTS `bets` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `money` decimal(8,2) DEFAULT NULL,
   `probability` float(7,5) DEFAULT NULL,
-  `ev` float(7,5) DEFAULT NULL,
-  `income` float(7,5) DEFAULT NULL,
+  `ev` float(10,2) DEFAULT NULL,
+  `income` float(15,2) DEFAULT NULL,
   `bet_time` datetime DEFAULT NULL,
-  `last_bet_ev` float(7,5) DEFAULT NULL,
+  `last_bet_ev` float(10,2) DEFAULT NULL,
   PRIMARY KEY (id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 

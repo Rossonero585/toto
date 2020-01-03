@@ -51,8 +51,8 @@ class EventRepository extends Repository
     {
         $tableName = self::TABLE_NAME;
         $insertQuery = <<<EOD
-REPLACE INTO `{$tableName}` (id, title, p1, px, p2, s1, sx, s2, league, is_canceled)
-VALUES (:id, :title, :p1, :px, :p2, :s1, :sx, :s2, :league, :is_canceled)
+REPLACE INTO `{$tableName}` (id, title, p1, px, p2, s1, sx, s2, league)
+VALUES (:id, :title, :p1, :px, :p2, :s1, :sx, :s2, :league)
 EOD;
 
         $st = $this->pdo->prepare($insertQuery);
@@ -66,10 +66,17 @@ EOD;
             "s1" => $event->getS1(),
             "sx" => $event->getSx(),
             "s2" => $event->getS2(),
-            "league" => $event->getLeague(),
-            "is_canceled" => $event->isCanceled(),
+            "league" => $event->getLeague()
         ]);
 
         return $event;
     }
+
+    public function updateEventResultById(int $id, $result)
+    {
+        return $this->updateFieldsById(self::TABLE_NAME, $id, [
+            'result' => $result
+        ]);
+    }
+
 }

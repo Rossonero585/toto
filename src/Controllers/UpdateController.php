@@ -12,9 +12,11 @@ use Builders\Providers\EventFromWeb;
 use Builders\Providers\TotoFromWeb;
 use Builders\TotoBuilder;
 use Helpers\ArrayHelper;
+use Helpers\TotoHelper;
 use Models\Bet;
 use Models\BreakDown;
 use Models\BreakDownItem;
+use Models\Event;
 use Repositories\BetsRepository;
 use Repositories\EventRepository;
 use Repositories\PoolRepository;
@@ -52,9 +54,9 @@ class UpdateController
             throw new \Exception("totoId is not defined");
         }
 
-        $jsonToto = json_decode(file_get_contents(self::BET_CITY."/d/se/one?id=$totoId"));
+        $jsonToto = $this->getJsonToto($totoId);
 
-        $totoEvents = $jsonToto->reply->toto->out;
+        $totoEvents = $this->getEventsFromJson($jsonToto);
 
         /** @var TotoRepository $totoRepository */
         $totoRepository = Repository::getRepository(TotoRepository::class);
@@ -66,10 +68,8 @@ class UpdateController
         /** @var EventRepository $eventRepository */
         $eventRepository = Repository::getRepository(EventRepository::class);
 
-        foreach ($totoEvents as $key => $jsonEvent)
+        foreach ($totoEvents as $event)
         {
-            $event = EventBuilder::createEvent(new EventFromWeb($jsonEvent, ++$key));
-
             $eventRepository->addEvent($event);
         }
     }
@@ -198,6 +198,100 @@ class UpdateController
         $poloRepository = PoolRepository::getRepository(PoolRepository::class);
 
         return $poloRepository->getPoolItem($bet);
+    }
+
+    public function updateTotoResult(int $totoId)
+    {
+
+        /** @var EventRepository $eventRepository */
+        $eventRepository = Repository::getRepository(EventRepository::class);
+
+        /** @var TotoRepository $totoRepository */
+        $totoRepository = Repository::getRepository(TotoRepository::class);
+
+        /** @var PoolRepository $poolRepository */
+        $poolRepository = Repository::getRepository(PoolRepository::class);
+
+        /** @var BetsRepository $betsRepository */
+        $betsRepository = Repository::getRepository(BetsRepository::class);
+
+        $totoJson = $this->getJsonToto($totoId);
+
+        $actualEvents = $this->getEventsFromJson($totoJson);
+
+        $events = $eventRepository->getAll();
+
+        $results = [];
+
+        foreach ($actualEvents as $event) {
+
+            $result = $event->isCanceled() ? [1, 'X', 2] : $event->getResult();
+
+            array_push($results, $result);
+        }
+
+        /** @var Event $event */
+        foreach ($events as $key => $event) {
+            $eventRepository->updateEventResultById($event->getId(), $actualEvents[$key]->getResult());
+        }
+
+        $toto = $totoRepository->getToto();
+
+        $breakDown = $poolRepository->getWinnersBreakDown($results);
+
+        $betPackages = $betsRepository->getAllPackages();
+
+        foreach ($betPackages as $package) {
+
+            $id = (int)$package['id'];
+
+            $bets = $betsRepository->geBetsOfPackage($id);
+
+            foreach ($bets as $bet) {
+
+                $totoHelper = new TotoHelper($toto, $bet->getMoney());
+
+                $countMatch = ArrayHelper::countMatchResult($bet->getResults(), $results);
+
+                if ($countMatch >= $toto->getMinWinnerCount()) {
+
+                    $ratio = $totoHelper->getRatioByWinCount($countMatch, $breakDown);
+
+                    $income = ($ratio - 1) * $bet->getMoney();
+                }
+                else {
+                    $income = 0;
+                }
+
+                $betsRepository->updateBetItemIncome($bet->getId(), $countMatch, $income);
+            }
+        }
+
+    }
+
+    private function getJsonToto(int $totoId)
+    {
+        return json_decode(file_get_contents(self::BET_CITY."/d/se/one?id=$totoId"));
+    }
+
+    /**
+     * @param $json
+     * @return Event[]
+     */
+    private function getEventsFromJson($json)
+    {
+        $out = [];
+
+        $totoEvents = $json->reply->toto->out;;
+
+        foreach ($totoEvents as $key => $jsonEvent)
+        {
+            $event = EventBuilder::createEvent(new EventFromWeb($jsonEvent, ++$key));
+
+            array_push($out, $event);
+        }
+
+        return $out;
     }
 
     public function updateBreakDownsAction()

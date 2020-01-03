@@ -74,18 +74,19 @@ EOD;
 
     public function updateBetItemEv(int $id, float $ev = null, float $p = null)
     {
-        $sql = <<<EOD
-UPDATE bet_items
-SET ev = :ev,
-    probability = :p
-WHERE id =:id
-EOD;
-
-        $st = $this->getCachedStatement($sql);
-
-        return $st->execute(['id' => $id, 'ev' => $ev, 'p' => $p]);
+        return $this->updateFieldsById('bet_items', $id, [
+            'ev' => $ev,
+            'probability' => $p
+        ]);
     }
 
+    public function updateBetItemIncome(int $id, int $countMatch, float $income)
+    {
+        return $this->updateFieldsById('bet_items', $id, [
+            'count_match' => $countMatch,
+            'income' => $income
+        ]);
+    }
 
     /**
      * @param int $id

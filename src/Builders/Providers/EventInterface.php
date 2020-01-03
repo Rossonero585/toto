@@ -55,8 +55,8 @@ interface EventInterface
     public function getTile(): string;
 
     /**
-     * @return bool
+     * @return string
      */
-    public function IsCanceled(): bool;
+    public function getResult(): ?string;
 
 }

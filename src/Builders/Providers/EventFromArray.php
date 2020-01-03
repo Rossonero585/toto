@@ -63,8 +63,8 @@ class EventFromArray implements EventInterface
         return $this->assoc['title'];
     }
 
-    public function IsCanceled(): bool
+    public function getResult(): ?string
     {
-        return $this->assoc['is_canceled'];
+        return (string)$this->assoc['result'];
     }
 }

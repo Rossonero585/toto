@@ -9,6 +9,8 @@ namespace Models;
 
 class Event
 {
+    const cancelledType = 4;
+
     /** @var  int */
     private $id;
 
@@ -36,8 +38,8 @@ class Event
     /** @var  string */
     private $title;
 
-    /** @var  boolean */
-    private $isCanceled = false;
+    /** @var  string */
+    private $result;
 
     /**
      * Event constructor.
@@ -50,9 +52,9 @@ class Event
      * @param $s2
      * @param $league
      * @param $title
-     * @param $isCanceled
+     * @param $result
      */
-    public function __construct($id, $p1, $px, $p2, $s1, $sx, $s2, $league, $title, $isCanceled = false)
+    public function __construct($id, $p1, $px, $p2, $s1, $sx, $s2, $league, $title, $result = null)
     {
         $this->id = $id;
         $this->p1 = $p1;
@@ -63,7 +65,7 @@ class Event
         $this->s2 = $s2;
         $this->league = $league;
         $this->title = $title;
-        $this->isCanceled = $isCanceled;
+        $this->result = $result;
     }
 
     /**
@@ -151,16 +153,23 @@ class Event
      */
     public function isCanceled(): bool
     {
-        return $this->isCanceled;
+        return $this->result == self::cancelledType;
     }
 
     /**
-     * @param bool $isCanceled
+     * @return string
      */
-    public function setIsCanceled(bool $isCanceled)
+    public function getResult()
     {
-        $this->isCanceled = $isCanceled;
+        return $this->result;
     }
 
+    /**
+     * @param string $result
+     */
+    public function setResult($result)
+    {
+        $this->result = $result;
+    }
 
 }
