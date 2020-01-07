@@ -428,11 +428,4 @@ class CalculationController
 
         return [$bets, $betSize, $money];
     }
-
-    private function writeLog(string $file, $line)
-    {
-        $path = ROOT_DIR.DIRECTORY_SEPARATOR."stats".DIRECTORY_SEPARATOR.$file;
-
-        file_put_contents($path, $line.PHP_EOL, FILE_APPEND);
-    }
 }

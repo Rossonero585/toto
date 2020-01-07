@@ -118,6 +118,9 @@ class EventFromWeb implements EventInterface
             case 4:
                 return '4';
                 break;
+            default:
+                return null;
+                break;
         }
     }
 

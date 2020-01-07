@@ -37,6 +37,7 @@ class UpdateController
             throw new \Exception("totoId is not defined");
         }
 
+        /** @var \PDO $pdo */
         $pdo = Pdo::getPdo(true);
 
         $dbName = "toto_".$totoId;
@@ -271,7 +272,7 @@ class UpdateController
 
     private function getJsonToto(int $totoId)
     {
-        return json_decode(file_get_contents(self::BET_CITY."/d/se/one?id=$totoId"));
+        return json_decode(file_get_contents($_ENV['BET_CITY_URL']."/d/se/one?id=$totoId"));
     }
 
     /**
