@@ -31,9 +31,7 @@ class ScheduleHelper
 
     private function getTimeToTotoInSeconds(\DateTime $dateTime)
     {
-        $current = new \DateTime();
-
-        $current->setTimezone(new \DateTimeZone('UTC'));
+        $current = new \DateTime('now', new \DateTimeZone('UTC'));
 
         return $dateTime->getTimestamp() - $current->getTimestamp();
     }

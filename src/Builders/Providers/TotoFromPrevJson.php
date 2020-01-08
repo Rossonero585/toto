@@ -30,8 +30,11 @@ class TotoFromPrevJson implements TotoInterface
 
     public function getDateTime(): \DateTime
     {
-        return \DateTime::createFromFormat("Y-m-d H:i:s", $this->obj->dt_tt)
-            ->setTimezone(new \DateTimeZone('Europe/Moscow'));
+        return \DateTime::createFromFormat(
+            "Y-m-d H:i:s",
+            $this->obj->dt_tt,
+            new \DateTimeZone('Europe/Moscow')
+        );
     }
 
     public function getEventCount(): int
