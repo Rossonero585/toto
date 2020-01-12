@@ -18,6 +18,10 @@ class CheckController
 
     public function scheduleToto()
     {
+        ini_set("display_errors", 0);
+
+        set_time_limit(40);
+
         $betcityUrl = $_ENV['BET_CITY_URL'];
 
         $content = file_get_contents($betcityUrl."/d/supex/list/cur?page=1&rev=2&ver=54&csn=ooca9s");
@@ -40,7 +44,7 @@ class CheckController
 
                 $totoNumber = $matches[1];
 
-                if ($totoNumber == $this->getLastBetTotoId()) {
+                if ($totoId == $this->getLastBetTotoId()) {
                     continue 1;
                 }
 
@@ -62,7 +66,20 @@ class CheckController
 
                     $startTime->modify("-2 minutes");
 
-                    $timeToRunScript = $startTime->format('H:i');
+                    if ($this->compareMinutes($startTime, $this->getCurrentDateTime())) {
+                        $timeToRunScript = $startTime->format('H:i');
+                    }
+                    else {
+                        $startTime = $this->getCurrentDateTime();
+
+                        $startTime->modify("+1 minutes");
+
+                        $timeToRunScript = $startTime->format("H:i");
+
+                        $startTime->modify("+2 minutes");
+
+                        $timeToRunToto = $startTime->format("H:i");
+                    }
 
                     echo "$timeToRunScript $timeToRunToto $totoNumber $totoId";
                 }
@@ -78,5 +95,28 @@ class CheckController
     private function updateLastBetTotoId(int $totoId)
     {
         file_put_contents(self::CACHE_FILE, $totoId);
+    }
+
+    private function getCurrentDateTime()
+    {
+        return new \DateTime('now', new \DateTimeZone('UTC'));
+    }
+
+    private function compareMinutes(\DateTime $dateTime1, \DateTime $dateTime2)
+    {
+        $h1 = (int)$dateTime1->format('H');
+        $m1 = (int)$dateTime1->format('i');
+
+        $h2 = (int)$dateTime2->format('H');
+        $m2 = (int)$dateTime2->format('i');
+
+        if ($h1 > $h2) {
+            return true;
+        }
+        else if ($m1 > $m2) {
+            return true;
+        }
+
+        return false;
     }
 }

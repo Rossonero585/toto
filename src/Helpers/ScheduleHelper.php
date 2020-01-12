@@ -12,7 +12,6 @@ use Models\Toto;
 
 class ScheduleHelper
 {
-    const TIME_BEFORE_ACTIVATE = 12;
 
     public function getTimeForRun(Toto $toto)
     {
@@ -22,7 +21,7 @@ class ScheduleHelper
 
         $timeToToto = $this->getTimeToTotoInSeconds($totoStart);
 
-        if ($timeToToto < self::TIME_BEFORE_ACTIVATE * 60) {
+        if ($timeToToto < $_ENV['TIME_BEFORE_RUN'] * 60) {
             return $this->getTimeToRunInMinutes($toto->getPot());
         }
 
