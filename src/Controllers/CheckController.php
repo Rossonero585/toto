@@ -60,6 +60,8 @@ class CheckController
 
                     $startTime->setTimezone(new \DateTimeZone('UTC'));
 
+                    $cloneStartTime = clone $startTime;
+
                     $startTime->modify("-$remainMinutes minutes");
 
                     $timeToRunToto = $startTime->format('H:i');
@@ -81,7 +83,13 @@ class CheckController
                         $timeToRunToto = $startTime->format("H:i");
                     }
 
-                    echo "$timeToRunScript $timeToRunToto $totoNumber $totoId";
+                    $cloneStartTime->modify("+2 minutes");
+
+                    $totoStartTime = $cloneStartTime->format("H:i");
+
+                    echo "$totoStartTime $timeToRunScript $timeToRunToto $totoNumber $totoId";
+
+                    break;
                 }
             }
         }
