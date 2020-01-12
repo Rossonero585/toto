@@ -14,6 +14,8 @@ use Helpers\ScheduleHelper;
 class CheckController
 {
 
+    const CACHE_FILE = "last_bet_toto.txt";
+
     public function scheduleToto()
     {
         $betcityUrl = $_ENV['BET_CITY_URL'];
@@ -38,11 +40,17 @@ class CheckController
 
                 $totoNumber = $matches[1];
 
+                if ($totoNumber == $this->getLastBetTotoId()) {
+                    continue 1;
+                }
+
                 $scheduleHelper = new ScheduleHelper();
 
                 $remainMinutes = $scheduleHelper->getTimeForRun($toto);
 
                 if ($remainMinutes !== -1) {
+
+                    $this->updateLastBetTotoId($totoId);
 
                     $startTime = $toto->getStartTime();
 
@@ -60,5 +68,15 @@ class CheckController
                 }
             }
         }
+    }
+
+    private function getLastBetTotoId()
+    {
+        return (int)file_get_contents(self::CACHE_FILE);
+    }
+
+    private function updateLastBetTotoId(int $totoId)
+    {
+        file_put_contents(self::CACHE_FILE, $totoId);
     }
 }
