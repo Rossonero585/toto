@@ -36,7 +36,6 @@ class ModifyController
 
     public function updateAllResult()
     {
-        $cu = new UpdateController();
 
         /** @var \PDO $pdo */
         $pdo = Pdo::getPdo(true);
@@ -49,9 +48,13 @@ class ModifyController
 
             $dbName = array_shift($db);
 
-            $totoId = (int)array_pop(explode("_", $dbName));
+            $parts = explode("_", $dbName);
 
-            $cu->updateTotoResult($totoId);
+            $totoId = (int)array_pop($parts);
+
+            exec("php ".ROOT_DIR.DIRECTORY_SEPARATOR."updateResult.php -t=".$totoId);
+
+            sleep(3);
 
             echo "Updated $dbName".PHP_EOL;
         }
