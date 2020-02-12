@@ -51,8 +51,13 @@ class EventRepository extends Repository
     {
         $tableName = self::TABLE_NAME;
         $insertQuery = <<<EOD
-REPLACE INTO `{$tableName}` (id, title, p1, px, p2, s1, sx, s2, league)
+INSERT INTO `{$tableName}` (id, title, p1, px, p2, s1, sx, s2, league)
 VALUES (:id, :title, :p1, :px, :p2, :s1, :sx, :s2, :league)
+ON DUPLICATE KEY UPDATE
+p1 = VALUES(p1),
+px = VALUES(px),
+p2 = VALUES(p2),
+league = VALUES(league)
 EOD;
 
         $st = $this->pdo->prepare($insertQuery);

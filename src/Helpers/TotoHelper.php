@@ -26,7 +26,7 @@ class TotoHelper
         $this->bet = $bet;
     }
 
-    public function getRatioByWinCount(int $count, BreakDown $breakDown, $includeBet = false)
+    public function getRatioByWinCount(int $count, BreakDown $breakDown, $includeBet = true)
     {
         $winCounts = array_keys($this->toto->getWinnerCounts());
 
