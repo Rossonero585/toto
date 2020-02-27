@@ -108,4 +108,32 @@ class EventsHelper
         return $this->events[$id];
     }
 
+    /**
+     * @return float|int
+     */
+    public function getAverageDeviation()
+    {
+        $deviation = 0;
+
+        $count = 0;
+
+        /** @var Event $event */
+        foreach ($this->events as $event) {
+
+            if (
+                $event->getP1() && $event->getPx() && $event->getP2()
+                && $event->getS1() && $event->getSx() && $event->getS2()
+            ) {
+
+                if ($event->getP1() > $event->getS1()) $deviation += $event->getP1() * ($event->getP1() - $event->getS1());
+                if ($event->getP2() > $event->getS2()) $deviation += $event->getP2() * ($event->getP2() - $event->getS2());
+                if ($event->getPx() > $event->getSx()) $deviation += $event->getPx() * ($event->getPx() - $event->getSx());
+
+                $count++;
+            }
+
+        }
+
+        return $deviation / $count;
+    }
 }

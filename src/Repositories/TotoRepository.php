@@ -57,4 +57,11 @@ EOD;
         return $toto;
     }
 
+    public function updateDeviation(float $deviation)
+    {
+        $this->updateFieldsById(self::TABLE_NAME, 1, [
+            'pool_deviation' => $deviation
+        ]);
+    }
+
 }

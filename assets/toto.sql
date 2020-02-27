@@ -66,6 +66,7 @@ CREATE TABLE IF NOT EXISTS `toto` (
   `jackpot` float(15,2) DEFAULT NULL,
   `event_count` int(11) DEFAULT NULL,
   `winner_counts` varchar(255) DEFAULT NULL,
+  `pool_deviation` float(15,14) DEFAULT NULL,
   PRIMARY KEY (id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 

@@ -1,0 +1,1 @@
+ALTER TABLE toto ADD COLUMN pool_deviation FLOAT(15,14) DEFAULT NULL;

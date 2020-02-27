@@ -12,6 +12,7 @@ use Builders\Providers\EventFromWeb;
 use Builders\Providers\TotoFromWeb;
 use Builders\TotoBuilder;
 use Helpers\ArrayHelper;
+use Helpers\EventsHelper;
 use Helpers\TotoHelper;
 use Models\Bet;
 use Models\BreakDown;
@@ -222,6 +223,8 @@ class UpdateController
 
         $events = $eventRepository->getAll();
 
+        $eventHelper = new EventsHelper($events);
+
         $results = [];
 
         foreach ($actualEvents as $event) {
@@ -235,6 +238,8 @@ class UpdateController
         foreach ($events as $key => $event) {
             $eventRepository->updateEventResultById($event->getId(), $actualEvents[$key]->getResult());
         }
+
+        $totoRepository->updateDeviation($eventHelper->getAverageDeviation());
 
         $toto = $totoRepository->getToto();
 
@@ -365,4 +370,16 @@ class UpdateController
 
     }
 
+    public function updateDeviation()
+    {
+        /** @var TotoRepository $totoRepository */
+        $totoRepository = Repository::getRepository(TotoRepository::class);
+
+        /** @var EventRepository $eventsRepository */
+        $eventsRepository = Repository::getRepository(EventRepository::class);
+
+        $eventHelper = new EventsHelper($eventsRepository->getAll());
+
+        $totoRepository->updateDeviation($eventHelper->getAverageDeviation());
+    }
 }

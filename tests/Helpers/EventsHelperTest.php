@@ -89,4 +89,14 @@ class EventsHelperTest extends TestCase
 
         $this->assertEquals(0.2*0.48*0.67, $p);
     }
+
+    public function testDeviation()
+    {
+        $deviation = $this->eventsHelper->getAverageDeviation();
+
+        $this->assertEquals(
+            (0.3*(0.3-0.2) + 0.5*(0.5-0.4) + 0.48*(0.48-0.2) + 0.5*(0.5-0.4) + 0.31*(0.31-0.2) + 0.67*(0.67-0.4)) / 3,
+            $deviation
+        );
+    }
 }
