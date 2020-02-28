@@ -124,7 +124,7 @@ class UpdateController
         }
     }
 
-    public function updateBetsEvUsingSeparateProcess($totoId)
+    public function updateBetsEvUsingSeparateProcess($totoId, array $ids = [])
     {
         /** @var BetsRepository $betsRepository */
         $betsRepository = Repository::getRepository(BetsRepository::class);
@@ -145,14 +145,18 @@ class UpdateController
 
                 $bets = $betsRepository->geBetsOfPackage($id);
 
-                foreach ($bets as $bet) {
+                foreach ($bets as $key => $bet) {
 
-                    $allBets[] = $bet->getResults();
+                    if ($ids && in_array($key, $ids)) {
 
-                    if (null == $bet->getEv()) $procArray[] = popen(
-                        "php ".ROOT_DIR."/updateBetItemEv.php -t $totoId --id=".$bet->getId()." --type=array &",
-                        "w"
-                    );
+                        $allBets[] = $bet->getResults();
+
+                        if (null == $bet->getEv()) $procArray[] = popen(
+                            "php ".ROOT_DIR."/updateBetItemEv.php -t $totoId --id=".$bet->getId()." --type=array &",
+                            "w"
+                        );
+                    }
+
                 }
 
                 foreach ($procArray as $proc) {
@@ -164,6 +168,33 @@ class UpdateController
                 $betsRepository->updateBetEv($id, null, $p);
             }
         }
+    }
+
+    public function updateRandomBetsUsingSeveralProcesses($totoId)
+    {
+        /** @var BetsRepository $betsRepository */
+        $betsRepository = Repository::getRepository(BetsRepository::class);
+
+        $betPackages = $betsRepository->getAllPackages();
+
+        $max = 0;
+
+        foreach ($betPackages as $package) {
+
+            $id = (int)$package['id'];
+
+            $bets = $betsRepository->geBetsOfPackage($id);
+
+            if (count($bets) > $max) $max = count($bets);
+        }
+
+        $ids = [];
+
+        for ($i = 1; $i <= $_ENV['COUNT_BETS_FOR_CALC']; $i++) {
+            array_push($ids, rand(0, $max - 1));
+        }
+
+        $this->updateBetsEvUsingSeparateProcess($totoId, $ids);
     }
 
 
