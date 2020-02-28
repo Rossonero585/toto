@@ -56,9 +56,9 @@ class UpdateController
             throw new \Exception("totoId is not defined");
         }
 
-        $jsonToto = $this->getJsonToto($totoId);
+        $jsonToto = TotoHelper::getJsonToto($totoId);
 
-        $totoEvents = $this->getEventsFromJson($jsonToto);
+        $totoEvents = EventsHelper::getEventsFromJson($jsonToto);
 
         /** @var TotoRepository $totoRepository */
         $totoRepository = Repository::getRepository(TotoRepository::class);
@@ -248,9 +248,9 @@ class UpdateController
         /** @var BetsRepository $betsRepository */
         $betsRepository = Repository::getRepository(BetsRepository::class);
 
-        $totoJson = $this->getJsonToto($totoId);
+        $totoJson = TotoHelper::getJsonToto($totoId);
 
-        $actualEvents = $this->getEventsFromJson($totoJson);
+        $actualEvents = EventsHelper::getEventsFromJson($totoJson);
 
         $events = $eventRepository->getAll();
 
@@ -304,31 +304,6 @@ class UpdateController
             }
         }
 
-    }
-
-    private function getJsonToto(int $totoId)
-    {
-        return json_decode(file_get_contents($_ENV['BET_CITY_URL']."/d/se/one?id=$totoId"));
-    }
-
-    /**
-     * @param $json
-     * @return Event[]
-     */
-    private function getEventsFromJson($json)
-    {
-        $out = [];
-
-        $totoEvents = $json->reply->toto->out;;
-
-        foreach ($totoEvents as $key => $jsonEvent)
-        {
-            $event = EventBuilder::createEvent(new EventFromWeb($jsonEvent, ++$key));
-
-            array_push($out, $event);
-        }
-
-        return $out;
     }
 
     public function updateBreakDownsAction()

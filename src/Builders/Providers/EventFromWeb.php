@@ -27,35 +27,35 @@ class EventFromWeb implements EventInterface
 
     public function getP1(): float
     {
-        return $this->totoItem->pwin_first / 100;
+        return $this->totoItem->p_first / 100;
     }
 
     public function getPx(): float
     {
-        return $this->totoItem->pdraw / 100;
+        return $this->totoItem->p_draw / 100;
     }
 
     public function getP2(): float
     {
-        return $this->totoItem->pwin_second / 100;
+        return $this->totoItem->p_second / 100;
     }
 
     public function getS1(): float
     {
         // todo
-        return $this->totoItem->p_first / 100;
+        return $this->totoItem->pwin_first / 100;
     }
 
     public function getSx(): float
     {
         // todo
-        return $this->totoItem->p_draw / 100;
+        return $this->totoItem->pdraw / 100;
     }
 
     public function getS2(): float
     {
         // todo
-        return $this->totoItem->p_second / 100;
+        return $this->totoItem->pwin_second / 100;
     }
 
     public function getLeague(): string
@@ -122,6 +122,11 @@ class EventFromWeb implements EventInterface
                 return null;
                 break;
         }
+    }
+
+    public function getSource(): ?string
+    {
+        return '';
     }
 
 

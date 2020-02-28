@@ -59,4 +59,9 @@ interface EventInterface
      */
     public function getResult(): ?string;
 
+    /**
+     * @return string
+     */
+    public function getSource(): ?string;
+
 }

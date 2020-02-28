@@ -128,4 +128,9 @@ class TotoHelper
 
         return $pot;
     }
+
+    public static function getJsonToto($totoId)
+    {
+        return json_decode(file_get_contents($_ENV['BET_CITY_URL']."/d/se/one?id=$totoId"));
+    }
 }

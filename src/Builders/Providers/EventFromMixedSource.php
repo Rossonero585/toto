@@ -2,60 +2,74 @@
 /**
  * Created by PhpStorm.
  * User: dmitry
- * Date: 08/10/17
- * Time: 18:48
+ * Date: 03/03/20
+ * Time: 21:46
  */
 
 namespace Builders\Providers;
 
-class EventFromArray implements EventInterface
+class EventFromMixedSource implements EventInterface
 {
-    /** @var array */
+    /**
+     * @var \stdClass
+     */
+    private $toto;
+
+    /**
+     * @var array
+     */
     private $assoc;
 
-    public function __construct(array $assoc)
+    /**
+     * @var int
+     */
+    private $id;
+
+    public function __construct(\stdClass $toto, array $assoc, int $id)
     {
+        $this->toto  = $toto;
         $this->assoc = $assoc;
+        $this->id    = $id;
     }
 
     public function getId(): int
     {
-        return $this->assoc['id'];
+        return $this->id;
     }
 
     public function getP1(): float
     {
-        return $this->assoc['s1'];
+        return $this->assoc['p1'];
     }
 
     public function getPx(): float
     {
-        return $this->assoc['sx'];
+        return $this->assoc['px'];
     }
 
     public function getP2(): float
     {
-        return $this->assoc['s2'];
+        return $this->assoc['p2'];
     }
 
     public function getS1(): float
     {
-        return $this->assoc['p1'];
+        return $this->toto->pwin_first / 100;
     }
 
     public function getSx(): float
     {
-        return $this->assoc['px'];
+        return $this->toto->pdraw / 100;
     }
 
     public function getS2(): float
     {
-        return $this->assoc['p2'];
+        return $this->toto->pwin_second / 100;
     }
 
     public function getLeague(): string
     {
-        return $this->assoc['league'];
+        return $this->toto->name_ch;
     }
 
     public function getTile(): string
@@ -65,11 +79,16 @@ class EventFromArray implements EventInterface
 
     public function getResult(): ?string
     {
-        return (string)$this->assoc['result'];
+        $win = $this->toto->win;
+
+        if (!$win) return null;
+
+        return (string)$win;
     }
 
     public function getSource(): ?string
     {
         return isset($this->assoc['source']) ? $this->assoc['source'] : '';
     }
+
 }

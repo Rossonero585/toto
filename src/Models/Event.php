@@ -41,6 +41,9 @@ class Event
     /** @var  string */
     private $result;
 
+    /** @var  string */
+    private $source;
+
     /**
      * Event constructor.
      * @param $id
@@ -52,9 +55,10 @@ class Event
      * @param $s2
      * @param $league
      * @param $title
+     * @param $source
      * @param $result
      */
-    public function __construct($id, $p1, $px, $p2, $s1, $sx, $s2, $league, $title, $result = null)
+    public function __construct($id, $p1, $px, $p2, $s1, $sx, $s2, $league, $title, $source = '', $result = null)
     {
         $this->id = $id;
         $this->p1 = $p1;
@@ -65,6 +69,7 @@ class Event
         $this->s2 = $s2;
         $this->league = $league;
         $this->title = $title;
+        $this->source = $source;
         $this->result = $result;
     }
 
@@ -172,4 +177,11 @@ class Event
         $this->result = $result;
     }
 
+    /**
+     * @return string
+     */
+    public function getSource(): string
+    {
+        return $this->source;
+    }
 }

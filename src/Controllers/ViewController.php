@@ -27,30 +27,37 @@ class ViewController
 
             $dbName = array_shift($db);
 
-            $pdo->exec("USE $dbName");
+            if (mb_strlen($dbName) == 12) {
 
-            $tempArr = explode("_", $dbName);
+                try {
 
-            $totoId = (int)array_pop($tempArr);
+                    $pdo->exec("USE $dbName");
 
-            $toto = $pdo->query("SELECT * FROM toto")->fetch();
+                    $tempArr = explode("_", $dbName);
 
-            $startDate = $toto['start_date'];
+                    $totoId = (int)array_pop($tempArr);
 
-            $betItems = $pdo->query("SELECT * FROM bet_items")->fetchAll();
+                    $toto = $pdo->query("SELECT * FROM toto")->fetch();
 
-            foreach ($betItems as $item) {
+                    $startDate = $toto['start_date'];
 
-                $bet = $item['bet'];
-                $money = $item['money'];
-                $income = $item['income'];
-                $ev = $item['ev'];
-                $probability = $item['probability'];
+                    $betItems = $pdo->query("SELECT * FROM bet_items")->fetchAll();
 
-                $s .= "$totoId;$startDate;$bet;$money;$income;$ev;$probability" . PHP_EOL;
+                    $bet = 0;
 
+                    $income = 0;
+
+                    foreach ($betItems as $item) {
+
+                        $bet += (float)$item['money'];
+                        $income += (float)$item['income'];
+                    }
+
+
+                    $s .= "$totoId;$startDate;$bet;$bet;$income" . PHP_EOL;
+                }
+                catch (\Exception $exception) {}
             }
-
         }
 
         echo $s;

@@ -8,6 +8,9 @@
 
 namespace Helpers;
 
+use Builders\EventBuilder;
+use Builders\Providers\EventFromMixedSource;
+use Builders\Providers\EventFromWeb;
 use Models\Event;
 
 class EventsHelper
@@ -135,5 +138,44 @@ class EventsHelper
         }
 
         return $deviation / $count;
+    }
+
+    /**
+     * @param $json
+     * @return Event[]
+     */
+    public static function getEventsFromJson($json)
+    {
+        $out = [];
+
+        $totoEvents = $json->reply->toto->out;
+
+        foreach ($totoEvents as $key => $jsonEvent)
+        {
+            $event = EventBuilder::createEvent(new EventFromWeb($jsonEvent, ++$key));
+
+            array_push($out, $event);
+        }
+
+        return $out;
+    }
+
+    public static function getEventsFromMixedProvider($json, array $array)
+    {
+
+        $out = [];
+
+        $totoEvents = $json->reply->toto->out;
+
+        foreach ($totoEvents as $key => $jsonEvent)
+        {
+            $id = $key + 1;
+
+            $event = EventBuilder::createEvent(new EventFromMixedSource($json, $array[$key], $id));
+
+            array_push($out, $event);
+        }
+
+        return $out;
     }
 }

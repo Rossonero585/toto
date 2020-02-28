@@ -23,4 +23,9 @@ class TotoBuilder
             $totoProvider->getWinnerCounts()
         );
     }
+
+    public static function createTotoFromJson()
+    {
+
+    }
 }
