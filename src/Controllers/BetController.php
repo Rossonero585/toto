@@ -13,9 +13,12 @@ use Builders\Providers\BetRequestFromPost;
 use Builders\Providers\TotoFromWeb;
 use Builders\TotoBuilder;
 use Helpers\EventsHelper;
+use Helpers\FileParser;
+use Helpers\Logger;
 use Helpers\TotoHelper;
 use Models\BetRequest;
 use Models\Event;
+use phpDocumentor\Reflection\File;
 use Repositories\BetsRepository;
 use Repositories\EventRepository;
 use Repositories\Repository;
@@ -27,31 +30,57 @@ class BetController
 
     public function makeBet()
     {
-
         $betBuilder = new BetBuilder();
 
         $betRequest = $betBuilder->createBetRequest(new BetRequestFromPost());
 
         $this->logBet($betRequest);
 
+        if (!$this->checkEvents($betRequest)) return false;
+
+
+
+    }
+
+
+    private function checkEvents(BetRequest $betRequest)
+    {
+        $logger = Logger::getInstance();
+
+        $eventsAssoc = FileParser::parseFileWithEvents($betRequest->getEventsFile());
+
         $totoJson = TotoHelper::getJsonToto($betRequest->getTotoId());
 
-        $events = EventsHelper::getEventsFromJson($totoJson);
+        $events = EventsHelper::getEventsFromMixedProvider($totoJson, $eventsAssoc);
 
+        $eventHelper = new EventsHelper($events);
 
+        if ($deviation = $eventHelper->getAverageDeviation() < self::MIN_DEVIATION) {
 
+            $logger->log("bet", "Refuse to make bet", "Deviation is not acceptable $deviation");
 
+            return false;
+
+        }
+
+        /** @var Event $event */
+        foreach ($events as $event) {
+
+            if ($event->isCanceled()) {
+
+                $id = $event->getId();
+
+                $logger->log("bet", "Refuse to make bet", "Event $id is canceled");
+
+                return false;
+            }
+
+        }
+
+        return true;
     }
 
-    /**
-     * @param Event[] $events
-     */
-    private function checkEvents(array $events)
-    {
 
-
-
-    }
 
     private function logBet(BetRequest $betRequest)
     {

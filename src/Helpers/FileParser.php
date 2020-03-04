@@ -17,7 +17,7 @@ class FileParser
      * @param string $file
      * @return array
      */
-    public function parseFileWithEvents(string $file) : array
+    public static function parseFileWithEvents(string $file) : array
     {
         $lines = explode(PHP_EOL, $file);
 
