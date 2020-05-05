@@ -14,16 +14,25 @@ use PHPUnit\Framework\TestCase;
 
 class FileParserTest extends TestCase
 {
-    public function testFileParser()
+    public function testParseEvents()
     {
         $fileParser = new FileParser();
 
-        $arr = $fileParser->parseFileWithEvents(file_get_contents(__DIR__."/out.txt"));
-
-        var_dump($arr);
+        $arr = $fileParser->parseFileWithEvents(file_get_contents(__DIR__."./../samples/out.txt"));
 
         $this->assertArraySubset([
             ['title' => 'Мидлсбро - Халл', 'p1' => 0.38689, 'px' => 0.27825, 'p2' => 0.33486, 'id' => 1, 'source' => 'pin'],
         ], $arr);
+    }
+
+    public function testParseBets()
+    {
+        $fileParser = new FileParser();
+
+        $arr = $fileParser->parseFileWithBets(file_get_contents(__DIR__."./../samples/matrix.csv"));
+
+        $this->assertEquals("0.2992999851703644", $arr[1]['pr_1']);
+        $this->assertEquals("X222211221X212", $arr[1]['cupon']);
+
     }
 }

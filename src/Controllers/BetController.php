@@ -8,21 +8,12 @@
 
 namespace Controllers;
 
-use Builders\BetBuilder;
-use Builders\Providers\BetRequestFromPost;
-use Builders\Providers\TotoFromWeb;
-use Builders\TotoBuilder;
+use Builders\BetRequestBuilder;
+use Builders\Providers\BetRequestFromTotoDecision;
 use Helpers\EventsHelper;
-use Helpers\FileParser;
 use Helpers\Logger;
-use Helpers\TotoHelper;
-use Models\BetRequest;
+use Models\Input\BetRequest;
 use Models\Event;
-use phpDocumentor\Reflection\File;
-use Repositories\BetsRepository;
-use Repositories\EventRepository;
-use Repositories\Repository;
-use Repositories\TotoRepository;
 
 class BetController
 {
@@ -30,15 +21,18 @@ class BetController
 
     public function makeBet()
     {
-        $betBuilder = new BetBuilder();
+        $betBuilder = new BetRequestBuilder();
 
-        $betRequest = $betBuilder->createBetRequest(new BetRequestFromPost());
+        $betRequest = $betBuilder->createBetRequest(new BetRequestFromTotoDecision(
+            $_POST['totoId'],
+            $this->getBetsContent(),
+            $this->getEventsContent(),
+            $_POST['isTest']
+        ));
 
         $this->logBet($betRequest);
 
         if (!$this->checkEvents($betRequest)) return false;
-
-
 
     }
 
@@ -47,11 +41,7 @@ class BetController
     {
         $logger = Logger::getInstance();
 
-        $eventsAssoc = FileParser::parseFileWithEvents($betRequest->getEventsFile());
-
-        $totoJson = TotoHelper::getJsonToto($betRequest->getTotoId());
-
-        $events = EventsHelper::getEventsFromMixedProvider($totoJson, $eventsAssoc);
+        $events = $betRequest->getEvents();
 
         $eventHelper = new EventsHelper($events);
 
@@ -60,21 +50,22 @@ class BetController
             $logger->log("bet", "Refuse to make bet", "Deviation is not acceptable $deviation");
 
             return false;
-
         }
 
         /** @var Event $event */
         foreach ($events as $event) {
 
+            $id = $event->getId();
+
             if ($event->isCanceled()) {
-
-                $id = $event->getId();
-
                 $logger->log("bet", "Refuse to make bet", "Event $id is canceled");
-
                 return false;
             }
 
+            if (!$event->isPinnacle()) {
+                $logger->log("bet", "Refuse to make bet", "Event $id is taken not from pinnacle");
+                return false;
+            }
         }
 
         return true;
@@ -90,9 +81,18 @@ class BetController
 
         mkdir($pathToLogs,0777, true);
 
-        file_put_contents($pathToLogs."/events.txt", $betRequest->getEventsFile());
+        file_put_contents($pathToLogs."/events.txt", $this->getEventsContent());
 
-        file_put_contents($pathToLogs."/bets.txt", $betRequest->getBetsFile());
+        file_put_contents($pathToLogs."/bets.txt", $this->getBetsContent());
     }
 
+    private function getEventsContent()
+    {
+        return file_get_contents($_FILES['events_file']);
+    }
+
+    private function getBetsContent()
+    {
+        return file_get_contents($_FILES['bets_file']);
+    }
 }

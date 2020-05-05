@@ -11,6 +11,8 @@ class Event
 {
     const cancelledType = 4;
 
+    const PINACLE = 'pin';
+
     /** @var  int */
     private $id;
 
@@ -183,5 +185,10 @@ class Event
     public function getSource(): string
     {
         return $this->source;
+    }
+
+    public function isPinnacle(): bool
+    {
+        return $this->source == self::PINACLE;
     }
 }

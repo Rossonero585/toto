@@ -42,19 +42,16 @@ class EventFromWeb implements EventInterface
 
     public function getS1(): float
     {
-        // todo
         return $this->totoItem->pwin_first / 100;
     }
 
     public function getSx(): float
     {
-        // todo
         return $this->totoItem->pdraw / 100;
     }
 
     public function getS2(): float
     {
-        // todo
         return $this->totoItem->pwin_second / 100;
     }
 

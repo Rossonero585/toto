@@ -17,7 +17,7 @@ class EventFromMixedProviderTest extends TestCase
     private function createMockEventFromWeb()
     {
         $provider = new EventFromMixedSource(
-            json_decode(file_get_contents(__DIR__."/totoItem.json")),
+            json_decode(file_get_contents(__DIR__."./../../samples/totoItem.json")),
             [
                 'p1' => 0.65,
                 'px' => 0.05,
@@ -45,5 +45,6 @@ class EventFromMixedProviderTest extends TestCase
         $this->assertEquals(0.3366,  $testEvent->getS2());
 
         $this->assertEquals('4',  $testEvent->getResult());
+        $this->assertEquals('pin',  $testEvent->getSource());
     }
 }

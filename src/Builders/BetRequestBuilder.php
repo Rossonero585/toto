@@ -9,16 +9,16 @@
 namespace Builders;
 
 use Builders\Providers\BetRequestInterface;
-use Models\BetRequest;
+use Models\Input\BetRequest;
 
-class BetBuilder
+class BetRequestBuilder
 {
     public function createBetRequest(BetRequestInterface $betRequestProvider)
     {
         return new BetRequest(
             $betRequestProvider->getTotoId(),
-            $betRequestProvider->getBetsFile(),
-            $betRequestProvider->getEventsFile(),
+            $betRequestProvider->getBets(),
+            $betRequestProvider->getEvents(),
             $betRequestProvider->isTest()
         );
     }

@@ -15,7 +15,7 @@ class TotoFromWebTest extends TestCase
 {
     private function createMockTotoProvider()
     {
-        return new TotoFromWeb(json_decode(file_get_contents(realpath(__DIR__."/toto.json"))));
+        return new TotoFromWeb(json_decode(file_get_contents(realpath(__DIR__."./../../samples/toto.json"))));
     }
 
     public function testGetPot()

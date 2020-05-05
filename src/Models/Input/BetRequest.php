@@ -6,7 +6,9 @@
  * Time: 18:30
  */
 
-namespace Models;
+namespace Models\Input;
+
+use Models\Event;
 
 class BetRequest
 {
@@ -16,14 +18,14 @@ class BetRequest
     private $totoId;
 
     /**
-     * @var string
+     * @var Bet[]
      */
-    private $betsFile;
+    private $bets;
 
     /**
-     * @var string
+     * @var Event[]
      */
-    private $eventsFile;
+    private $events;
 
     /**
      * @var bool
@@ -33,15 +35,15 @@ class BetRequest
     /**
      * BetRequest constructor.
      * @param int $totoId
-     * @param string $betsFile
-     * @param string $eventsFile
+     * @param Bet[] $bets
+     * @param Event[] $events
      * @param bool $isTest
      */
-    public function __construct(int $totoId, string $betsFile, string $eventsFile, bool $isTest)
+    public function __construct(int $totoId, array $bets, array $events, bool $isTest)
     {
         $this->totoId = $totoId;
-        $this->betsFile = $betsFile;
-        $this->eventsFile = $eventsFile;
+        $this->bets = $bets;
+        $this->events = $events;
         $this->isTest = $isTest;
     }
 
@@ -54,19 +56,19 @@ class BetRequest
     }
 
     /**
-     * @return string
+     * @return array
      */
-    public function getBetsFile(): string
+    public function getBets(): array
     {
-        return $this->betsFile;
+        return $this->bets;
     }
 
     /**
-     * @return string
+     * @return Event[]
      */
-    public function getEventsFile(): string
+    public function getEvents(): array
     {
-        return $this->eventsFile;
+        return $this->events;
     }
 
     /**

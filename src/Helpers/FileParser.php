@@ -56,4 +56,40 @@ class FileParser
         return $eventsAssoc;
     }
 
+    public static function parseFileWithBets(string $file) : array
+    {
+        $lines = explode(PHP_EOL, $file);
+
+        $keys = array_shift($lines);
+
+        $keys = explode(";", $keys);
+
+        $out = [];
+
+        foreach ($lines as $line) {
+
+            if ($line) {
+
+                if (preg_match_all("/\"((?:\d|=|;|X|Х)+)\"/", $line, $bet)) {
+
+                    $betString = $bet[1][0];
+
+                    $parts = explode(";\"$betString\";", $line);
+
+                    $arr = array_merge(explode(";", $parts[0]), [$betString], explode(";", $parts[1]));
+
+                    $items = [];
+
+                    foreach ($arr as $i => $item) {
+                        if ($item) $items[$keys[$i]] = $item;
+                    }
+
+                    array_push($out, $items);
+                };
+            }
+        }
+
+        return $out;
+    }
+
 }
