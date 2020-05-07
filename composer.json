@@ -6,7 +6,8 @@
         "psr-4": {"": "src/", "Tests\\": "tests"}
     },
     "require": {
-        "drupol/phpermutations": "^1.2"
+        "drupol/phpermutations": "^1.2",
+        "guzzlehttp/guzzle": "~6.0"
     },
     "scripts": {
         "test": "@php ./vendor/phpunit/phpunit/phpunit tests"

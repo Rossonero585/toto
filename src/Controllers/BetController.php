@@ -11,6 +11,7 @@ namespace Controllers;
 use Builders\BetRequestBuilder;
 use Builders\Providers\BetRequestFromTotoDecision;
 use Helpers\EventsHelper;
+use Helpers\Http\BetCityClient;
 use Helpers\Logger;
 use Models\Input\BetRequest;
 use Models\Event;
@@ -33,6 +34,10 @@ class BetController
         $this->logBet($betRequest);
 
         if (!$this->checkEvents($betRequest)) return false;
+
+        $betCityClient = new BetCityClient($betRequest->getTotoId());
+
+        $betCityClient->makeBet($betRequest->getBets(), $betRequest->isTest());
 
     }
 
