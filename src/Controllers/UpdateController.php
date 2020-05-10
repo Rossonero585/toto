@@ -7,18 +7,18 @@
  */
 namespace Controllers;
 
-use Builders\EventBuilder;
-use Builders\Providers\EventFromWeb;
 use Builders\Providers\TotoFromWeb;
 use Builders\TotoBuilder;
 use Helpers\ArrayHelper;
 use Helpers\EventsHelper;
 use Helpers\TotoHelper;
 use Models\Bet;
+use Models\BetPackage;
 use Models\BreakDown;
 use Models\BreakDownItem;
 use Models\Event;
-use Repositories\BetsRepository;
+use Repositories\BetItemRepository;
+use Repositories\BetPackageRepository;
 use Repositories\EventRepository;
 use Repositories\PoolRepository;
 use Repositories\PreparedResultRepository;
@@ -95,20 +95,24 @@ class UpdateController
     {
         $cc = new CalculationController();
 
-        /** @var BetsRepository $betsRepository */
-        $betsRepository = Repository::getRepository(BetsRepository::class);
+        /** @var BetPackageRepository $betPackageRepository */
+        $betPackageRepository = Repository::getRepository(BetPackageRepository::class);
 
-        $betPackages = $betsRepository->getAllPackages();
+        /** @var BetItemRepository $betItemsRepository */
+        $betItemsRepository = Repository::getRepository(BetItemRepository::class);
 
+        $betPackages = $betPackageRepository->getAllPackages();
+
+        /** @var BetPackage $package */
         foreach ($betPackages as $package) {
 
-            $id = (int)$package['id'];
+            $id = $package->getId();
 
-            if (!$package['probability'] && !$package['ev']) {
+            if (!$package->getProbability() && !$package->getEv() ) {
 
                 $allBets = array();
 
-                $bets = $betsRepository->geBetsOfPackage($id);
+                $bets = $betItemsRepository->geBetsOfPackage($id);
 
                 foreach ($bets as $bet) {
 
@@ -119,31 +123,34 @@ class UpdateController
 
                 $p = $cc->calculateProbabilityOfPackage($allBets);
 
-                $betsRepository->updateBetEv($id, null, $p);
+                $betPackageRepository->updateBetEv($id, null, $p);
             }
         }
     }
 
     public function updateBetsEvUsingSeparateProcess($totoId, array $ids = [])
     {
-        /** @var BetsRepository $betsRepository */
-        $betsRepository = Repository::getRepository(BetsRepository::class);
+        /** @var BetPackageRepository $betPackageRepository */
+        $betPackageRepository = Repository::getRepository(BetPackageRepository::class);
+
+        /** @var BetItemRepository $betItemsRepository */
+        $betItemsRepository = Repository::getRepository(BetItemRepository::class);
 
         $cc = new CalculationController();
 
-        $betPackages = $betsRepository->getAllPackages();
+        $betPackages = $betPackageRepository->getAllPackages();
 
         foreach ($betPackages as $package) {
 
-            $id = (int)$package['id'];
+            $id = $package->getId();
 
-            if (!$package['probability'] && !$package['ev']) {
+            if (!$package->getProbability() && !$package->getEv() ) {
 
                 $procArray = [];
 
                 $allBets = [];
 
-                $bets = $betsRepository->geBetsOfPackage($id);
+                $bets = $betItemsRepository->geBetsOfPackage($id);
 
                 foreach ($bets as $key => $bet) {
 
@@ -165,25 +172,26 @@ class UpdateController
 
                 $p = $cc->calculateProbabilityOfPackage($allBets);
 
-                $betsRepository->updateBetEv($id, null, $p);
+                $betPackageRepository->updateBetEv($id, null, $p);
             }
         }
     }
 
     public function updateRandomBetsUsingSeveralProcesses($totoId)
     {
-        /** @var BetsRepository $betsRepository */
-        $betsRepository = Repository::getRepository(BetsRepository::class);
+        /** @var BetPackageRepository $betPackageRepository */
+        $betPackageRepository = Repository::getRepository(BetPackageRepository::class);
 
-        $betPackages = $betsRepository->getAllPackages();
+        /** @var BetItemRepository $betItemsRepository */
+        $betItemsRepository = Repository::getRepository(BetItemRepository::class);
+
+        $betPackages = $betPackageRepository->getAllPackages();
 
         $max = 0;
 
         foreach ($betPackages as $package) {
 
-            $id = (int)$package['id'];
-
-            $bets = $betsRepository->geBetsOfPackage($id);
+            $bets = $betItemsRepository->geBetsOfPackage($package->getId());
 
             if (count($bets) > $max) $max = count($bets);
         }
@@ -200,10 +208,10 @@ class UpdateController
 
     public function updateBetItemById($id, $type = 'array')
     {
-        /** @var BetsRepository $betsRepository */
-        $betsRepository = Repository::getRepository(BetsRepository::class);
+        /** @var BetItemRepository $betItemsRepository */
+        $betItemsRepository = Repository::getRepository(BetItemRepository::class);
 
-        $bet = $betsRepository->getBetItemById($id);
+        $bet = $betItemsRepository->getBetItemById($id);
 
         $this->updateBetEv($bet, $type);
     }
@@ -212,8 +220,8 @@ class UpdateController
     {
         $cc = new CalculationController();
 
-        /** @var BetsRepository $betsRepository */
-        $betsRepository = Repository::getRepository(BetsRepository::class);
+        /** @var BetItemRepository $betItemsRepository */
+        $betItemsRepository = Repository::getRepository(BetItemRepository::class);
 
         if ($type == 'mysql') {
             list($ev, $p) = $cc->calculateEV($bet->getResults(), $bet->getMoney());
@@ -222,7 +230,7 @@ class UpdateController
             list($ev, $p) = $cc->calculateEVUsingArray($bet->getResults(), $bet->getMoney());
         }
 
-        $betsRepository->updateBetItemEv($bet->getId(), $ev, $p);
+        $betItemsRepository->updateBetItemEv($bet->getId(), $ev, $p);
     }
 
     public function checkInPool(array $bet)
@@ -245,8 +253,11 @@ class UpdateController
         /** @var PoolRepository $poolRepository */
         $poolRepository = Repository::getRepository(PoolRepository::class);
 
-        /** @var BetsRepository $betsRepository */
-        $betsRepository = Repository::getRepository(BetsRepository::class);
+        /** @var BetPackageRepository $betPackageRepository */
+        $betPackageRepository = Repository::getRepository(BetPackageRepository::class);
+
+        /** @var BetItemRepository $betItemsRepository */
+        $betItemsRepository = Repository::getRepository(BetItemRepository::class);
 
         $totoJson = TotoHelper::getJsonToto($totoId);
 
@@ -276,13 +287,11 @@ class UpdateController
 
         $breakDown = $poolRepository->getWinnersBreakDown($results);
 
-        $betPackages = $betsRepository->getAllPackages();
+        $betPackages = $betPackageRepository->getAllPackages();
 
         foreach ($betPackages as $package) {
 
-            $id = (int)$package['id'];
-
-            $bets = $betsRepository->geBetsOfPackage($id);
+            $bets = $betItemsRepository->geBetsOfPackage($package->getId());
 
             foreach ($bets as $bet) {
 
@@ -300,7 +309,7 @@ class UpdateController
                     $income = 0;
                 }
 
-                $betsRepository->updateBetItemIncome($bet->getId(), $countMatch, $income);
+                $betItemsRepository->updateBetItemIncome($bet->getId(), $countMatch, $income);
             }
         }
 

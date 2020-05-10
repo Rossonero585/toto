@@ -20,6 +20,8 @@ class TotoHelper
     /** @var  float */
     private $bet;
 
+    private static $jsonStorage = [];
+
     public function __construct(Toto $toto, float $bet)
     {
         $this->toto = $toto;
@@ -129,8 +131,18 @@ class TotoHelper
         return $pot;
     }
 
+    /**
+     * @param $totoId
+     * @return \stdClass
+     */
     public static function getJsonToto($totoId)
     {
-        return json_decode(file_get_contents($_ENV['BET_CITY_URL']."/d/se/one?id=$totoId"));
+        $requestedUrl = $_ENV['BET_CITY_URL']."/d/se/one?id=$totoId";
+
+        if (!self::$jsonStorage[$requestedUrl]) {
+            self::$jsonStorage[$requestedUrl] = json_decode(file_get_contents($requestedUrl));
+        }
+
+        return self::$jsonStorage[$requestedUrl];
     }
 }

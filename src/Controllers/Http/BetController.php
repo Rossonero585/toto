@@ -6,22 +6,25 @@
  * Time: 20:30
  */
 
-namespace Controllers;
+namespace Controllers\Http;
 
 use Builders\BetRequestBuilder;
 use Builders\Providers\BetRequestFromTotoDecision;
+use Helpers\BetRequestHelper;
 use Helpers\EventsHelper;
 use Helpers\Http\BetCityClient;
 use Helpers\Logger;
 use Models\Input\BetRequest;
 use Models\Event;
 
-class BetController
+class BetController extends Controller
 {
     const MIN_DEVIATION = 0.0205;
 
-    public function makeBet()
+    public function makeBet() : void
     {
+        $logger = Logger::getInstance();
+
         $betBuilder = new BetRequestBuilder();
 
         $betRequest = $betBuilder->createBetRequest(new BetRequestFromTotoDecision(
@@ -33,12 +36,33 @@ class BetController
 
         $this->logBet($betRequest);
 
-        if (!$this->checkEvents($betRequest)) return false;
+        if (!$this->checkEvents($betRequest)) return;
 
         $betCityClient = new BetCityClient($betRequest->getTotoId());
 
-        $betCityClient->makeBet($betRequest->getBets(), $betRequest->isTest());
+        try {
+            $betCityClient->makeBet($betRequest->getBets(), $betRequest->isTest());
+        }
+        catch (\Throwable $exception) {
+            $logger->log('main', 'Bet was not successful', $exception->getMessage());
+            $this->sendRequest(500, $exception->getMessage());
+        }
 
+        $betRequestHelper = new BetRequestHelper();
+
+        try {
+            $betRequestHelper->saveBetRequest($betRequest);
+        }
+        catch (\Throwable $exception) {
+            $logger->log(
+                'main',
+                'Can\'t save bet request into database',
+                $exception->getMessage()
+            );
+            $this->sendRequest(500, $exception->getMessage());
+        }
+
+        $this->sendRequest(200, '');
     }
 
 

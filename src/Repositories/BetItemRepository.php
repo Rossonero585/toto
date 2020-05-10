@@ -10,14 +10,18 @@ namespace Repositories;
 
 
 use Models\Bet;
+use Models\Input\Bet as InputBet;
 
-class BetsRepository extends Repository
+class BetItemRepository extends Repository
 {
+    const TABLE_NAME = 'bet_items';
 
     public function getBetItemById(int $id)
     {
+        $tableName = self::TABLE_NAME;
+
         $sql = <<<EOD
-SELECT * FROM bet_items bi WHERE bi.id = :id
+SELECT * FROM {$tableName} bi WHERE bi.id = :id
 EOD;
 
         $st = $this->getCachedStatement($sql);
@@ -31,31 +35,17 @@ EOD;
         return $this->createBet(array_shift($betArr));
     }
 
-
-    /**
-     * @return array
-     */
-    public function getAllPackages()
-    {
-        $sql = <<<EOD
-SELECT * FROM bets 
-EOD;
-        $st = $this->pdo->prepare($sql);
-
-        $st->execute();
-
-        return $st->fetchAll(\PDO::FETCH_ASSOC);
-    }
-
     /**
      * @param int $id
      * @return Bet[]
      */
     public function geBetsOfPackage(int $id)
     {
+        $tableName = self::TABLE_NAME;
+
         $sql = <<<EOD
 SELECT bi.id as id, bi.money as money, bi.bet as bet, bi.ev as ev FROM bets b
-LEFT JOIN bet_items bi ON bi.bet_id = b.id
+LEFT JOIN {$tableName} bi ON bi.bet_id = b.id
 WHERE b.id = :id
 EOD;
 
@@ -71,6 +61,30 @@ EOD;
 
     }
 
+    /**
+     * @param InputBet $bet
+     * @param int $packageId
+     * @return string
+     */
+    public function addBetItem(InputBet $bet, int $packageId)
+    {
+        $tableName = self::TABLE_NAME;
+
+        $sql = <<<EOD
+INSERT INTO {$tableName} (bet_id, bet, money)
+VALUES (:bet_id, :bet, :money)
+EOD;
+
+        $st = $this->pdo->prepare($sql);
+
+        $st->execute([
+            'bet_id' => $packageId,
+            'bet' => implode("", $bet->getResults()),
+            'money' => $bet->getMoney()
+        ]);
+
+        return $this->pdo->lastInsertId();
+    }
 
     public function updateBetItemEv(int $id, float $ev = null, float $p = null)
     {
@@ -86,26 +100,6 @@ EOD;
             'count_match' => $countMatch,
             'income' => $income
         ]);
-    }
-
-    /**
-     * @param int $id
-     * @param float $ev
-     * @param float $p
-     * @return bool
-     */
-    public function updateBetEv(int $id, float $ev = null, float $p = null)
-    {
-        $sql = <<<EOD
-UPDATE bets
-SET ev = :ev,
-    probability = :p
-WHERE id =:id
-EOD;
-
-        $st = $this->getCachedStatement($sql);
-
-        return $st->execute(['id' => $id, 'ev' => $ev, 'p' => $p]);
     }
 
 

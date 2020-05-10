@@ -37,9 +37,7 @@ class Logger
     {
         $file = $this->path."/".$path.".log";
 
-        $f = fopen($file, "a+t");
-
-        if (!$f) throw new \Exception("Unable to create log file $file");
+        $f = @fopen($file, "a+t");
 
         flock($f, LOCK_EX);
 
