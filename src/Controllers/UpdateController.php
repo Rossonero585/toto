@@ -206,29 +206,24 @@ class UpdateController
     }
 
 
-    public function updateBetItemById($id, $type = 'array')
+    public function updateBetItemById($id)
     {
         /** @var BetItemRepository $betItemsRepository */
         $betItemsRepository = Repository::getRepository(BetItemRepository::class);
 
         $bet = $betItemsRepository->getBetItemById($id);
 
-        $this->updateBetEv($bet, $type);
+        $this->updateBetEv($bet);
     }
 
-    private function updateBetEv(Bet $bet, $type = 'mysql')
+    private function updateBetEv(Bet $bet)
     {
         $cc = new CalculationController();
 
         /** @var BetItemRepository $betItemsRepository */
         $betItemsRepository = Repository::getRepository(BetItemRepository::class);
 
-        if ($type == 'mysql') {
-            list($ev, $p) = $cc->calculateEV($bet->getResults(), $bet->getMoney());
-        }
-        else {
-            list($ev, $p) = $cc->calculateEVUsingArray($bet->getResults(), $bet->getMoney());
-        }
+        list($ev, $p) = $cc->calculateEV($bet->getResults(), $bet->getMoney());
 
         $betItemsRepository->updateBetItemEv($bet->getId(), $ev, $p);
     }

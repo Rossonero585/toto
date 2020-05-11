@@ -3,21 +3,19 @@
 
 include "autoload.php";
 
-$options = getopt("t:", ["id:", "type:"]);
+$options = getopt("t:", ["id:"]);
 
 $totoId = $options['t'];
 
 $betItemId = $options['id'];
 
-$calculationType = $options['type'];
-
 $cu = new \Controllers\UpdateController();
 
-test_log("Start calculate bet item with id $betItemId for $totoId using $calculationType. Pid".getmypid());
+test_log("Start calculate bet item with id $betItemId for $totoId. Pid".getmypid());
 
-$cu->updateBetItemById($betItemId, $calculationType);
+$cu->updateBetItemById($betItemId);
 
-test_log("End calculate bet item with id $betItemId for $totoId using $calculationType. Pid".getmypid());
+test_log("End calculate bet item with id $betItemId for $totoId. Pid".getmypid());
 
 function test_log($str) {
 

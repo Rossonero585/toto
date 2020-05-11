@@ -25,6 +25,9 @@ class Toto
     /** @var  array */
     private $winnerCounts;
 
+    /** @var string */
+    private $bookMaker;
+
     /**
      * Toto constructor.
      * @param \DateTime $startTime
@@ -32,14 +35,16 @@ class Toto
      * @param float $jackPot
      * @param int $count
      * @param array $winnerCounts
+     * @param string $bookMaker
      */
-    public function __construct(\DateTime $startTime, $pot, $jackPot, $count, array $winnerCounts)
+    public function __construct(\DateTime $startTime, $pot, $jackPot, $count, array $winnerCounts, string $bookMaker)
     {
         $this->startTime = $startTime;
         $this->pot = $pot;
         $this->jackPot = $jackPot;
         $this->eventCount = $count;
         $this->winnerCounts = $winnerCounts;
+        $this->bookMaker = $bookMaker;
     }
 
     /**
@@ -90,5 +95,20 @@ class Toto
         return min(array_keys($this->winnerCounts));
     }
 
+    /**
+     * @return string
+     */
+    public function getBookMaker(): string
+    {
+        return $this->bookMaker;
+    }
+
+    /**
+     * @param string $bookMaker
+     */
+    public function setBookMaker(string $bookMaker): void
+    {
+        $this->bookMaker = $bookMaker;
+    }
 
 }

@@ -23,7 +23,7 @@ class PoolRepository extends Repository
     {
         $sql = <<<EOD
 INSERT IGNORE INTO pool
-          (code, money, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13, r14)
+          (code, money, result, toto_id)
 VALUES
 EOD;
         $lines = explode("\n", $str);
@@ -67,32 +67,14 @@ EOD;
     public function getPoolItem(array $bet)
     {
         $sql = <<<EOD
-SELECT * FROM pool WHERE 
-r1 = :r1 AND  
-r2 = :r2 AND  
-r3 = :r3 AND  
-r4 = :r4 AND  
-r5 = :r5 AND  
-r6 = :r6 AND  
-r7 = :r7 AND  
-r8 = :r8 AND  
-r9 = :r9 AND  
-r10 = :r10 AND  
-r11 = :r11 AND  
-r12 = :r12 AND  
-r13 = :r13 AND  
-r14 = :r14
+SELECT * FROM pool WHERE result = :result AND toto_id = :toto_id
 EOD;
         $st = $this->getCachedStatement($sql);
 
-        $counter = 0;
-
-        foreach ($bet as $key => $item) {
-            ++$counter;
-            $st->bindParam("r".$counter, $bet[$key]);
-        }
-
-        $st->execute();
+        $st->execute([
+            'result' => implode("", $bet),
+            'toto_id' => $this->getTotoId()
+        ]);
 
         $items = $st->fetch();
 
@@ -101,17 +83,11 @@ EOD;
 
     private function addSqlRow($money, $code, $results)
     {
-        $row = <<<EOT
-'$code', $money
-EOT;
+        $results = implode("", $results);
 
-        foreach ($results as $r) {
-            $row .= " ,'$r'";
-        }
+        $totoId = $this->getTotoId();
 
-        $row = " ($row), ";
-
-        return $row;
+        return " ('$code', $money, '$results', $totoId), ";
     }
 
     /**
@@ -138,58 +114,13 @@ EOT;
         return $this;
     }
 
-    /**
-     * @param array $results
-     * @return \Models\BreakDown
-     */
-    public function getWinnersBreakDown(array $results)
-    {
-        $ifBlock = "";
-        $i = 0;
-
-        foreach ($results as $item) {
-            $i++;
-            if (is_array($item)) {
-                $inBlock = "";
-                foreach ($item as $k) {
-                    $inBlock .= "'$k',";
-                }
-                $inBlock = substr($inBlock, 0, -1);
-                $ifBlock.= "IF (r$i IN ($inBlock), 1, 0) + ";
-            }
-            else {
-                $ifBlock.= "IF (r$i = '$item', 1, 0) + ";
-            }
-
-        }
-
-        $ifBlock = substr($ifBlock, 0, -3);
-
-        $query =
-            <<<EOD
-SELECT
-	(
-      {$ifBlock}
-    ) AS amount, COUNT(*) AS win_comb, SUM(money) AS pot
-FROM `pool` GROUP BY amount ORDER BY amount DESC
-EOD;
-
-        $st = $this->pdo->query($query);
-
-        $arr = $st->fetchAll();
-
-        $breakDown = BreakDownBuilder::createBreakDownFromArray($arr);
-
-        return $breakDown;
-    }
-
 
     /**
      * @param array $results
      * @return BreakDown|null
      * @throws \Exception
      */
-    public function getWinnersBreakDownUsingArray(array $results)
+    public function getWinnersBreakDown(array $results)
     {
         $pool = $this->getAllPool();
 
@@ -197,9 +128,8 @@ EOD;
 
         foreach ($pool as $poolItem) {
             $money = (float)$poolItem['money'];
-            unset($poolItem['money'], $poolItem['code']);
 
-            $matched = ArrayHelper::countMatchResult($results, array_values($poolItem));
+            $matched = ArrayHelper::countMatchResult($results, str_split($poolItem['result']));
 
             if (!isset($outArray[$matched])) {
                 $outArray[$matched] = [
@@ -225,11 +155,13 @@ EOD;
         if (!$this->pool) {
 
             $sql = <<<EOD
-SELECT * FROM pool 
+SELECT * FROM pool WHERE toto_id = :toto_id
 EOD;
             $st = $this->getCachedStatement($sql);
 
-            $st->execute();
+            $st->execute([
+                'toto_id' => $this->getTotoId()
+            ]);
 
             $this->pool = $st->fetchAll();
         }

@@ -19,4 +19,6 @@ interface TotoInterface
     public function getEventCount() : int;
 
     public function getWinnerCounts() : array;
+
+    public function getBookMaker() : string;
 }

@@ -23,7 +23,8 @@ class ScheduleHelperTest extends TestCase
             300000,
             1300000,
             14,
-            []
+            [],
+            'test'
         );
 
         $this->assertEquals(4, $scheduleHelper->getTimeForRun($toto));
@@ -34,7 +35,8 @@ class ScheduleHelperTest extends TestCase
             3000000,
             1300000,
             14,
-            []
+            [],
+            'test'
         );
 
         $this->assertEquals(8, $scheduleHelper->getTimeForRun($toto));
@@ -45,7 +47,8 @@ class ScheduleHelperTest extends TestCase
             3000000,
             1300000,
             14,
-            []
+            [],
+            'test'
         );
 
         $this->assertEquals(-1, $scheduleHelper->getTimeForRun($toto));

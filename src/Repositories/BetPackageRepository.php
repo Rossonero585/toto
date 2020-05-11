@@ -18,14 +18,15 @@ class BetPackageRepository extends Repository
         $tableName = self::TABLE_NAME;
 
         $sql = <<<EOD
-INSERT INTO {$tableName} (money, bet_time)
-VALUES (:money, :bet_time)
+INSERT INTO {$tableName} (money, bet_time, toto_id)
+VALUES (:money, :bet_time, :toto_id)
 EOD;
         $st = $this->pdo->prepare($sql);
 
         $st->execute([
             'money' => $money,
-            'bet_time' => $dateTime->format("Y-m-d H:i:s")
+            'bet_time' => $dateTime->format("Y-m-d H:i:s"),
+            'toto_id' => $this->getTotoId()
         ]);
 
         return new BetPackage(
@@ -45,11 +46,13 @@ EOD;
         $tableName = self::TABLE_NAME;
 
         $sql = <<<EOD
-SELECT * FROM {$tableName} 
+SELECT * FROM {$tableName} WHERE toto_id = :toto_id
 EOD;
         $st = $this->pdo->prepare($sql);
 
-        $st->execute();
+        $st->execute([
+            'toto_id' => $this->getTotoId()
+        ]);
 
         $arr = $st->fetchAll(\PDO::FETCH_ASSOC);
 

@@ -51,6 +51,7 @@ class CalculationController
      * @param array $bet
      * @param float $betSize
      * @return array
+     * @throws \Exceptions\UnknownRepository
      */
     public function calculateEV(array $bet, float $betSize)
     {

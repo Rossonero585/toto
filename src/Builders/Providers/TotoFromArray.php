@@ -41,5 +41,10 @@ class TotoFromArray implements TotoInterface
         return unserialize($this->row['winner_counts']);
     }
 
+    public function getBookMaker(): string
+    {
+        return $this->row['bookmaker'];
+    }
+
 
 }

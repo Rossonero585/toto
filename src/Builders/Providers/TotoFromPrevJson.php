@@ -47,5 +47,10 @@ class TotoFromPrevJson implements TotoInterface
         return [9 => 0.3, 10 => 0.2, 11 => 0.15, 12 => 0.1, 13 => 0.1, 14 => 0.05];
     }
 
+    public function getBookMaker(): string
+    {
+        return 'betcity';
+    }
+
 
 }

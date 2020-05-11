@@ -20,7 +20,8 @@ class TotoBuilder
             $totoProvider->getPot(),
             $totoProvider->getJackPot(),
             $totoProvider->getEventCount(),
-            $totoProvider->getWinnerCounts()
+            $totoProvider->getWinnerCounts(),
+            $totoProvider->getBookMaker()
         );
     }
 

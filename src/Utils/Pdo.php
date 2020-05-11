@@ -8,6 +8,8 @@
 
 namespace Utils;
 
+use Helpers;
+
 class Pdo
 {
     /**
@@ -39,20 +41,7 @@ class Pdo
 
     private static function getTotoId()
     {
-        $opt = getopt('t:');
-
-        if (isset($_SESSION['toto_id'])) {
-            return $_SESSION['toto_id'];
-        }
-        else if (isset($_REQUEST['toto_id'])) {
-            return $_REQUEST['toto_id'];
-        }
-        else if (isset($opt['t'])) {
-            return $opt['t'];
-        }
-        else {
-            return null;
-        }
+        return Helpers\getTotoId();
     }
 
     private static function createConnection()

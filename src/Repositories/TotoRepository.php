@@ -21,9 +21,9 @@ class TotoRepository extends Repository
      */
     public function getToto()
     {
-        $st = $this->pdo->prepare("SELECT * FROM `".self::TABLE_NAME."` WHERE id = 1");
+        $st = $this->pdo->prepare("SELECT * FROM `".self::TABLE_NAME."` WHERE id = :id");
 
-        $st->execute();
+        $st->execute(['id' => $this->getTotoId()]);
 
         $row = $st->fetch();
 
@@ -46,12 +46,13 @@ EOD;
         $st = $this->pdo->prepare($insertQuery);
 
         $st->execute([
-            "id" => 1,
+            "id" => $this->getTotoId(),
             "pot" => $toto->getPot(),
             "jackpot" => $toto->getJackPot(),
             "start_date" => $toto->getStartTime()->format("Y-m-d H:i:s"),
             "winner_counts" => serialize($toto->getWinnerCounts()),
-            "event_count" => $toto->getEventCount()
+            "event_count" => $toto->getEventCount(),
+            'bookmaker' => $toto->getBookMaker()
         ]);
 
         return $toto;
@@ -59,7 +60,7 @@ EOD;
 
     public function updateDeviation(float $deviation)
     {
-        $this->updateFieldsById(self::TABLE_NAME, 1, [
+        $this->updateFieldsById(self::TABLE_NAME, $this->getTotoId(), [
             'pool_deviation' => $deviation
         ]);
     }

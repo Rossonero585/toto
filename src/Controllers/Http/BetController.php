@@ -28,10 +28,10 @@ class BetController extends Controller
         $betBuilder = new BetRequestBuilder();
 
         $betRequest = $betBuilder->createBetRequest(new BetRequestFromTotoDecision(
-            $_POST['totoId'],
+            $_POST['toto_id'],
             $this->getBetsContent(),
             $this->getEventsContent(),
-            $_POST['isTest']
+            $_POST['is_test']
         ));
 
         $this->logBet($betRequest);
