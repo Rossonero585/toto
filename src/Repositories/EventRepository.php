@@ -18,9 +18,11 @@ class EventRepository extends Repository
 
     public function getAll()
     {
-        $st = $this->pdo->prepare("SELECT * FROM `".self::TABLE_NAME."`");
+        $sql = "SELECT * FROM `".self::TABLE_NAME."` WHERE toto_id = :toto_id";
 
-        $st->execute();
+        $st = $this->getCachedStatement($sql);
+
+        $st->execute(['toto_id' => $this->getTotoId()]);
 
         $events = [];
 
@@ -38,7 +40,9 @@ class EventRepository extends Repository
     {
         $tableName = self::TABLE_NAME;
 
-        $st = $this->pdo->prepare("SELECT * FROM `{$tableName}` WHERE id = :id");
+        $sql = "SELECT * FROM `{$tableName}` WHERE id = :id";
+
+        $st = $this->getCachedStatement($sql);
 
         $st->execute(["id" => $id]);
 
@@ -60,7 +64,7 @@ p2 = VALUES(p2),
 league = VALUES(league)
 EOD;
 
-        $st = $this->pdo->prepare($insertQuery);
+        $st = $this->getCachedStatement($insertQuery);
 
         $st->execute([
             "id"    => $event->getId(),

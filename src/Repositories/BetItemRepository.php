@@ -49,7 +49,7 @@ LEFT JOIN {$tableName} bi ON bi.bet_id = b.id
 WHERE b.id = :id
 EOD;
 
-        $st = $this->pdo->prepare($sql);
+        $st = $this->getCachedStatement($sql);
 
         $st->execute(['id' => $id]);
 
@@ -75,7 +75,7 @@ INSERT INTO {$tableName} (bet_id, bet, money)
 VALUES (:bet_id, :bet, :money)
 EOD;
 
-        $st = $this->pdo->prepare($sql);
+        $st = $this->getCachedStatement($sql);
 
         $st->execute([
             'bet_id' => $packageId,

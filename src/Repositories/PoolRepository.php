@@ -122,6 +122,10 @@ EOD;
      */
     public function getWinnersBreakDown(array $results)
     {
+        $cachedBreakDown = $this->getCachedBreakDown($results);
+
+        if ($cachedBreakDown) return $cachedBreakDown;
+
         $pool = $this->getAllPool();
 
         $outArray = [];
@@ -142,6 +146,8 @@ EOD;
         }
 
         $breakDown = BreakDownBuilder::createBreakDownFromArray($outArray);
+
+        $this->addCachedBreakDown($results, $breakDown);
 
         return $breakDown;
     }

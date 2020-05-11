@@ -21,7 +21,9 @@ class TotoRepository extends Repository
      */
     public function getToto()
     {
-        $st = $this->pdo->prepare("SELECT * FROM `".self::TABLE_NAME."` WHERE id = :id");
+        $sql = "SELECT * FROM `".self::TABLE_NAME."` WHERE id = :id";
+
+        $st = $this->getCachedStatement($sql);
 
         $st->execute(['id' => $this->getTotoId()]);
 
@@ -43,7 +45,7 @@ REPLACE INTO `{$tableName}` (id, pot, jackpot, start_date, winner_counts, event_
 VALUES (:id, :pot, :jackpot, :start_date, :winner_counts, :event_count)
 EOD;
 
-        $st = $this->pdo->prepare($insertQuery);
+        $st = $this->getCachedStatement($insertQuery);
 
         $st->execute([
             "id" => $this->getTotoId(),

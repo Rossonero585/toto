@@ -21,7 +21,7 @@ class BetPackageRepository extends Repository
 INSERT INTO {$tableName} (money, bet_time, toto_id)
 VALUES (:money, :bet_time, :toto_id)
 EOD;
-        $st = $this->pdo->prepare($sql);
+        $st = $this->getCachedStatement($sql);
 
         $st->execute([
             'money' => $money,
@@ -48,7 +48,7 @@ EOD;
         $sql = <<<EOD
 SELECT * FROM {$tableName} WHERE toto_id = :toto_id
 EOD;
-        $st = $this->pdo->prepare($sql);
+        $st = $this->getCachedStatement($sql);
 
         $st->execute([
             'toto_id' => $this->getTotoId()
