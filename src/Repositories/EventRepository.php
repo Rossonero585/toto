@@ -40,11 +40,11 @@ class EventRepository extends Repository
     {
         $tableName = self::TABLE_NAME;
 
-        $sql = "SELECT * FROM `{$tableName}` WHERE id = :id";
+        $sql = "SELECT * FROM `{$tableName}` WHERE id = :id AND toto_id = :toto_id";
 
         $st = $this->getCachedStatement($sql);
 
-        $st->execute(["id" => $id]);
+        $st->execute(["id" => $id, "toto_id" => $this->getTotoId()]);
 
         $row = $st->fetch(\PDO::FETCH_ASSOC);
 

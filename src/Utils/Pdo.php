@@ -22,7 +22,7 @@ class Pdo
      */
     private static $pdo;
 
-    public static function getPdo($root = false) : PdoWrapper
+    public static function getPdo($root = true) : PdoWrapper
     {
         if ($root) {
             if (!self::$rootPdo) self::createRootConnection();
@@ -41,7 +41,7 @@ class Pdo
 
     private static function getTotoId()
     {
-        return Helpers\getTotoId();
+        return Helpers\Arguments::getArguments()->get('t');
     }
 
     private static function createConnection()
@@ -57,7 +57,7 @@ class Pdo
 
     private static function createRootConnection()
     {
-        $dsn = "mysql:host=".$_ENV['DB_HOST'].";charset=utf8;port=".$_ENV['DB_PORT'];
+        $dsn = "mysql:dbname=toto;host=".$_ENV['DB_HOST'].";charset=utf8;port=".$_ENV['DB_PORT'];
 
         self::$rootPdo = new PdoWrapper($dsn, $_ENV['DB_USER'], $_ENV['DB_PASSWORD']);
 

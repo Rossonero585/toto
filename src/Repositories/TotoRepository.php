@@ -41,8 +41,8 @@ class TotoRepository extends Repository
         $tableName = self::TABLE_NAME;
 
         $insertQuery = <<<EOD
-REPLACE INTO `{$tableName}` (id, pot, jackpot, start_date, winner_counts, event_count)
-VALUES (:id, :pot, :jackpot, :start_date, :winner_counts, :event_count)
+REPLACE INTO `{$tableName}` (id, pot, jackpot, start_date, winner_counts, event_count, bookmaker)
+VALUES (:id, :pot, :jackpot, :start_date, :winner_counts, :event_count, :bookmaker)
 EOD;
 
         $st = $this->getCachedStatement($insertQuery);

@@ -22,8 +22,8 @@ CREATE TABLE IF NOT EXISTS `events` (
   `s2` float(7,5) DEFAULT NULL,
   `league` varchar(255) DEFAULT NULL,
   `result` VARCHAR(1) DEFAULT NULL,
-  `toto_id` int(11) NOT NULL,
-  PRIMARY KEY (id)
+  `toto_id` varchar(255) NOT NULL,
+  PRIMARY KEY (id, toto_id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -35,8 +35,9 @@ CREATE TABLE IF NOT EXISTS `events` (
 CREATE TABLE IF NOT EXISTS `pool` (
   `result` varchar(20) NOT NULL,
   `money` decimal(8,2) DEFAULT NULL,
-  `code` varchar(20) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
-  `toto_id` int(11) NOT NULL
+  `code` varchar(20) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `toto_id` varchar(255) NOT NULL,
+  PRIMARY KEY (code, toto_id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -46,14 +47,14 @@ CREATE TABLE IF NOT EXISTS `pool` (
 --
 
 CREATE TABLE IF NOT EXISTS `toto` (
-  `id` int(11) NOT NULL,
+  `id` varchar(255) NOT NULL,
   `start_date` datetime DEFAULT NULL,
   `pot` float(15,2) DEFAULT NULL,
   `jackpot` float(15,2) DEFAULT NULL,
   `event_count` int(11) DEFAULT NULL,
   `winner_counts` varchar(255) DEFAULT NULL,
   `pool_deviation` float(15,14) DEFAULT NULL,
-  `bookmaker` varchar(255) DEFAULT NOT NULL,
+  `bookmaker` varchar(255) NOT NULL,
   PRIMARY KEY (id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -86,7 +87,7 @@ CREATE TABLE IF NOT EXISTS `bets` (
   `income` float(15,2) DEFAULT NULL,
   `bet_time` datetime DEFAULT NULL,
   `last_bet_ev` float(10,2) DEFAULT NULL,
-  `toto_id` int(11) NOT NULL,
+  `toto_id` varchar(255) NOT NULL,
   PRIMARY KEY (id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 

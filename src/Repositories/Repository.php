@@ -9,8 +9,9 @@
 namespace Repositories;
 
 use Exceptions\UnknownRepository;
+use Helpers\Arguments;
 use Utils;
-use function Helpers\getTotoId;
+
 
 class Repository
 {
@@ -23,12 +24,13 @@ class Repository
     /** @var \PDOStatement[] */
     protected $cachedStatements = [];
 
+    /** @var string|null  */
     private $totoId;
 
     public function __construct()
     {
         $this->pdo = Utils\Pdo::getPdo();
-        $this->totoId = getTotoId();
+        $this->totoId = Arguments::getArguments()->get('t');
     }
 
     /**

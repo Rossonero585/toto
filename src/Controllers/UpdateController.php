@@ -14,41 +14,18 @@ use Helpers\EventsHelper;
 use Helpers\TotoHelper;
 use Models\Bet;
 use Models\BetPackage;
-use Models\BreakDown;
-use Models\BreakDownItem;
 use Models\Event;
 use Repositories\BetItemRepository;
 use Repositories\BetPackageRepository;
 use Repositories\EventRepository;
 use Repositories\PoolRepository;
-use Repositories\PreparedResultRepository;
 use Repositories\Repository;
 use Repositories\TotoRepository;
-use Utils\Pdo;
 
 class UpdateController
 {
-    const ASSET_PATH = "assets";
 
     const BET_CITY = "https://hdr.betcity.ru";
-
-    public function initAction($totoId)
-    {
-        if (!$totoId) {
-            throw new \Exception("totoId is not defined");
-        }
-
-        /** @var \PDO $pdo */
-        $pdo = Pdo::getPdo(true);
-
-        $dbName = "toto_".$totoId;
-
-        $query = file_get_contents(ROOT_DIR.DIRECTORY_SEPARATOR.self::ASSET_PATH.DIRECTORY_SEPARATOR."toto.sql");
-
-        $query = str_replace("%toto_db_name%", $dbName, $query);
-
-        $pdo->exec($query);
-    }
 
     public function insertEventAction($totoId)
     {
@@ -307,76 +284,6 @@ class UpdateController
                 $betItemsRepository->updateBetItemIncome($bet->getId(), $countMatch, $income);
             }
         }
-
-    }
-
-    public function updateBreakDownsAction()
-    {
-        $testedPool = [
-            [1, 2, 1, 'X', 1, 1, 1, 1, 2, 1, 2, 2, 1, 2, 50],
-            [1, 2, 1, 'X', 1, 1, 1, 1, 2, 1, 2, 2, 1, 2, 50],
-            [1, 2, 1, 'X', 1, 1, 1, 1, 2, 1, 2, 2, 1, 2, 50],
-            [1, 2, 1, 'X', 1, 1, 1, 1, 2, 1, 2, 2, 1, 2, 50]
-        ];
-
-        $preparedResultRepository = new PreparedResultRepository();
-
-        /** @var TotoRepository $totoRepository */
-        $totoRepository = Repository::getRepository(TotoRepository::class);
-
-        $toto = $totoRepository->getToto();
-
-        $minCountForWin = $toto->getMinWinnerCount();
-
-        $cursor = $preparedResultRepository->getAllPool();
-
-        $requestToUpdate = [];
-
-        while ($row = $cursor->fetch(\PDO::FETCH_ASSOC)) {
-
-            $breakDown = array_pop($row);
-
-            if ($breakDown) {
-                $breakDown = unserialize($breakDown);
-            }
-            else {
-                $breakDown = new BreakDown();
-            }
-
-            $row = [
-                $row['r1'],
-                $row['r2'],
-                $row['r3'],
-                $row['r4'],
-                $row['r5'],
-                $row['r6'],
-                $row['r7'],
-                $row['r8'],
-                $row['r9'],
-                $row['r10'],
-                $row['r11'],
-                $row['r12'],
-                $row['r13'],
-                $row['r14'],
-            ];
-
-            foreach ($testedPool as $item) {
-                $bet = array_pop($item);
-                $count = ArrayHelper::countMatchResult($item, $row);
-                if ($minCountForWin <= $count) {
-                    $breakDownItem = new BreakDownItem($count, $bet);
-                    $breakDown->addBreakDownItem($breakDownItem);
-                }
-            }
-
-            if ($breakDown->getCountItems())
-            {
-                $row['break_down'] = serialize($breakDown);
-                $requestToUpdate[] = $row;
-            }
-        }
-
-        $preparedResultRepository->updateBreakDown($requestToUpdate);
 
     }
 

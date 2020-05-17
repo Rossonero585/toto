@@ -139,7 +139,7 @@ class TotoHelper
     {
         $requestedUrl = $_ENV['BET_CITY_URL']."/d/se/one?id=$totoId";
 
-        if (!self::$jsonStorage[$requestedUrl]) {
+        if (!isset(self::$jsonStorage[$requestedUrl])) {
             self::$jsonStorage[$requestedUrl] = json_decode(file_get_contents($requestedUrl));
         }
 

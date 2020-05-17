@@ -87,7 +87,7 @@ EOD;
 
         $totoId = $this->getTotoId();
 
-        return " ('$code', $money, '$results', $totoId), ";
+        return " ('$code', $money, '$results', '$totoId'), ";
     }
 
     /**
