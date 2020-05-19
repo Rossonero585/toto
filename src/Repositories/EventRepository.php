@@ -55,8 +55,8 @@ class EventRepository extends Repository
     {
         $tableName = self::TABLE_NAME;
         $insertQuery = <<<EOD
-INSERT INTO `{$tableName}` (id, title, p1, px, p2, s1, sx, s2, league, toto_id)
-VALUES (:id, :title, :p1, :px, :p2, :s1, :sx, :s2, :league, :toto_id)
+INSERT INTO `{$tableName}` (number, title, p1, px, p2, s1, sx, s2, league, toto_id)
+VALUES (:number, :title, :p1, :px, :p2, :s1, :sx, :s2, :league, :toto_id)
 ON DUPLICATE KEY UPDATE
 p1 = VALUES(p1),
 px = VALUES(px),
@@ -67,7 +67,6 @@ EOD;
         $st = $this->getCachedStatement($insertQuery);
 
         $st->execute([
-            "id"    => $event->getId(),
             "title" => $event->getTitle(),
             "p1" => $event->getP1(),
             "px" => $event->getPx(),
@@ -76,7 +75,8 @@ EOD;
             "sx" => $event->getSx(),
             "s2" => $event->getS2(),
             "league" => $event->getLeague(),
-            "toto_id" => $this->getTotoId()
+            "toto_id" => $this->getTotoId(),
+            "number" => $event->getNumber()
         ]);
 
         return $event;

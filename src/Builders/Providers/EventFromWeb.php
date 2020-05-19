@@ -12,17 +12,17 @@ class EventFromWeb implements EventInterface
 {
     private $totoItem;
 
-    private $id;
+    private $number;
 
-    public function __construct(\stdClass $toto, int $id)
+    public function __construct(\stdClass $toto, int $number)
     {
         $this->totoItem = $toto;
-        $this->id = $id;
+        $this->number = $number;
     }
 
-    public function getId(): int
+    public function getNumber(): int
     {
-        return $this->id;
+        return $this->number;
     }
 
     public function getP1(): float
@@ -124,6 +124,11 @@ class EventFromWeb implements EventInterface
     public function getSource(): ?string
     {
         return '';
+    }
+
+    public function getId(): ?int
+    {
+        return null;
     }
 
 

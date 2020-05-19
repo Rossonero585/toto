@@ -13,7 +13,7 @@ use Models\Event;
 class BetRequest
 {
     /**
-     * @var int
+     * @var string
      */
     private $totoId;
 
@@ -34,12 +34,12 @@ class BetRequest
 
     /**
      * BetRequest constructor.
-     * @param int $totoId
+     * @param string $totoId
      * @param Bet[] $bets
      * @param Event[] $events
      * @param bool $isTest
      */
-    public function __construct(int $totoId, array $bets, array $events, bool $isTest)
+    public function __construct(string $totoId, array $bets, array $events, bool $isTest)
     {
         $this->totoId = $totoId;
         $this->bets = $bets;
@@ -48,9 +48,9 @@ class BetRequest
     }
 
     /**
-     * @return int
+     * @return string
      */
-    public function getTotoId(): int
+    public function getTotoId(): string
     {
         return $this->totoId;
     }

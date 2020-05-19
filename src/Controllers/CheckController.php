@@ -100,7 +100,7 @@ class CheckController
         return (int)file_get_contents(self::CACHE_FILE);
     }
 
-    private function updateLastBetTotoId(int $totoId)
+    private function updateLastBetTotoId(string $totoId)
     {
         file_put_contents(self::CACHE_FILE, $totoId);
     }

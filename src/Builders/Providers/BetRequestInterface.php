@@ -13,7 +13,7 @@ use Models\Bet;
 
 interface BetRequestInterface
 {
-    public function getTotoId() : int ;
+    public function getTotoId() : string ;
 
     /**
      * @return Bet[]

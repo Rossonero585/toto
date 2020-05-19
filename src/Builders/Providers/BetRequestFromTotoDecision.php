@@ -16,7 +16,7 @@ use Models\Input\Bet;
 class BetRequestFromTotoDecision implements BetRequestInterface
 {
     /**
-     * @var int
+     * @var string
      */
     private $totoId;
 
@@ -37,12 +37,12 @@ class BetRequestFromTotoDecision implements BetRequestInterface
 
     /**
      * BetRequestFromTotoDecision constructor.
-     * @param int $totoId
+     * @param string $totoId
      * @param string $betsFile
      * @param string $eventsFile
      * @param bool $isTest
      */
-    public function __construct(int $totoId, string $betsFile, string $eventsFile, bool $isTest)
+    public function __construct(string $totoId, string $betsFile, string $eventsFile, bool $isTest)
     {
         $this->totoId     = $totoId;
         $this->betsFile   = $betsFile;
@@ -50,9 +50,9 @@ class BetRequestFromTotoDecision implements BetRequestInterface
         $this->isTest     = $isTest;
     }
 
-    public function getTotoId() : int
+    public function getTotoId() : string
     {
-        return (int)$this->totoId;
+        return $this->totoId;
     }
 
     public function getBets() : array

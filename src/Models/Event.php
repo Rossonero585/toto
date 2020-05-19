@@ -14,6 +14,9 @@ class Event
     const PINACLE = 'pin';
 
     /** @var  int */
+    private $number;
+
+    /** @var int|null */
     private $id;
 
     /** @var float */
@@ -48,7 +51,7 @@ class Event
 
     /**
      * Event constructor.
-     * @param $id
+     * @param $number
      * @param $p1
      * @param $px
      * @param $p2
@@ -59,10 +62,11 @@ class Event
      * @param $title
      * @param $source
      * @param $result
+     * @param $id
      */
-    public function __construct($id, $p1, $px, $p2, $s1, $sx, $s2, $league, $title, $source = '', $result = null)
+    public function __construct($number, $p1, $px, $p2, $s1, $sx, $s2, $league, $title, $source = '', $result = null, $id = null)
     {
-        $this->id = $id;
+        $this->number = $number;
         $this->p1 = $p1;
         $this->px = $px;
         $this->p2 = $p2;
@@ -73,15 +77,25 @@ class Event
         $this->title = $title;
         $this->source = $source;
         $this->result = $result;
+        $this->id = $id;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getId(): ?int
+    {
+        return $this->id;
     }
 
     /**
      * @return int
      */
-    public function getId(): int
+    public function getNumber(): int
     {
-        return $this->id;
+        return $this->number;
     }
+
 
     /**
      * @return float

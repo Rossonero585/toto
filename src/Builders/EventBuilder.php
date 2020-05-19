@@ -16,7 +16,7 @@ class EventBuilder
     public static function createEvent(EventInterface $eventProvider)
     {
         return new Event(
-            $eventProvider->getId(),
+            $eventProvider->getNumber(),
             $eventProvider->getP1(),
             $eventProvider->getPx(),
             $eventProvider->getP2(),
@@ -26,7 +26,8 @@ class EventBuilder
             $eventProvider->getLeague(),
             $eventProvider->getTile(),
             $eventProvider->getSource(),
-            $eventProvider->getResult()
+            $eventProvider->getResult(),
+            $eventProvider->getId()
         );
     }
 

@@ -11,9 +11,14 @@ namespace Builders\Providers;
 interface EventInterface
 {
     /**
+     * @return int|null
+     */
+    public function getId(): ?int;
+
+    /**
      * @return int
      */
-    public function getId(): int;
+    public function getNumber() : int;
 
     /**
      * @return float

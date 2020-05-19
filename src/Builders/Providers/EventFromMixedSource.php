@@ -23,18 +23,18 @@ class EventFromMixedSource implements EventInterface
     /**
      * @var int
      */
-    private $id;
+    private $number;
 
-    public function __construct(\stdClass $toto, array $assoc, int $id)
+    public function __construct(\stdClass $toto, array $assoc, int $number)
     {
         $this->toto  = $toto;
         $this->assoc = $assoc;
-        $this->id    = $id;
+        $this->number = $number;
     }
 
-    public function getId(): int
+    public function getNumber(): int
     {
-        return $this->id;
+        return $this->number;
     }
 
     public function getP1(): float
@@ -90,5 +90,11 @@ class EventFromMixedSource implements EventInterface
     {
         return isset($this->assoc['source']) ? $this->assoc['source'] : '';
     }
+
+    public function getId(): ?int
+    {
+        return null;
+    }
+
 
 }

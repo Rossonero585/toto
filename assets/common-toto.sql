@@ -23,7 +23,9 @@ CREATE TABLE IF NOT EXISTS `events` (
   `league` varchar(255) DEFAULT NULL,
   `result` VARCHAR(1) DEFAULT NULL,
   `toto_id` varchar(255) NOT NULL,
-  PRIMARY KEY (id, toto_id)
+  `number` int(11) NOT NULL,
+   PRIMARY KEY (id),
+   UNIQUE INDEX (toto_id, number)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -91,8 +93,3 @@ CREATE TABLE IF NOT EXISTS `bets` (
   PRIMARY KEY (id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

@@ -66,7 +66,7 @@ class Repository
     }
 
 
-    protected function updateFieldsById(string $tableName, int $id, array $fields)
+    protected function updateFieldsById(string $tableName, $id, array $fields)
     {
         $updatePart = array_reduce(array_keys($fields), function($carry, $field) {
             $carry .= "$field = :$field, ";

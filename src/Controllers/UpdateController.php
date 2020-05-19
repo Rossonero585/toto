@@ -213,7 +213,7 @@ class UpdateController
         return $poloRepository->getPoolItem($bet);
     }
 
-    public function updateTotoResult(int $totoId)
+    public function updateTotoResult(string $totoId)
     {
 
         /** @var EventRepository $eventRepository */
