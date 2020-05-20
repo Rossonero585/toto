@@ -162,7 +162,6 @@ class EventsHelper
 
     public static function getEventsFromMixedProvider($json, array $array)
     {
-
         $out = [];
 
         $totoEvents = $json->reply->toto->out;
@@ -171,7 +170,7 @@ class EventsHelper
         {
             $id = $key + 1;
 
-            $event = EventBuilder::createEvent(new EventFromMixedSource($json, $array[$key], $id));
+            $event = EventBuilder::createEvent(new EventFromMixedSource($jsonEvent, $array[$key], $id));
 
             array_push($out, $event);
         }

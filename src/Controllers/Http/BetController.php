@@ -27,16 +27,23 @@ class BetController extends Controller
 
         $betBuilder = new BetRequestBuilder();
 
+        list($totoId, $book) = explode("_", $_REQUEST['toto_id']);
+
         $betRequest = $betBuilder->createBetRequest(new BetRequestFromTotoDecision(
-            $_POST['toto_id'],
+            $totoId,
             $this->getBetsContent(),
             $this->getEventsContent(),
-            $_POST['is_test']
+            $_REQUEST['is_test']
         ));
 
         $this->logBet($betRequest);
 
-        if (!$this->checkEvents($betRequest)) return;
+        if (!$this->checkEvents($betRequest)) {
+
+            $this->sendRequest(400, 'do not pass conditions');
+
+            return;
+        }
 
         $betCityClient = new BetCityClient($betRequest->getTotoId());
 
@@ -62,7 +69,7 @@ class BetController extends Controller
             $this->sendRequest(500, $exception->getMessage());
         }
 
-        $this->sendRequest(200, '');
+        $this->sendRequest(200, 'success');
     }
 
 
@@ -84,7 +91,7 @@ class BetController extends Controller
         /** @var Event $event */
         foreach ($events as $event) {
 
-            $id = $event->getId();
+            $id = $event->getNumber();
 
             if ($event->isCanceled()) {
                 $logger->log("bet", "Refuse to make bet", "Event $id is canceled");
@@ -106,9 +113,7 @@ class BetController extends Controller
     {
         $pathToLogs = ROOT_DIR."/log/bet_requests/".$betRequest->getTotoId();
 
-        if (is_dir($pathToLogs)) rmdir($pathToLogs);
-
-        mkdir($pathToLogs,0777, true);
+        if (!is_dir($pathToLogs)) mkdir($pathToLogs,0777, true);
 
         file_put_contents($pathToLogs."/events.txt", $this->getEventsContent());
 
@@ -117,11 +122,11 @@ class BetController extends Controller
 
     private function getEventsContent()
     {
-        return file_get_contents($_FILES['events_file']);
+        return file_get_contents($_FILES['events_file']['tmp_name']);
     }
 
     private function getBetsContent()
     {
-        return file_get_contents($_FILES['bets_file']);
+        return file_get_contents($_FILES['bets_file']['tmp_name']);
     }
 }

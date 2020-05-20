@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h1>TEST SEND BET REQUEST</h1>
+
+    <form action="server.php?method=make_bet" method="post" enctype="multipart/form-data">
+        <div>
+            <label for="toto_id">Toto id</label>
+            <input type="text" id="toto_id" name="toto_id"/>
+        </div>
+        <div>
+            <label for="bets_file">Bets file</label>
+            <input type="file" id="bets_file" name="bets_file"/>
+        </div>
+        <div>
+            <label for="events_file">Events file</label>
+            <input type="file" id="events_file" name="events_file"/>
+        </div>
+        <div>
+            <label for="is_test">Is test</label>
+            <input type="checkbox" id="is_test" name="is_test"/>
+        </div>
+
+        <button type="submit">Send bet request</button>
+    </form>
+
+</body>
+</html>

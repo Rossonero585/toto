@@ -30,7 +30,12 @@ class Repository
     public function __construct()
     {
         $this->pdo = Utils\Pdo::getPdo();
-        $this->totoId = Arguments::getArguments()->get('t');
+
+        $totoId = isset($_SERVER['argv']) ? Arguments::getArguments()->get('t') : null;
+
+        if (!$totoId) $totoId = $_REQUEST['toto_id'];
+
+        $this->totoId = $totoId;
     }
 
     /**

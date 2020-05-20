@@ -2,7 +2,7 @@
 
 use Helpers\Arguments;
 
-include "register.php";
+include "register_commands.php";
 
 $arguments = Arguments::getArguments($argv);
 

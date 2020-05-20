@@ -19,7 +19,7 @@ class FileParser
      */
     public static function parseFileWithEvents(string $file) : array
     {
-        $lines = explode(PHP_EOL, $file);
+        $lines = explode("\n", $file);
 
         $matches = preg_grep('/\d{1,2}\s{2}\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}/', $lines);
 
