@@ -11,6 +11,7 @@ use Builders\Providers\TotoFromWeb;
 use Builders\TotoBuilder;
 use Helpers\ArrayHelper;
 use Helpers\EventsHelper;
+use Helpers\Http\BetCityClient;
 use Helpers\TotoHelper;
 use Models\Bet;
 use Models\BetPackage;
@@ -298,5 +299,12 @@ class UpdateController
         $eventHelper = new EventsHelper($eventsRepository->getAll());
 
         $totoRepository->updateDeviation($eventHelper->getAverageDeviation());
+    }
+
+    public function setBetCityTokens($totoId)
+    {
+        $betCityClient = new BetCityClient($totoId);
+
+        $betCityClient->setTokens();
     }
 }

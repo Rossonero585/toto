@@ -122,3 +122,13 @@ $commandManager->registerCommand('make_bet', function () {
 
 });
 
+$commandManager->registerCommand('betcity_tokens', function () use($arguments) {
+
+    $totoId = $arguments->get('t');
+
+    $cu = new UpdateController();
+
+    $cu->setBetCityTokens($totoId);
+
+});
+

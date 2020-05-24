@@ -30,7 +30,5 @@ class CommandManager
         else {
             throw new \Exception("Unknown function $alias");
         }
-
-        $function();
     }
 }

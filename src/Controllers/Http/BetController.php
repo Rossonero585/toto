@@ -81,7 +81,7 @@ class BetController extends Controller
 
         $eventHelper = new EventsHelper($events);
 
-        if ($deviation = $eventHelper->getAverageDeviation() < self::MIN_DEVIATION) {
+        if (($deviation = $eventHelper->getAverageDeviation()) < self::MIN_DEVIATION) {
 
             $logger->log("bet", "Refuse to make bet", "Deviation is not acceptable $deviation");
 

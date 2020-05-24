@@ -9,6 +9,8 @@ use Models\Input\Bet;
 
 class BetCityClient
 {
+    const bet_city_cache_file = 'token.txt';
+
     const dev = "b63d27af6554ac2a54869acd63300289";
     const ver = "179";
     const csn = "ooca9s";
@@ -65,9 +67,17 @@ class BetCityClient
     /**
      * @throws \Throwable
      */
-    private function initAction()
+    public function setTokens() : void
     {
         if ($this->token && $this->totoHash) return;
+
+        $tokensFromFile = $this->readTokensFromFile();
+
+        if ($tokensFromFile) {
+            $this->token = $tokensFromFile[0];
+            $this->totoHash = $tokensFromFile[1];
+            return;
+        };
 
         $authRequest = $this->client->postAsync(self::authUrl, [
             "query" => [
@@ -110,6 +120,8 @@ class BetCityClient
 
             $this->money = $userInfo->info->money->avail;
 
+            $this->writeTokensToFile($this->token, $this->totoHash);
+
         }
         catch (\Throwable $exception) {
             Logger::getInstance()->log('http', "Auth request to betcity failed {$this->totoId}", $exception->getMessage());
@@ -125,7 +137,7 @@ class BetCityClient
      */
     public function makeBet(array $bets, $isTest = false)
     {
-        $this->initAction();
+        $this->setTokens();
 
         $betContent = "";
 
@@ -171,5 +183,30 @@ class BetCityClient
             Logger::getInstance()->log('test_bets', "Successfully test bet {$this->totoId}", $betContent);
         }
 
+    }
+
+    public function writeTokensToFile($token, $totoHash) : void
+    {
+        file_put_contents(self::bet_city_cache_file, $token.PHP_EOL);
+        file_put_contents(self::bet_city_cache_file, $totoHash, FILE_APPEND);
+    }
+
+    public function readTokensFromFile() : ?array
+    {
+        if (file_exists(self::bet_city_cache_file)) {
+
+            $content = file_get_contents(self::bet_city_cache_file);
+
+            if ($content) {
+
+                $updateTime = filemtime(self::bet_city_cache_file);
+
+                if ((time() - $updateTime) < 3600) {
+                    return explode(PHP_EOL, $content);
+                }
+            }
+        }
+
+        return null;
     }
 }
