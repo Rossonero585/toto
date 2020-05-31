@@ -48,9 +48,12 @@ class UpdateController
         /** @var EventRepository $eventRepository */
         $eventRepository = Repository::getRepository(EventRepository::class);
 
-        foreach ($totoEvents as $event)
-        {
-            $eventRepository->addEvent($event);
+        $currentEvents = $eventRepository->getAll();
+
+        if (count($currentEvents) > 0) {
+            foreach ($totoEvents as $event) {
+                $eventRepository->addEvent($event);
+            }
         }
     }
 
