@@ -50,7 +50,7 @@ class UpdateController
 
         $currentEvents = $eventRepository->getAll();
 
-        if (count($currentEvents) > 0) {
+        if (count($currentEvents) == 0) {
             foreach ($totoEvents as $event) {
                 $eventRepository->addEvent($event);
             }
