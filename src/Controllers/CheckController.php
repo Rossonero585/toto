@@ -87,7 +87,7 @@ class CheckController
 
                     $totoStartTime = $cloneStartTime->format("H:i");
 
-                    echo "$totoStartTime $timeToRunScript $timeToRunToto $totoNumber $totoId";
+                    echo "$totoStartTime $timeToRunScript $timeToRunToto $totoNumber $totoId"."_betcity";
 
                     break;
                 }
