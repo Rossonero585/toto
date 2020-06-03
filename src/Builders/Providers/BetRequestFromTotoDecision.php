@@ -42,7 +42,7 @@ class BetRequestFromTotoDecision implements BetRequestInterface
      * @param string $eventsFile
      * @param bool $isTest
      */
-    public function __construct(string $totoId, string $betsFile, string $eventsFile, bool $isTest)
+    public function __construct(string $totoId, string $betsFile, string $eventsFile, bool $isTest = false)
     {
         $this->totoId     = $totoId;
         $this->betsFile   = $betsFile;
