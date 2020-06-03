@@ -100,19 +100,14 @@ $commandManager->registerCommand('update_result', function () use ($arguments) {
 
     $totoId = $arguments->get('t');
 
+    list($totoId, $bookmaker) = explode("_", $totoId);
+
     $cu = new UpdateController();
 
     $cu->updateTotoResult($totoId);
 
 });
 
-$commandManager->registerCommand('dump', function () {
-
-    $cv = new ViewController();
-
-    $cv->getAll();
-
-});
 
 $commandManager->registerCommand('make_bet', function () {
 
@@ -125,6 +120,8 @@ $commandManager->registerCommand('make_bet', function () {
 $commandManager->registerCommand('betcity_tokens', function () use($arguments) {
 
     $totoId = $arguments->get('t');
+
+    list($totoId, $bookmaker) = explode("_", $totoId);
 
     $cu = new UpdateController();
 
