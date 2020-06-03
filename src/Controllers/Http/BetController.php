@@ -33,7 +33,7 @@ class BetController extends Controller
             $totoId,
             $this->getBetsContent(),
             $this->getEventsContent(),
-            $_REQUEST['is_test']
+            (bool)$_REQUEST['is_test']
         ));
 
         $this->logBet($betRequest);
