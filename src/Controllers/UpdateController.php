@@ -140,7 +140,7 @@ class UpdateController
                         $allBets[] = $bet->getResults();
 
                         if (null == $bet->getEv()) $procArray[] = popen(
-                            "php ".ROOT_DIR."/updateBetItemEv.php -t $totoId --id=".$bet->getId()." --type=array &",
+                            "php ".ROOT_DIR."/run.php update_bet_item_ev -t=$totoId -id=".$bet->getId()." &",
                             "w"
                         );
                     }
