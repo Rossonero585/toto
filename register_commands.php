@@ -50,13 +50,6 @@ $commandManager->registerCommand('update_bet_item_ev', function () use ($argumen
 
     test_log("End calculate bet item with id $betItemId for $totoId. Pid".getmypid());
 
-    function test_log($str) {
-
-        $str  = (new DateTime())->format(DATE_ISO8601)." - ".$str." - ".PHP_EOL;
-
-        file_put_contents("test.log", $str, FILE_APPEND);
-    }
-
 });
 
 $commandManager->registerCommand('update_deviation', function () {
@@ -129,3 +122,9 @@ $commandManager->registerCommand('betcity_tokens', function () use($arguments) {
 
 });
 
+function test_log($str) {
+
+    $str  = (new DateTime())->format(DATE_ISO8601)." - ".$str." - ".PHP_EOL;
+
+    file_put_contents("test.log", $str, FILE_APPEND);
+}
