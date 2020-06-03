@@ -46,7 +46,7 @@ EOD;
         $sql = <<<EOD
 SELECT bi.id as id, bi.money as money, bi.bet as bet, bi.ev as ev FROM bets b
 LEFT JOIN {$tableName} bi ON bi.bet_id = b.id
-WHERE b.id = :id
+WHERE b.id = :id ORDER BY bi.id
 EOD;
 
         $st = $this->getCachedStatement($sql);

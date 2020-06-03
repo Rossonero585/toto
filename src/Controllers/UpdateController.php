@@ -168,22 +168,25 @@ class UpdateController
 
         $betPackages = $betPackageRepository->getAllPackages();
 
-        $max = 0;
-
         foreach ($betPackages as $package) {
 
             $bets = $betItemsRepository->geBetsOfPackage($package->getId());
 
-            if (count($bets) > $max) $max = count($bets);
+            if (count($bets) > 0) {
+
+                $minId = $bets[0]->getId();
+                $maxId = $bets[count($bets) - 1]->getId();
+
+                $ids = [];
+
+                for ($i = 1; $i <= $_ENV['COUNT_BETS_FOR_CALC']; $i++) {
+                    array_push($ids, rand($minId, $maxId));
+                }
+
+
+                $this->updateBetsEvUsingSeparateProcess($totoId, array_unique($ids));
+            }
         }
-
-        $ids = [];
-
-        for ($i = 1; $i <= $_ENV['COUNT_BETS_FOR_CALC']; $i++) {
-            array_push($ids, rand(0, $max - 1));
-        }
-
-        $this->updateBetsEvUsingSeparateProcess($totoId, $ids);
     }
 
 
@@ -205,6 +208,8 @@ class UpdateController
         $betItemsRepository = Repository::getRepository(BetItemRepository::class);
 
         list($ev, $p) = $cc->calculateEV($bet->getResults(), $bet->getMoney());
+
+        file_put_contents(ROOT_DIR.'/temp_update_ev.log', date(DATE_ISO8601)."after calculation {$bet->getId()} $ev $p");
 
         $betItemsRepository->updateBetItemEv($bet->getId(), $ev, $p);
     }
