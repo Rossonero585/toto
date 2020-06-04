@@ -71,7 +71,7 @@ class BetPackage
     /**
      * @return float
      */
-    public function getProbability(): float
+    public function getProbability(): ?float
     {
         return $this->probability;
     }
@@ -87,7 +87,7 @@ class BetPackage
     /**
      * @return float
      */
-    public function getEv(): float
+    public function getEv(): ?float
     {
         return $this->ev;
     }
@@ -103,7 +103,7 @@ class BetPackage
     /**
      * @return float
      */
-    public function getIncome(): float
+    public function getIncome(): ?float
     {
         return $this->income;
     }

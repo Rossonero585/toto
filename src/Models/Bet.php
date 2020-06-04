@@ -72,7 +72,7 @@ class Bet
     /**
      * @return float
      */
-    public function getEv(): float
+    public function getEv(): ?float
     {
         return $this->ev;
     }
