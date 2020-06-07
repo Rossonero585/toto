@@ -8,6 +8,7 @@
 
 namespace Controllers;
 
+use Helpers\EventsHelper;
 use Utils\Pdo;
 
 class ViewController
@@ -95,13 +96,19 @@ class ViewController
 
                     $betItems = $pdo->query("SELECT * FROM bet_items WHERE ev IS NOT NULL")->fetchAll();
 
+                    $events = $pdo->query("SELECT * FROM events WHERE 1 = 1")->fetchAll();
+
+                    $eventsHelper = new EventsHelper($events);
+
                     foreach ($betItems as $item) {
 
                         $ev = $item['ev'];
 
                         $p = $item['probability'];
 
-                        $s .= "$totoId;$deviation;$ev;$p" . PHP_EOL;
+                        $raw_p = $eventsHelper->calculateProbabilityOfAllEvents(str_split($item['bet']));
+
+                        $s .= "$totoId;$deviation;$ev;$p;$raw_p" . PHP_EOL;
                     }
 
                 }
