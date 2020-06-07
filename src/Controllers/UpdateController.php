@@ -125,36 +125,33 @@ class UpdateController
 
             $id = $package->getId();
 
-            if (!$package->getProbability() && !$package->getEv() ) {
+            $procArray = [];
 
-                $procArray = [];
+            $allBets = [];
 
-                $allBets = [];
+            $bets = $betItemsRepository->geBetsOfPackage($id);
 
-                $bets = $betItemsRepository->geBetsOfPackage($id);
+            foreach ($bets as $key => $bet) {
 
-                foreach ($bets as $key => $bet) {
+                if ($ids && in_array($key, $ids)) {
 
-                    if ($ids && in_array($key, $ids)) {
+                    $allBets[] = $bet->getResults();
 
-                        $allBets[] = $bet->getResults();
-
-                        if (null == $bet->getEv()) $procArray[] = popen(
-                            "php ".ROOT_DIR."/run.php update_bet_item_ev -t=$totoId -id=".$bet->getId()." &",
-                            "w"
-                        );
-                    }
-
+                    if (null == $bet->getEv()) $procArray[] = popen(
+                        "php ".ROOT_DIR."/run.php update_bet_item_ev -t=$totoId -id=".$bet->getId()." &",
+                        "w"
+                    );
                 }
 
-                foreach ($procArray as $proc) {
-                    pclose($proc);
-                }
-
-                $p = $cc->calculateProbabilityOfPackage($allBets);
-
-                $betPackageRepository->updateBetEv($id, null, $p);
             }
+
+            foreach ($procArray as $proc) {
+                pclose($proc);
+            }
+
+            $p = $cc->calculateProbabilityOfPackage($allBets);
+
+            $betPackageRepository->updateBetEv($id, null, $p);
         }
     }
 
