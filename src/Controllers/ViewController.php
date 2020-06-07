@@ -8,6 +8,8 @@
 
 namespace Controllers;
 
+use Builders\EventBuilder;
+use Builders\Providers\EventFromArray;
 use Helpers\EventsHelper;
 use Utils\Pdo;
 
@@ -98,7 +100,9 @@ class ViewController
 
                     $events = $pdo->query("SELECT * FROM events WHERE 1 = 1")->fetchAll();
 
-                    $eventsHelper = new EventsHelper($events);
+                    $eventsHelper = new EventsHelper(array_map(function (array $event) {
+                        return EventBuilder::createEvent(new EventFromArray($event));
+                    }, $events));
 
                     foreach ($betItems as $item) {
 
