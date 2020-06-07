@@ -25,32 +25,32 @@ class EventFromArray implements EventInterface
 
     public function getP1(): float
     {
-        return $this->assoc['s1'];
+        return $this->assoc['p1'];
     }
 
     public function getPx(): float
     {
-        return $this->assoc['sx'];
+        return $this->assoc['px'];
     }
 
     public function getP2(): float
     {
-        return $this->assoc['s2'];
+        return $this->assoc['p2'];
     }
 
     public function getS1(): float
     {
-        return $this->assoc['p1'];
+        return $this->assoc['s1'];
     }
 
     public function getSx(): float
     {
-        return $this->assoc['px'];
+        return $this->assoc['sx'];
     }
 
     public function getS2(): float
     {
-        return $this->assoc['p2'];
+        return $this->assoc['s2'];
     }
 
     public function getLeague(): string
