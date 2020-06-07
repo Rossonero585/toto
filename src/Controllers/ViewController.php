@@ -62,4 +62,53 @@ class ViewController
 
         echo $s;
     }
+
+
+    public function dumpAllEv()
+    {
+        /** @var \PDO $pdo */
+        $pdo = Pdo::getPdo(true);
+
+        $st = $pdo->query("SHOW DATABASES LIKE 'toto_%'");
+
+        $databases = $st->fetchAll();
+
+        $s = "";
+
+        foreach ($databases as $db) {
+
+            $dbName = array_shift($db);
+
+            if (mb_strlen($dbName) == 12) {
+
+                try {
+
+                    $pdo->exec("USE $dbName");
+
+                    $tempArr = explode("_", $dbName);
+
+                    $totoId = (int)array_pop($tempArr);
+
+                    $toto = $pdo->query("SELECT * FROM toto")->fetch();
+
+                    $deviation = $toto['pool_deviation'];
+
+                    $betItems = $pdo->query("SELECT * FROM bet_items WHERE ev IS NOT NULL")->fetchAll();
+
+                    foreach ($betItems as $item) {
+
+                        $ev = $item['ev'];
+
+                        $p = $item['probability'];
+
+                        $s .= "$totoId;$deviation;$ev;$p" . PHP_EOL;
+                    }
+
+                }
+                catch (\Exception $exception) {}
+            }
+        }
+
+        echo $s;
+    }
 }

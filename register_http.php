@@ -16,6 +16,14 @@ $commandManager->registerCommand('dump', function () {
 
 });
 
+$commandManager->registerCommand('dump_ev', function () {
+
+    $cv = new ViewController();
+
+    $cv->dumpAllEv();
+
+});
+
 $commandManager->registerCommand('make_bet', function () {
 
     $cu = new BetController();
