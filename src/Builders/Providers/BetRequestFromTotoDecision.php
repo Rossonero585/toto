@@ -76,20 +76,7 @@ class BetRequestFromTotoDecision implements BetRequestInterface
 
         $betsCount = $_ENV['BETS_COUNT'];
 
-        $betsCountForSelecting = $betsCount * 3;
-
-        $selectedBets = array_slice($betAssoc, 0, $betsCountForSelecting);
-
-        usort($selectedBets, function ($arr1, $arr2) {
-            $chance9_1 = (float)$arr1['chance_9'];
-            $chance9_2 = (float)$arr2['chance_9'];
-
-            if ($chance9_1 === $chance9_2) return 0;
-
-            return $chance9_1 < $chance9_2 ? 1 : -1;
-        });
-
-        $betsArray = array_slice($selectedBets, 0, $betsCount);
+        $betsArray = array_slice($betAssoc, 0, $betsCount);
 
         return array_map(function (array $arr) {
             return new Bet(
