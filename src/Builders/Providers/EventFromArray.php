@@ -73,7 +73,7 @@ class EventFromArray implements EventInterface
         return isset($this->assoc['source']) ? $this->assoc['source'] : '';
     }
 
-    public function getNumber(): int
+    public function getNumber(): ?int
     {
         return $this->assoc['number'];
     }

@@ -18,7 +18,7 @@ interface EventInterface
     /**
      * @return int
      */
-    public function getNumber() : int;
+    public function getNumber() : ?int;
 
     /**
      * @return float
