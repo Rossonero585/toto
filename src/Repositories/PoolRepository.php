@@ -7,15 +7,10 @@
  */
 
 namespace Repositories;
-use Builders\BreakDownBuilder;
 use Helpers\ArrayHelper;
-use Models\BreakDown;
 
 class PoolRepository extends Repository
 {
-    /** @var  BreakDown[] */
-    private $breakDowns = [];
-
     /** @var  array */
     private $pool;
 
@@ -89,69 +84,6 @@ EOD;
 
         return " ('$code', $money, '$results', '$totoId'), ";
     }
-
-    /**
-     * @param array $results
-     * @return BreakDown|null
-     */
-    private function getCachedBreakDown(array $results)
-    {
-        $key = md5(json_encode($results));
-
-        if (isset($this->breakDowns[$key])) {
-            return $this->breakDowns[$key];
-        }
-
-        return null;
-    }
-
-    private function addCachedBreakDown(array $results, BreakDown $breakDown)
-    {
-        $key = md5(json_encode($results));
-
-        $this->breakDowns[$key] = $breakDown;
-
-        return $this;
-    }
-
-
-    /**
-     * @param array $results
-     * @return BreakDown|null
-     * @throws \Exception
-     */
-    public function getWinnersBreakDown(array $results)
-    {
-        $cachedBreakDown = $this->getCachedBreakDown($results);
-
-        if ($cachedBreakDown) return $cachedBreakDown;
-
-        $pool = $this->getAllPool();
-
-        $outArray = [];
-
-        foreach ($pool as $poolItem) {
-            $money = (float)$poolItem['money'];
-
-            $matched = ArrayHelper::countMatchResult($results, str_split($poolItem['result']));
-
-            if (!isset($outArray[$matched])) {
-                $outArray[$matched] = [
-                    'amount' => $matched,
-                    'pot' => 0
-                ];
-            }
-
-            $outArray[$matched]['pot'] += $money;
-        }
-
-        $breakDown = BreakDownBuilder::createBreakDownFromArray($outArray);
-
-        $this->addCachedBreakDown($results, $breakDown);
-
-        return $breakDown;
-    }
-
 
     /**
      * @return array

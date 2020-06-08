@@ -90,6 +90,7 @@ CREATE TABLE IF NOT EXISTS `bets` (
   `bet_time` datetime DEFAULT NULL,
   `last_bet_ev` float(10,2) DEFAULT NULL,
   `toto_id` varchar(255) NOT NULL,
+  `is_test` int(1) NOT NULL,
   PRIMARY KEY (id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 

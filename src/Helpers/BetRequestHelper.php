@@ -34,7 +34,7 @@ class BetRequestHelper
         /** @var BetItemRepository $betItemRepository */
         $betItemRepository = Repository::getRepository(BetItemRepository::class);
 
-        $package = $this->createBetPackage($betRequest->getBets());
+        $package = $this->createBetPackage($betRequest->getBets(), $betRequest->isTest());
 
         /** @var Bet $bet */
         foreach ($betRequest->getBets() as $bet) {
@@ -45,10 +45,11 @@ class BetRequestHelper
 
     /**
      * @param array $bets
+     * @param bool $isTest
      * @return BetPackage
      * @throws \Exceptions\UnknownRepository
      */
-    private function createBetPackage(array $bets)
+    private function createBetPackage(array $bets, $isTest = false)
     {
         $money = array_reduce($bets, function ($carry, Bet $bet) {
             return $carry + $bet->getMoney();
@@ -57,7 +58,7 @@ class BetRequestHelper
         /** @var BetPackageRepository $betPackageRepository */
         $betPackageRepository = Repository::getRepository(BetPackageRepository::class);
 
-        return $betPackageRepository->addNewPackage($money, new \DateTime());
+        return $betPackageRepository->addNewPackage($money, new \DateTime(), $isTest);
 
     }
 }

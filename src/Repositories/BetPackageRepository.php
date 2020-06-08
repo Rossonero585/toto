@@ -11,22 +11,24 @@ class BetPackageRepository extends Repository
     /**
      * @param float $money
      * @param \DateTime $dateTime
+     * @param boolean $isTest
      * @return BetPackage
      */
-    public function addNewPackage(float $money, \DateTime $dateTime)
+    public function addNewPackage(float $money, \DateTime $dateTime, $isTest = false)
     {
         $tableName = self::TABLE_NAME;
 
         $sql = <<<EOD
-INSERT INTO {$tableName} (money, bet_time, toto_id)
-VALUES (:money, :bet_time, :toto_id)
+INSERT INTO {$tableName} (money, bet_time, toto_id, is_test)
+VALUES (:money, :bet_time, :toto_id, :is_test)
 EOD;
         $st = $this->getCachedStatement($sql);
 
         $st->execute([
             'money' => $money,
             'bet_time' => $dateTime->format("Y-m-d H:i:s"),
-            'toto_id' => $this->getTotoId()
+            'toto_id' => $this->getTotoId(),
+            'is_test' => $isTest ? 1 : 0
         ]);
 
         return new BetPackage(
@@ -34,7 +36,8 @@ EOD;
             $money,
             null,
             null,
-            null
+            null,
+            $isTest
         );
     }
 
@@ -62,7 +65,8 @@ EOD;
                 $arr['money'],
                 $arr['probability'],
                 $arr['ev'],
-                $arr['income']
+                $arr['income'],
+                (bool)$arr['is_test']
             );
         }, $arr);
     }

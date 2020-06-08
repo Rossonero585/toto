@@ -19,6 +19,8 @@ class BetPackage
     /** @var float */
     private $income;
 
+    private $isTest;
+
     /**
      * BetPackage constructor.
      * @param int $id
@@ -26,14 +28,17 @@ class BetPackage
      * @param float $probability
      * @param float $ev
      * @param float $income
+     * @param bool $isTest
+     *
      */
-    public function __construct(?int $id, ?float $money, ?float $probability, ?float $ev, ?float $income)
+    public function __construct(?int $id, ?float $money, ?float $probability, ?float $ev, ?float $income, bool $isTest = false)
     {
         $this->id = $id;
         $this->money = $money;
         $this->probability = $probability;
         $this->ev = $ev;
         $this->income = $income;
+        $this->isTest = $isTest;
     }
 
     /**
@@ -116,6 +121,12 @@ class BetPackage
         $this->income = $income;
     }
 
-
+    /**
+     * @return bool
+     */
+    public function isTest(): bool
+    {
+        return $this->isTest;
+    }
 
 }

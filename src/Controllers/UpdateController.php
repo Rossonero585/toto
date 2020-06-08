@@ -12,6 +12,7 @@ use Builders\TotoBuilder;
 use Helpers\ArrayHelper;
 use Helpers\EventsHelper;
 use Helpers\Http\BetCityClient;
+use Helpers\PoolHelper;
 use Helpers\TotoHelper;
 use Models\Bet;
 use Models\BetPackage;
@@ -221,21 +222,19 @@ class UpdateController
 
     public function updateTotoResult(string $totoId)
     {
-
         /** @var EventRepository $eventRepository */
         $eventRepository = Repository::getRepository(EventRepository::class);
 
         /** @var TotoRepository $totoRepository */
         $totoRepository = Repository::getRepository(TotoRepository::class);
 
-        /** @var PoolRepository $poolRepository */
-        $poolRepository = Repository::getRepository(PoolRepository::class);
-
         /** @var BetPackageRepository $betPackageRepository */
         $betPackageRepository = Repository::getRepository(BetPackageRepository::class);
 
         /** @var BetItemRepository $betItemsRepository */
         $betItemsRepository = Repository::getRepository(BetItemRepository::class);
+
+        $poolHelper = new PoolHelper();
 
         $totoJson = TotoHelper::getJsonToto($totoId);
 
@@ -263,7 +262,7 @@ class UpdateController
 
         $toto = $totoRepository->getToto();
 
-        $breakDown = $poolRepository->getWinnersBreakDown($results);
+        $breakDown = $poolHelper->getWinnersBreakDown($results, true);
 
         $betPackages = $betPackageRepository->getAllPackages();
 
