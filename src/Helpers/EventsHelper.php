@@ -22,7 +22,7 @@ class EventsHelper
     {
         /** @var Event $event */
         foreach ($events as $event) {
-            $this->events[$event->getId()] = $event;
+            $this->events[$event->getNumber()] = $event;
         }
     }
 
