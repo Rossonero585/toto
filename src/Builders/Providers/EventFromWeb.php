@@ -85,7 +85,7 @@ class EventFromWeb implements EventInterface
 
         $matches = [];
 
-        preg_match('/([\p{Cyrillic}-\s\d]+)\s-\s([\p{Cyrillic}-\s\d]+)/u', $matchName, $matches);
+        preg_match('/([\p{Cyrillic}\-\s\d]+)\s\-\s([\p{Cyrillic}\-\s\d]+)/u', $matchName, $matches);
 
         return $matches[$number];
     }

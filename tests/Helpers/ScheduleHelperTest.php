@@ -16,6 +16,8 @@ class ScheduleHelperTest extends TestCase
 {
     public function testGetTimeForRun()
     {
+        $_ENV['TIME_BEFORE_RUN'] = 11;
+
         $scheduleHelper = new ScheduleHelper();
 
         $toto = new Toto(
