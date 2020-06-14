@@ -132,9 +132,9 @@ class UpdateController
 
             $bets = $betItemsRepository->geBetsOfPackage($id);
 
-            foreach ($bets as $key => $bet) {
+            foreach ($bets as $bet) {
 
-                if ($ids && in_array($key, $ids)) {
+                if ($ids && in_array($bet->getId(), $ids)) {
 
                     $allBets[] = $bet->getResults();
 
