@@ -168,22 +168,17 @@ class UpdateController
 
         foreach ($betPackages as $package) {
 
-            $bets = $betItemsRepository->geBetsOfPackage($package->getId());
+            $bets = $betItemsRepository->getBetsOfPackageWithNullEv($package->getId());
 
-            if (count($bets) > 0) {
+            $countBetsToCalc = $_ENV['COUNT_BETS_FOR_CALC'] < count($bets) ? $_ENV['COUNT_BETS_FOR_CALC'] : count($bets);
 
-                $minId = $bets[0]->getId();
-                $maxId = $bets[count($bets) - 1]->getId();
+            $keysToCalc = array_rand($bets, $countBetsToCalc);
 
-                $ids = [];
+            $idsToCalc = array_map(function ($key) use($bets) {
+                return $bets[$key]->getId();
+            }, $keysToCalc);
 
-                for ($i = 1; $i <= $_ENV['COUNT_BETS_FOR_CALC']; $i++) {
-                    array_push($ids, rand($minId, $maxId));
-                }
-
-
-                $this->updateBetsEvUsingSeparateProcess($totoId, array_unique($ids));
-            }
+            $this->updateBetsEvUsingSeparateProcess($totoId, $idsToCalc);
         }
     }
 

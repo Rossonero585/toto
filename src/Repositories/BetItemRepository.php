@@ -62,6 +62,31 @@ EOD;
     }
 
     /**
+     * @param int $id
+     * @return Bet[]
+     */
+    public function getBetsOfPackageWithNullEv(int $id)
+    {
+        $tableName = self::TABLE_NAME;
+
+        $sql = <<<EOD
+SELECT bi.id as id, bi.money as money, bi.bet as bet, bi.ev as ev FROM bets b
+LEFT JOIN {$tableName} bi ON bi.bet_id = b.id
+WHERE b.id = :id AND bi.ev IS NULL ORDER BY bi.id
+EOD;
+
+        $st = $this->getCachedStatement($sql);
+
+        $st->execute(['id' => $id]);
+
+        $betArr = $st->fetchAll(\PDO::FETCH_ASSOC);
+
+        return array_map(function ($arr) {
+            return $this->createBet($arr);
+        }, $betArr);
+    }
+
+    /**
      * @param InputBet $bet
      * @param int $packageId
      * @return string
