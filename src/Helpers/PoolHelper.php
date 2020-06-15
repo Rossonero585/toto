@@ -22,7 +22,13 @@ class PoolHelper
     private $betPackageRepository;
 
     /** @var  BreakDown[] */
+    private $breakDownsWithTest = [];
+
+    /** @var  BreakDown[] */
     private $breakDowns = [];
+
+    /** @var array */
+    private $testBets;
 
     public function __construct()
     {
@@ -33,7 +39,7 @@ class PoolHelper
 
     public function getWinnersBreakDown(array $results, bool $includeTest = false)
     {
-        $cachedBreakDown = $this->getCachedBreakDown($results);
+        $cachedBreakDown = $this->getCachedBreakDown($results, $includeTest);
 
         if ($cachedBreakDown) return $cachedBreakDown;
 
@@ -68,14 +74,22 @@ class PoolHelper
 
     /**
      * @param array $results
+     * @param bool $isTest
      * @return BreakDown|null
      */
-    private function getCachedBreakDown(array $results)
+    private function getCachedBreakDown(array $results, bool $isTest)
     {
+        if ($isTest) {
+            $cachedArray = &$this->breakDownsWithTest;
+        }
+        else {
+            $cachedArray = &$this->breakDowns;
+        }
+
         $key = md5(json_encode($results));
 
-        if (isset($this->breakDowns[$key])) {
-            return $this->breakDowns[$key];
+        if (isset($cachedArray[$key])) {
+            return $cachedArray[$key];
         }
 
         return null;
@@ -92,26 +106,31 @@ class PoolHelper
 
     private function getTestBets()
     {
-        $betPackages = $this->betPackageRepository->getAllPackages();
+        if (!$this->testBets) {
 
-        $testBets = [];
+            $betPackages = $this->betPackageRepository->getAllPackages();
 
-        /** @var BetPackage $package */
-        foreach ($betPackages as $package) {
+            $testBets = [];
 
-            if ($package->isTest()) {
+            /** @var BetPackage $package */
+            foreach ($betPackages as $package) {
 
-                $betItems = $this->betItemRepository->geBetsOfPackage($package->getId());
+                if ($package->isTest()) {
 
-                foreach ($betItems as $item) {
-                    array_push($testBets, [
-                        'money' => $item->getMoney(),
-                        'result' => implode("", $item->getResults())
-                    ]);
+                    $betItems = $this->betItemRepository->geBetsOfPackage($package->getId());
+
+                    foreach ($betItems as $item) {
+                        array_push($testBets, [
+                            'money' => $item->getMoney(),
+                            'result' => implode("", $item->getResults())
+                        ]);
+                    }
                 }
             }
+
+            $this->testBets = $testBets;
         }
 
-        return $testBets;
+        return $this->testBets;
     }
 }
