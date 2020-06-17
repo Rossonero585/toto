@@ -4,7 +4,6 @@ namespace Helpers;
 
 use Builders\BreakDownBuilder;
 use Models\BetPackage;
-use Models\BreakDown;
 use Repositories\BetItemRepository;
 use Repositories\BetPackageRepository;
 use Repositories\PoolRepository;
@@ -21,12 +20,6 @@ class PoolHelper
     /** @var BetPackageRepository */
     private $betPackageRepository;
 
-    /** @var  BreakDown[] */
-    private $breakDownsWithTest = [];
-
-    /** @var  BreakDown[] */
-    private $breakDowns = [];
-
     /** @var array */
     private $testBets;
 
@@ -39,10 +32,6 @@ class PoolHelper
 
     public function getWinnersBreakDown(array $results, bool $includeTest = false)
     {
-        $cachedBreakDown = $this->getCachedBreakDown($results, $includeTest);
-
-        if ($cachedBreakDown) return $cachedBreakDown;
-
         $pool = $this->poolRepository->getAllPool();
 
         $pool = array_merge($pool, $includeTest ? $this->getTestBets() : []);
@@ -67,41 +56,7 @@ class PoolHelper
 
         $breakDown = BreakDownBuilder::createBreakDownFromArray($outArray);
 
-        $this->addCachedBreakDown($results, $breakDown);
-
         return $breakDown;
-    }
-
-    /**
-     * @param array $results
-     * @param bool $isTest
-     * @return BreakDown|null
-     */
-    private function getCachedBreakDown(array $results, bool $isTest)
-    {
-        if ($isTest) {
-            $cachedArray = &$this->breakDownsWithTest;
-        }
-        else {
-            $cachedArray = &$this->breakDowns;
-        }
-
-        $key = md5(json_encode($results));
-
-        if (isset($cachedArray[$key])) {
-            return $cachedArray[$key];
-        }
-
-        return null;
-    }
-
-    private function addCachedBreakDown(array $results, BreakDown $breakDown)
-    {
-        $key = md5(json_encode($results));
-
-        $this->breakDowns[$key] = $breakDown;
-
-        return $this;
     }
 
     private function getTestBets()
