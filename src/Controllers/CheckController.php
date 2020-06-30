@@ -7,7 +7,7 @@
  */
 namespace Controllers;
 
-use Builders\Providers\TotoFromPrevJson;
+use Builders\Providers\BetCity\TotoFromPrevJson;
 use Builders\TotoBuilder;
 use Helpers\ScheduleHelper;
 

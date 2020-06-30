@@ -6,16 +6,16 @@
  * Time: 22:35
  */
 
-namespace Tests\Builders\Providers;
+namespace Tests\Builders\Providers\BetCity;
 
-use Builders\Providers\TotoFromWeb;
+use Builders\Providers\BetCity\TotoFromWeb;
 use PHPUnit\Framework\TestCase;
 
 class TotoFromWebTest extends TestCase
 {
     private function createMockTotoProvider()
     {
-        return new TotoFromWeb(json_decode(file_get_contents(__DIR__."./../../samples/toto.json")));
+        return new TotoFromWeb(json_decode(file_get_contents(__DIR__ . "./../../../samples/betcity/toto.json")));
     }
 
     public function testGetPot()

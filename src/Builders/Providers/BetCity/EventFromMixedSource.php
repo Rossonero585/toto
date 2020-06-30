@@ -6,7 +6,9 @@
  * Time: 21:46
  */
 
-namespace Builders\Providers;
+namespace Builders\Providers\BetCity;
+
+use Builders\Providers\EventInterface;
 
 class EventFromMixedSource implements EventInterface
 {

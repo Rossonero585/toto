@@ -2,7 +2,7 @@
 
 namespace Helpers;
 
-use Builders\Providers\TotoFromWeb;
+use Builders\Providers\BetCity\TotoFromWeb;
 use Builders\TotoBuilder;
 use Models\BetPackage;
 use Models\Input\Bet;

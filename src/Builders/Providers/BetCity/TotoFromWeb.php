@@ -6,7 +6,9 @@
  * Time: 22:07
  */
 
-namespace Builders\Providers;
+namespace Builders\Providers\BetCity;
+
+use Builders\Providers\TotoInterface;
 
 class TotoFromWeb implements TotoInterface
 {
@@ -49,6 +51,5 @@ class TotoFromWeb implements TotoInterface
     {
         return 'betcity';
     }
-
 
 }

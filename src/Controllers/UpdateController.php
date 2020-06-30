@@ -7,7 +7,7 @@
  */
 namespace Controllers;
 
-use Builders\Providers\TotoFromWeb;
+use Builders\Providers\BetCity\TotoFromWeb;
 use Builders\TotoBuilder;
 use Helpers\ArrayHelper;
 use Helpers\EventsHelper;

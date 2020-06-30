@@ -6,16 +6,16 @@
  * Time: 21:16
  */
 
-namespace Tests\Builders\Providers;
+namespace Tests\Builders\Providers\BetCity;
 
-use Builders\Providers\EventFromWeb;
+use Builders\Providers\BetCity\EventFromWeb;
 use PHPUnit\Framework\TestCase;
 
 class EventFromWebTest extends TestCase
 {
     private function createMockEventFromWeb()
     {
-        return new EventFromWeb(json_decode(file_get_contents(__DIR__."./../../samples/totoItem.json")), 0);
+        return new EventFromWeb(json_decode(file_get_contents(__DIR__ . "./../../../samples/betcity/totoItem.json")), 0);
     }
 
     public function testGetId()

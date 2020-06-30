@@ -1,0 +1,1043 @@
+{
+  "d": {
+    "__type": "Drawing:#FonbetEntity",
+    "Complexity": 9.3280000000,
+    "CouponCount": 38862,
+    "Details": {
+      "__type": "DrawingDetail:#FonbetEntity",
+      "DefaultResult": null,
+      "Events": [
+        {
+          "__type": "Event:#FonbetEntity",
+          "Championships": [
+            {
+              "Key": "ru",
+              "Value": "Футбол. Россия. Премьер-Лига"
+            },
+            {
+              "Key": "en",
+              "Value": "Football. Russia. Premier League"
+            }
+          ],
+          "Date": "\/Date(1593538200000)\/",
+          "Draw": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 26.8424310113,
+            "Probability": 28.0000000000
+          },
+          "GroupCode": 1,
+          "Id": 56161,
+          "Names": [
+            {
+              "Key": "ru",
+              "Value": "ЦСКА - Спартак М"
+            },
+            {
+              "Key": "en",
+              "Value": "CSKA Moscow - Spartak Moscow"
+            }
+          ],
+          "Order": 0,
+          "ResultCode": null,
+          "Score": null,
+          "Url": null,
+          "UserDraw": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 26.8424310113,
+            "Probability": 28.0000000000
+          },
+          "UserWin1": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 30.9123579427,
+            "Probability": 33.0000000000
+          },
+          "UserWin2": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 42.2452110460,
+            "Probability": 39.0000000000
+          },
+          "Win1": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 30.9123579427,
+            "Probability": 33.0000000000
+          },
+          "Win2": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 42.2452110460,
+            "Probability": 39.0000000000
+          }
+        },
+        {
+          "__type": "Event:#FonbetEntity",
+          "Championships": [
+            {
+              "Key": "ru",
+              "Value": "Футбол. Англия. Чемпион-Лига"
+            },
+            {
+              "Key": "en",
+              "Value": "Football. England. Championship"
+            }
+          ],
+          "Date": "\/Date(1593532800000)\/",
+          "Draw": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 27.7864485628,
+            "Probability": 31.0000000000
+          },
+          "GroupCode": 2,
+          "Id": 56162,
+          "Names": [
+            {
+              "Key": "ru",
+              "Value": "Миллуолл - Суонси"
+            },
+            {
+              "Key": "en",
+              "Value": "Millwall - Swansea City"
+            }
+          ],
+          "Order": 1,
+          "ResultCode": null,
+          "Score": null,
+          "Url": null,
+          "UserDraw": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 27.7864485628,
+            "Probability": 31.0000000000
+          },
+          "UserWin1": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 34.6755721806,
+            "Probability": 37.0000000000
+          },
+          "UserWin2": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 37.5379792566,
+            "Probability": 32.0000000000
+          },
+          "Win1": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 34.6755721806,
+            "Probability": 37.0000000000
+          },
+          "Win2": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 37.5379792566,
+            "Probability": 32.0000000000
+          }
+        },
+        {
+          "__type": "Event:#FonbetEntity",
+          "Championships": [
+            {
+              "Key": "ru",
+              "Value": "Футбол. Англия. Чемпион-Лига"
+            },
+            {
+              "Key": "en",
+              "Value": "Football. England. Championship"
+            }
+          ],
+          "Date": "\/Date(1593536400000)\/",
+          "Draw": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 27.1196688607,
+            "Probability": 30.0000000000
+          },
+          "GroupCode": 2,
+          "Id": 56163,
+          "Names": [
+            {
+              "Key": "ru",
+              "Value": "Барнсли - Блэкберн Роверс"
+            },
+            {
+              "Key": "en",
+              "Value": "Barnsley - Blackburn Rovers"
+            }
+          ],
+          "Order": 2,
+          "ResultCode": null,
+          "Score": null,
+          "Url": null,
+          "UserDraw": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 27.1196688607,
+            "Probability": 30.0000000000
+          },
+          "UserWin1": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 39.0133923327,
+            "Probability": 37.0000000000
+          },
+          "UserWin2": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 33.8669388067,
+            "Probability": 33.0000000000
+          },
+          "Win1": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 39.0133923327,
+            "Probability": 37.0000000000
+          },
+          "Win2": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 33.8669388067,
+            "Probability": 33.0000000000
+          }
+        },
+        {
+          "__type": "Event:#FonbetEntity",
+          "Championships": [
+            {
+              "Key": "ru",
+              "Value": "Футбол. Англия. Чемпион-Лига"
+            },
+            {
+              "Key": "en",
+              "Value": "Football. England. Championship"
+            }
+          ],
+          "Date": "\/Date(1593538200000)\/",
+          "Draw": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 23.2301267431,
+            "Probability": 28.0000000000
+          },
+          "GroupCode": 2,
+          "Id": 56164,
+          "Names": [
+            {
+              "Key": "ru",
+              "Value": "КПР - Фулхэм"
+            },
+            {
+              "Key": "en",
+              "Value": "QPR - Fulham"
+            }
+          ],
+          "Order": 3,
+          "ResultCode": null,
+          "Score": null,
+          "Url": null,
+          "UserDraw": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 23.2301267431,
+            "Probability": 28.0000000000
+          },
+          "UserWin1": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 25.5536923102,
+            "Probability": 29.0000000000
+          },
+          "UserWin2": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 51.2161809467,
+            "Probability": 43.0000000000
+          },
+          "Win1": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 25.5536923102,
+            "Probability": 29.0000000000
+          },
+          "Win2": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 51.2161809467,
+            "Probability": 43.0000000000
+          }
+        },
+        {
+          "__type": "Event:#FonbetEntity",
+          "Championships": [
+            {
+              "Key": "ru",
+              "Value": "Футбол. Англия. Чемпион-Лига"
+            },
+            {
+              "Key": "en",
+              "Value": "Football. England. Championship"
+            }
+          ],
+          "Date": "\/Date(1593542700000)\/",
+          "Draw": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 26.6323634395,
+            "Probability": 32.0000000000
+          },
+          "GroupCode": 2,
+          "Id": 56165,
+          "Names": [
+            {
+              "Key": "ru",
+              "Value": "Уиган - Сток С"
+            },
+            {
+              "Key": "en",
+              "Value": "Wigan - Stoke City"
+            }
+          ],
+          "Order": 4,
+          "ResultCode": null,
+          "Score": null,
+          "Url": null,
+          "UserDraw": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 26.6323634395,
+            "Probability": 32.0000000000
+          },
+          "UserWin1": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 45.6312156693,
+            "Probability": 34.0000000000
+          },
+          "UserWin2": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 27.7364208912,
+            "Probability": 34.0000000000
+          },
+          "Win1": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 45.6312156693,
+            "Probability": 34.0000000000
+          },
+          "Win2": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 27.7364208912,
+            "Probability": 34.0000000000
+          }
+        },
+        {
+          "__type": "Event:#FonbetEntity",
+          "Championships": [
+            {
+              "Key": "ru",
+              "Value": "Футбол. Испания. Премьер-Лига"
+            },
+            {
+              "Key": "en",
+              "Value": "Football. Spain. Premier League"
+            }
+          ],
+          "Date": "\/Date(1593538200000)\/",
+          "Draw": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 23.4893818082,
+            "Probability": 30.0000000000
+          },
+          "GroupCode": 3,
+          "Id": 56166,
+          "Names": [
+            {
+              "Key": "ru",
+              "Value": "Мальорка - Сельта"
+            },
+            {
+              "Key": "en",
+              "Value": "Mallorca - Celta Vigo"
+            }
+          ],
+          "Order": 5,
+          "ResultCode": null,
+          "Score": null,
+          "Url": null,
+          "UserDraw": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 23.4893818082,
+            "Probability": 30.0000000000
+          },
+          "UserWin1": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 21.3669631973,
+            "Probability": 29.0000000000
+          },
+          "UserWin2": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 55.1436549944,
+            "Probability": 41.0000000000
+          },
+          "Win1": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 21.3669631973,
+            "Probability": 29.0000000000
+          },
+          "Win2": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 55.1436549944,
+            "Probability": 41.0000000000
+          }
+        },
+        {
+          "__type": "Event:#FonbetEntity",
+          "Championships": [
+            {
+              "Key": "ru",
+              "Value": "Футбол. Испания. Сегунда"
+            },
+            {
+              "Key": "en",
+              "Value": "Football. Spain. Segunda Division"
+            }
+          ],
+          "Date": "\/Date(1593538200000)\/",
+          "Draw": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 27.8269097193,
+            "Probability": 30.0000000000
+          },
+          "GroupCode": 4,
+          "Id": 56167,
+          "Names": [
+            {
+              "Key": "ru",
+              "Value": "Тенерифе - Депортиво Ла-Корунья"
+            },
+            {
+              "Key": "en",
+              "Value": "Tenerife - Deportivo La Coruna"
+            }
+          ],
+          "Order": 6,
+          "ResultCode": null,
+          "Score": null,
+          "Url": null,
+          "UserDraw": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 27.8269097193,
+            "Probability": 30.0000000000
+          },
+          "UserWin1": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 46.3190310312,
+            "Probability": 43.0000000000
+          },
+          "UserWin2": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 25.8540592494,
+            "Probability": 27.0000000000
+          },
+          "Win1": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 46.3190310312,
+            "Probability": 43.0000000000
+          },
+          "Win2": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 25.8540592494,
+            "Probability": 27.0000000000
+          }
+        },
+        {
+          "__type": "Event:#FonbetEntity",
+          "Championships": [
+            {
+              "Key": "ru",
+              "Value": "Футбол. Испания. Сегунда"
+            },
+            {
+              "Key": "en",
+              "Value": "Football. Spain. Segunda Division"
+            }
+          ],
+          "Date": "\/Date(1593546300000)\/",
+          "Draw": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 31.5749783674,
+            "Probability": 33.0000000000
+          },
+          "GroupCode": 4,
+          "Id": 56168,
+          "Names": [
+            {
+              "Key": "ru",
+              "Value": "Эльче - Кадис"
+            },
+            {
+              "Key": "en",
+              "Value": "Elche - Cadiz"
+            }
+          ],
+          "Order": 7,
+          "ResultCode": null,
+          "Score": null,
+          "Url": null,
+          "UserDraw": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 31.5749783674,
+            "Probability": 33.0000000000
+          },
+          "UserWin1": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 34.0174492100,
+            "Probability": 33.0000000000
+          },
+          "UserWin2": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 34.4075724226,
+            "Probability": 34.0000000000
+          },
+          "Win1": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 34.0174492100,
+            "Probability": 33.0000000000
+          },
+          "Win2": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 34.4075724226,
+            "Probability": 34.0000000000
+          }
+        },
+        {
+          "__type": "Event:#FonbetEntity",
+          "Championships": [
+            {
+              "Key": "ru",
+              "Value": "Футбол. Австрия. Бундеслига"
+            },
+            {
+              "Key": "en",
+              "Value": "Football. Austria. Bundesliga"
+            }
+          ],
+          "Date": "\/Date(1593541800000)\/",
+          "Draw": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 22.9471941690,
+            "Probability": 27.0000000000
+          },
+          "GroupCode": 5,
+          "Id": 56169,
+          "Names": [
+            {
+              "Key": "ru",
+              "Value": "Адмира - Ст. Пельтен"
+            },
+            {
+              "Key": "en",
+              "Value": "Admira - St. Polten"
+            }
+          ],
+          "Order": 8,
+          "ResultCode": null,
+          "Score": null,
+          "Url": null,
+          "UserDraw": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 22.9471941690,
+            "Probability": 27.0000000000
+          },
+          "UserWin1": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 50.7383679876,
+            "Probability": 39.0000000000
+          },
+          "UserWin2": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 26.3144378434,
+            "Probability": 34.0000000000
+          },
+          "Win1": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 50.7383679876,
+            "Probability": 39.0000000000
+          },
+          "Win2": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 26.3144378434,
+            "Probability": 34.0000000000
+          }
+        },
+        {
+          "__type": "Event:#FonbetEntity",
+          "Championships": [
+            {
+              "Key": "ru",
+              "Value": "Футбол. Австрия. Бундеслига"
+            },
+            {
+              "Key": "en",
+              "Value": "Football. Austria. Bundesliga"
+            }
+          ],
+          "Date": "\/Date(1593541800000)\/",
+          "Draw": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 25.3880730650,
+            "Probability": 28.0000000000
+          },
+          "GroupCode": 5,
+          "Id": 56170,
+          "Names": [
+            {
+              "Key": "ru",
+              "Value": "Альтах - Аустрия Вена"
+            },
+            {
+              "Key": "en",
+              "Value": "SCR Altach - Austria Vienna"
+            }
+          ],
+          "Order": 9,
+          "ResultCode": null,
+          "Score": null,
+          "Url": null,
+          "UserDraw": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 25.3880730650,
+            "Probability": 28.0000000000
+          },
+          "UserWin1": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 28.8572194831,
+            "Probability": 36.0000000000
+          },
+          "UserWin2": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 45.7547074519,
+            "Probability": 36.0000000000
+          },
+          "Win1": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 28.8572194831,
+            "Probability": 36.0000000000
+          },
+          "Win2": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 45.7547074519,
+            "Probability": 36.0000000000
+          }
+        },
+        {
+          "__type": "Event:#FonbetEntity",
+          "Championships": [
+            {
+              "Key": "ru",
+              "Value": "Футбол. Австрия. Бундеслига"
+            },
+            {
+              "Key": "en",
+              "Value": "Football. Austria. Bundesliga"
+            }
+          ],
+          "Date": "\/Date(1593541800000)\/",
+          "Draw": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 24.3411596703,
+            "Probability": 27.0000000000
+          },
+          "GroupCode": 5,
+          "Id": 56171,
+          "Names": [
+            {
+              "Key": "ru",
+              "Value": "Маттерсбург - Ваттенс"
+            },
+            {
+              "Key": "en",
+              "Value": "Mattersburg - Wattens"
+            }
+          ],
+          "Order": 10,
+          "ResultCode": null,
+          "Score": null,
+          "Url": null,
+          "UserDraw": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 24.3411596703,
+            "Probability": 27.0000000000
+          },
+          "UserWin1": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 50.3317626757,
+            "Probability": 39.0000000000
+          },
+          "UserWin2": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 25.3270776541,
+            "Probability": 34.0000000000
+          },
+          "Win1": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 50.3317626757,
+            "Probability": 39.0000000000
+          },
+          "Win2": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 25.3270776541,
+            "Probability": 34.0000000000
+          }
+        },
+        {
+          "__type": "Event:#FonbetEntity",
+          "Championships": [
+            {
+              "Key": "ru",
+              "Value": "Футбол. Дания. 1-й дивизион"
+            },
+            {
+              "Key": "en",
+              "Value": "Football. Denmark. Division 1"
+            }
+          ],
+          "Date": "\/Date(1593536400000)\/",
+          "Draw": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 30.2457921173,
+            "Probability": 28.0000000000
+          },
+          "GroupCode": 6,
+          "Id": 56172,
+          "Names": [
+            {
+              "Key": "ru",
+              "Value": "Колдинг ИФ - Скиве"
+            },
+            {
+              "Key": "en",
+              "Value": "Kolding IF - Skive"
+            }
+          ],
+          "Order": 11,
+          "ResultCode": null,
+          "Score": null,
+          "Url": null,
+          "UserDraw": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 30.2457921173,
+            "Probability": 28.0000000000
+          },
+          "UserWin1": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 36.9901932508,
+            "Probability": 43.0000000000
+          },
+          "UserWin2": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 32.7640146319,
+            "Probability": 29.0000000000
+          },
+          "Win1": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 36.9901932508,
+            "Probability": 43.0000000000
+          },
+          "Win2": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 32.7640146319,
+            "Probability": 29.0000000000
+          }
+        },
+        {
+          "__type": "Event:#FonbetEntity",
+          "Championships": [
+            {
+              "Key": "ru",
+              "Value": "Футбол. Польша. 1-я лига"
+            },
+            {
+              "Key": "en",
+              "Value": "Football. Poland. League 1"
+            }
+          ],
+          "Date": "\/Date(1593525600000)\/",
+          "Draw": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 27.7223650626,
+            "Probability": 28.0000000000
+          },
+          "GroupCode": 7,
+          "Id": 56173,
+          "Names": [
+            {
+              "Key": "ru",
+              "Value": "Сандецья Новы-Сонч - Заглембе Сосновец"
+            },
+            {
+              "Key": "en",
+              "Value": "Sandecja Nowy Cacz - Zaglebie Sosnowiec"
+            }
+          ],
+          "Order": 12,
+          "ResultCode": null,
+          "Score": null,
+          "Url": null,
+          "UserDraw": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 27.7223650626,
+            "Probability": 28.0000000000
+          },
+          "UserWin1": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 37.3263756861,
+            "Probability": 42.0000000000
+          },
+          "UserWin2": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 34.9512592513,
+            "Probability": 30.0000000000
+          },
+          "Win1": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 37.3263756861,
+            "Probability": 42.0000000000
+          },
+          "Win2": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 34.9512592513,
+            "Probability": 30.0000000000
+          }
+        },
+        {
+          "__type": "Event:#FonbetEntity",
+          "Championships": [
+            {
+              "Key": "ru",
+              "Value": "Футбол. Хорватия. Премьер-Лига"
+            },
+            {
+              "Key": "en",
+              "Value": "Football. Croatia. Premier League"
+            }
+          ],
+          "Date": "\/Date(1593543900000)\/",
+          "Draw": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 24.6836864700,
+            "Probability": 29.0000000000
+          },
+          "GroupCode": 8,
+          "Id": 56174,
+          "Names": [
+            {
+              "Key": "ru",
+              "Value": "Горица ХНК - Хайдук Сплит"
+            },
+            {
+              "Key": "en",
+              "Value": "NK Gorica - Hajduk Split"
+            }
+          ],
+          "Order": 13,
+          "ResultCode": null,
+          "Score": null,
+          "Url": null,
+          "UserDraw": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 24.6836864700,
+            "Probability": 29.0000000000
+          },
+          "UserWin1": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 29.3173248214,
+            "Probability": 35.0000000000
+          },
+          "UserWin2": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 45.9989887086,
+            "Probability": 36.0000000000
+          },
+          "Win1": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 29.3173248214,
+            "Probability": 35.0000000000
+          },
+          "Win2": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 45.9989887086,
+            "Probability": 36.0000000000
+          }
+        },
+        {
+          "__type": "Event:#FonbetEntity",
+          "Championships": [
+            {
+              "Key": "ru",
+              "Value": "Футбол. Швейцария. Челлендж-Лига"
+            },
+            {
+              "Key": "en",
+              "Value": "Football. Switzerland. Challenge League"
+            }
+          ],
+          "Date": "\/Date(1593533700000)\/",
+          "Draw": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 25.6329532216,
+            "Probability": 28.0000000000
+          },
+          "GroupCode": 9,
+          "Id": 56175,
+          "Names": [
+            {
+              "Key": "ru",
+              "Value": "Винтертур - Арау"
+            },
+            {
+              "Key": "en",
+              "Value": "FC Winterthur - FC Aarau"
+            }
+          ],
+          "Order": 14,
+          "ResultCode": null,
+          "Score": null,
+          "Url": null,
+          "UserDraw": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 25.6329532216,
+            "Probability": 28.0000000000
+          },
+          "UserWin1": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 37.2325954584,
+            "Probability": 31.0000000000
+          },
+          "UserWin2": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 37.1344513200,
+            "Probability": 41.0000000000
+          },
+          "Win1": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 37.2325954584,
+            "Probability": 31.0000000000
+          },
+          "Win2": {
+            "__type": "EventStatItem:#FonbetEntity",
+            "Percentage": 37.1344513200,
+            "Probability": 41.0000000000
+          }
+        }
+      ],
+      "MinStakeAmount": 30,
+      "OptionsDictCount": 66019,
+      "P14": 0.1866348850,
+      "P14Current": 0.1866348850,
+      "PAllFavorites": 0.0000006829,
+      "PJackpot": 0.0072421452,
+      "PJackpotCurrent": 0.0072421452,
+      "PTop1K": 0.0004234068,
+      "PTop20K": 0.0039857065,
+      "PTop5K": 0.0015175509,
+      "Result": {
+        "__type": "Result:#FonbetEntity",
+        "Coupons": null,
+        "CouponsResults": null,
+        "DrawingResults": [
+          {
+            "__type": "ResultItem:#FonbetEntity",
+            "Amount": {
+              "__type": "Money:#FonbetEntity",
+              "Value": 3590667.0111
+            },
+            "Count": 69349,
+            "K": 0,
+            "Percent": 10.00,
+            "Pool": 14017566,
+            "Result": 15
+          },
+          {
+            "__type": "ResultItem:#FonbetEntity",
+            "Amount": {
+              "__type": "Money:#FonbetEntity",
+              "Value": 3590667.0111
+            },
+            "Count": 69349,
+            "K": 0,
+            "Percent": 10.00,
+            "Pool": 323160,
+            "Result": 14
+          },
+          {
+            "__type": "ResultItem:#FonbetEntity",
+            "Amount": {
+              "__type": "Money:#FonbetEntity",
+              "Value": 3590667.0111
+            },
+            "Count": 69349,
+            "K": 0,
+            "Percent": 10.00,
+            "Pool": 323160,
+            "Result": 13
+          },
+          {
+            "__type": "ResultItem:#FonbetEntity",
+            "Amount": {
+              "__type": "Money:#FonbetEntity",
+              "Value": 3590667.0111
+            },
+            "Count": 69349,
+            "K": 0,
+            "Percent": 10.00,
+            "Pool": 323160,
+            "Result": 12
+          },
+          {
+            "__type": "ResultItem:#FonbetEntity",
+            "Amount": {
+              "__type": "Money:#FonbetEntity",
+              "Value": 3590667.0111
+            },
+            "Count": 69349,
+            "K": 0,
+            "Percent": 10.00,
+            "Pool": 323160,
+            "Result": 11
+          },
+          {
+            "__type": "ResultItem:#FonbetEntity",
+            "Amount": {
+              "__type": "Money:#FonbetEntity",
+              "Value": 3590667.0111
+            },
+            "Count": 69349,
+            "K": 0,
+            "Percent": 18.00,
+            "Pool": 581688,
+            "Result": 10
+          },
+          {
+            "__type": "ResultItem:#FonbetEntity",
+            "Amount": {
+              "__type": "Money:#FonbetEntity",
+              "Value": 3590667.0111
+            },
+            "Count": 69349,
+            "K": 0,
+            "Percent": 32.00,
+            "Pool": 1034112,
+            "Result": 9
+          },
+          {
+            "__type": "ResultItem:#FonbetEntity",
+            "Amount": {
+              "__type": "Money:#FonbetEntity",
+              "Value": 3590667.0111
+            },
+            "Count": 69349,
+            "K": 0,
+            "Percent": 0.00,
+            "Pool": 0,
+            "Result": 8
+          }
+        ],
+        "TotalPrize": 0,
+        "TotalStake": 0
+      }
+    },
+    "Expired": "\/Date(1593525600000)\/",
+    "Id": 591,
+    "IsBlocked": false,
+    "Jackpot": 13694406,
+    "LocalPool": 3590667,
+    "MaxMatch": 15,
+    "MaxPrize": 0,
+    "OptionCount": 66019,
+    "Pool": 3590667,
+    "PrizeMoney": 3231600,
+    "StakeCount": 69349,
+    "State": 2,
+    "UnusedPrizeMoney": 0.0000,
+    "Updated": "\/Date(1593501122163)\/",
+    "Version": 3801757178
+  }
+}
