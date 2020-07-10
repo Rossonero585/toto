@@ -5,6 +5,7 @@ namespace Builders\Providers\BetCity;
 use Builders\Providers\PoolItemsInterface;
 use Helpers\ArrayHelper;
 use Models\PoolItem;
+use \DateTime;
 
 class PoolItemsFromCoupon implements PoolItemsInterface
 {
@@ -25,6 +26,9 @@ class PoolItemsFromCoupon implements PoolItemsInterface
         $items = explode("|", $this->line);
 
         if (count($items) > 1) {
+
+            $betTime = DateTime::createFromFormat('d.m.Y H:i:s', $items[1]);
+
             $code = $items[0];
             $money = (float)trim(substr($items[2], 0, -3));
 
@@ -44,7 +48,8 @@ class PoolItemsFromCoupon implements PoolItemsInterface
                     array_push($out, new PoolItem(
                         $tempCode,
                         $money,
-                        implode("", $subResult)
+                        implode("", $subResult),
+                        $betTime
                     ));
                 }
             }
@@ -52,7 +57,8 @@ class PoolItemsFromCoupon implements PoolItemsInterface
                 array_push($out, new PoolItem(
                     $code,
                     $money,
-                    implode("", $results)
+                    implode("", $results),
+                    $betTime
                 ));
             }
         }

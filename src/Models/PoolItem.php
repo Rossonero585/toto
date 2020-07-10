@@ -2,6 +2,8 @@
 
 namespace Models;
 
+use \DateTime;
+
 class PoolItem
 {
     /**
@@ -19,18 +21,23 @@ class PoolItem
      */
     private $result;
 
+    /** @var DateTime */
+    private $betDate;
+
     /**
      * PoolItem constructor.
      *
      * @param string $code
      * @param float $money
      * @param string $result
+     * @param DateTime $betDate
      */
-    public function __construct(string $code, float $money, string $result)
+    public function __construct(string $code, float $money, string $result, DateTime $betDate = null)
     {
         $this->code = $code;
         $this->money = $money;
         $this->result = $result;
+        $this->betDate = $betDate;
     }
 
     /**
@@ -79,5 +86,13 @@ class PoolItem
     public function setResult(string $result): void
     {
         $this->result = $result;
+    }
+
+    /**
+     * @return DateTime
+     */
+    public function getBetDate(): ?DateTime
+    {
+        return $this->betDate;
     }
 }

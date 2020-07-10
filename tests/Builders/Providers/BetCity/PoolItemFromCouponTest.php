@@ -28,5 +28,7 @@ class PoolItemFromCouponTest extends TestCase
 
         $this->assertEquals(14, strlen($poolItem->getResult()));
 
+        $this->assertEquals("30.06.2020 12:34:20", $poolItem->getBetDate()->format('d.m.Y H:i:s'));
+
     }
 }

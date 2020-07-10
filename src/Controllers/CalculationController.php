@@ -39,7 +39,7 @@ class CalculationController
 
         $breakDown = $poolHelper->getWinnersBreakDown($results);
 
-        $totoHelper = new TotoHelper($toto, 50);
+        $totoHelper = new TotoHelper($toto, 0);
 
         $ratio = $totoHelper->getRatioByCategory($cat, $breakDown);
 

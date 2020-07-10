@@ -4,6 +4,7 @@
 namespace Builders\Providers\FonBet;
 
 use Builders\Providers\EventInterface;
+use \stdClass;
 
 class EventFromWeb implements EventInterface
 {
@@ -13,7 +14,7 @@ class EventFromWeb implements EventInterface
     /** @var string */
     private $lang;
 
-    public function __construct(\stdClass $toto, $lang = 'ru')
+    public function __construct(stdClass $toto, $lang = 'ru')
     {
         $this->event = $toto;
         $this->lang = $lang;
@@ -26,7 +27,7 @@ class EventFromWeb implements EventInterface
 
     public function getNumber(): ?int
     {
-        return $this->event->GroupCode;
+        return $this->event->Order + 1;
     }
 
     public function getP1(): float

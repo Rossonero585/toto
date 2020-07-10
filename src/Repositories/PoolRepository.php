@@ -7,51 +7,36 @@
  */
 
 namespace Repositories;
-use Helpers\ArrayHelper;
+use Builders\Providers\PoolProviderInterface;
+use Models\PoolItem;
 
 class PoolRepository extends Repository
 {
     /** @var  array */
     private $pool;
 
-    public function insertFromFile($str)
+    public function insertFromProvider(PoolProviderInterface $poolProvider)
     {
-        $sql = <<<EOD
-INSERT IGNORE INTO pool
-          (code, money, result, toto_id)
-VALUES
-EOD;
-        $lines = explode("\n", $str);
+        $s = "INSERT IGNORE INTO pool (result, money, code, bet_time, toto_id) VALUES ";
 
-        foreach ($lines as $line) {
-            $items = explode("|", $line);
+        /** @var PoolItem $poolItem */
+        foreach ($poolProvider->getPoolItem() as $poolItem) {
 
-            if (count($items) > 1) {
-                $code = $items[0];
-                $money = (float)trim(substr($items[2], 0, -3));
+            $result = $poolItem->getResult();
+            $money  = $poolItem->getMoney();
+            $code   = $poolItem->getCode();
+            $betTime = $poolItem->getBetDate() ? $poolItem->getBetDate()->format('Y-m-d H:i:s') : '';
+            $totoId  = $this->getTotoId();
 
-                $results = explode(";", $items[3]);
-
-                array_pop($results);
-
-                if (preg_match("/,/", $items[3])) {
-                    $results = array_map(function($r) {return explode(",", $r);}, $results);
-                    $results = ArrayHelper::array_combination($results);
-
-                    $money = $money / count($results);
-
-                    foreach ($results as $key => $subResult) {
-                        $tempCode = $code.$key;
-                        $sql .= $this->addSqlRow($money, $tempCode, $subResult);
-                    }
-                }
-                else {
-                    $sql .= $this->addSqlRow($money, $code, $results);
-                }
+            if ($betTime) {
+                $s .= " ('$result', $money, '$code', '$betTime', '$totoId'), ";
+            }
+            else {
+                $s .= " ('$result', $money, '$code', NULL, '$totoId'), ";
             }
         }
 
-        $sql = substr($sql, 0, -2);
+        $sql = substr($s, 0, -2);
 
         $st = $this->pdo->prepare($sql);
 
@@ -74,15 +59,6 @@ EOD;
         $items = $st->fetch();
 
         return (bool)count($items);
-    }
-
-    private function addSqlRow($money, $code, $results)
-    {
-        $results = implode("", $results);
-
-        $totoId = $this->getTotoId();
-
-        return " ('$code', $money, '$results', '$totoId'), ";
     }
 
     /**

@@ -15,7 +15,9 @@ class TotoFromWebTest extends TestCase
 {
     private function createMockTotoProvider()
     {
-        return new TotoFromWeb(json_decode(file_get_contents(__DIR__ . "./../../../samples/fonbet/toto.json")));
+        $json = json_decode(file_get_contents(__DIR__ . "./../../../samples/fonbet/toto.json"));
+
+        return new TotoFromWeb($json->d);
     }
 
     public function testGetPot()

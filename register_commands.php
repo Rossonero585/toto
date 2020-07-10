@@ -2,10 +2,10 @@
 
 include "autoload.php";
 
+use Controllers\CalculationController;
 use Controllers\Http\BetController;
 use Controllers\UpdateController;
 use Controllers\CheckController;
-use Controllers\ViewController;
 use Helpers\Arguments;
 use Helpers\CommandManager;
 
@@ -22,9 +22,11 @@ $commandManager->registerCommand('insertion', function () use ($arguments) {
 
     $cu = new UpdateController();
 
-    $cu->insertEventAction($totoId);
+    $cu->insertTotoAction($bookmaker, $totoId);
 
-    $cu->insertBetsAction($totoId);
+    $cu->insertEventsAction($bookmaker, $totoId);
+
+    $cu->insertBetsAction($bookmaker, $totoId);
 
 });
 
@@ -121,6 +123,27 @@ $commandManager->registerCommand('betcity_tokens', function () use($arguments) {
     $cu->setBetCityTokens($totoId);
 
 });
+
+
+$commandManager->registerCommand('calculate_ratio', function () use($arguments) {
+
+    $result = $arguments->get('r');
+
+    $cat = $arguments->get('c');
+
+    $cu = new CalculationController();
+
+    $start = microtime(true);
+
+    echo $cu->calculateRatioAction(str_split($result), (int)$cat);
+
+    echo PHP_EOL;
+
+    $end = microtime(true);
+
+    echo ($end - $start);
+});
+
 
 function test_log($str) {
 
