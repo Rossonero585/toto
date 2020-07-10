@@ -31,6 +31,12 @@ class FileParser
 
             $l = []; $i++;
 
+            preg_match('/\s+(\d{1,2})\s+\d{4}-/i', $m, $l);
+
+            $number = (int)$l[1];
+
+            $l = [];
+
             preg_match('/.+\s\-\s.+\s+/U', $m, $l);
 
             $title = trim(array_shift($l));
@@ -43,14 +49,14 @@ class FileParser
 
             list($p1, $px, $p2, $source) = $p;
 
-            array_push($eventsAssoc, [
+            $eventsAssoc[$number] =  [
                 'p1' => $p1,
                 'px' => $px,
                 'p2' => $p2,
                 'title' => $title,
-                'id' => $i,
-                'source' => $source
-            ]);
+                'source' => $source,
+                'number' => $number
+            ];
         }
 
         return $eventsAssoc;
