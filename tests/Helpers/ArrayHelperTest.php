@@ -95,12 +95,5 @@ class ArrayHelperTest extends TestCase
         $countMatch = ArrayHelper::countMatchResult($a, $b);
 
         $this->assertEquals(2, $countMatch);
-
-        $b = [[1,2,3], [2], [0]];
-
-        $countMatch = ArrayHelper::countMatchResult($a, $b);
-
-        $this->assertEquals(2, $countMatch);
-
     }
 }

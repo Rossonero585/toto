@@ -26,37 +26,6 @@ class EventsHelper
         }
     }
 
-    /**
-     * @param array $bet
-     * @param array $win
-     * @return float|int
-     * @throws \Exception
-     */
-    public function calculateProbabilityOfCombination(array $bet, array $win)
-    {
-        $countEvents = count($this->events);
-
-        if ($countEvents != count($bet)) {
-            throw new \Exception("Bet array doesn't conform events count");
-        }
-
-        if (count($win) > $countEvents) {
-            throw new \Exception("Results array doesn't conform events count");
-        }
-
-        $p = 1;
-
-        foreach ($bet as $key => $item) {
-
-            $eventId = $key + 1;
-
-            $success = in_array($eventId, $win);
-
-            $p = $p * $this->getProbabilityForResult($eventId, [$item], $success);
-        }
-
-        return $p;
-    }
 
     public function calculateProbabilityOfAllEvents(array $bet)
     {
@@ -66,7 +35,7 @@ class EventsHelper
 
             $eventId = $key + 1;
 
-            $p = $p * $this->getProbabilityForResult($eventId, [$item]);
+            $p = $p * $this->getProbabilityForResult($eventId, $item);
         }
 
         return $p;
@@ -74,12 +43,11 @@ class EventsHelper
 
     /**
      * @param int $eventId
-     * @param array $result
-     * @param bool $success
+     * @param string $result
      * @return float|int
      * @throws \Exception
      */
-    public function getProbabilityForResult($eventId, $result, $success = true)
+    public function getProbabilityForResult($eventId, $result)
     {
         $event = $this->events[$eventId];
 
@@ -91,14 +59,20 @@ class EventsHelper
             return 1;
         }
 
-        $p = 0;
+        if ('1' === $result) {
+            return $event->getP1();
+        }
+        elseif ('2' === $result) {
+            return  $event->getP2();
+        }
+        elseif ('X' === $result || 'x' === $result) {
+            return $event->getPx();
+        }
+        elseif ('4' === $result) {
+            return 1;
+        }
 
-        if (in_array(1, $result))   $p = $p + $event->getP1();
-        if (in_array('x', $result) || in_array('X', $result)) $p = $p + $event->getPx();
-        if (in_array(2, $result))   $p = $p + $event->getP2();
-
-        return $success ? $p : 1 - $p;
-
+        throw new \Exception("Unknown result $result");
     }
 
 
@@ -176,5 +150,14 @@ class EventsHelper
         }
 
         return $out;
+    }
+
+    public function getIndexOfCanceledEvent()
+    {
+        foreach ($this->events as $event) {
+            if ($event->isCanceled()) return $event->getNumber();
+        }
+
+        return -1;
     }
 }

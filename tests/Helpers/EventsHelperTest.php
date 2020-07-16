@@ -63,29 +63,14 @@ class EventsHelperTest extends TestCase
 
     public function testGetProbabilityForResult()
     {
-        $p = $this->eventsHelper->getProbabilityForResult(1, ['x'], false);
+        $p = $this->eventsHelper->getProbabilityForResult(1, 'x');
 
-        $this->assertEquals(0.7, $p);
-    }
-
-    public function testCalculateProbability()
-    {
-        $p = $this->eventsHelper->calculateProbabilityOfCombination([1, 1, 1], [2, 3]);
-
-        $this->assertEquals((1-0.2)*0.02*0.02, $p);
-
-        $p = $this->eventsHelper->calculateProbabilityOfCombination(['x', 1, 2], [1, 3]);
-
-        $this->assertEquals(0.3*(1 - 0.02)*0.67, $p);
-
-        $p = $this->eventsHelper->calculateProbabilityOfCombination(['x', 2, 'x'], [3]);
-
-        $this->assertEquals((1-0.3)*(1 - 0.5)*0.31, $p);
+        $this->assertEquals(0.3, $p);
     }
 
     public function testCalculateProbabilityOfAllEvents()
     {
-        $p = $this->eventsHelper->calculateProbabilityOfAllEvents([1, 'x', 2]);
+        $p = $this->eventsHelper->calculateProbabilityOfAllEvents(['1', 'x', '2']);
 
         $this->assertEquals(0.2*0.48*0.67, $p);
     }

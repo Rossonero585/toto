@@ -107,6 +107,21 @@ class ArrayHelper
         }
     }
 
+    public static function countMatchValues(array $arr1, array $arr2)
+    {
+        if (count($arr1) !== count($arr2)) {
+            throw new \Exception("Arrays should have equal size");
+        }
+
+        $k = 0;
+
+        foreach ($arr1 as $key => $value) {
+            if ($value === $arr2[$key]) $k++;
+        }
+
+        return $k;
+    }
+
     public static function countMatchResult(array $arr1, array $arr2)
     {
         if (count($arr1) != count($arr2)) {

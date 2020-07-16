@@ -42,7 +42,7 @@ class PoolHelper
 
             $money = (float)$poolItem['money'];
 
-            $matched = ArrayHelper::countMatchResult($results, str_split($poolItem['result']));
+            $matched = ArrayHelper::countMatchValues($results, str_split($poolItem['result']));
 
             if (!isset($outArray[$matched])) {
                 $outArray[$matched] = [

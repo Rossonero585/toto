@@ -49,6 +49,9 @@ class Event
     /** @var  string */
     private $source;
 
+    /** @var bool */
+    private $isCanceled;
+
     /**
      * Event constructor.
      * @param $number
@@ -78,6 +81,7 @@ class Event
         $this->source = $source;
         $this->result = $result;
         $this->id = $id;
+        $this->isCanceled = $this->result == self::cancelledType;
     }
 
     /**
@@ -174,7 +178,7 @@ class Event
      */
     public function isCanceled(): bool
     {
-        return $this->result == self::cancelledType;
+        return $this->isCanceled;
     }
 
     /**

@@ -65,6 +65,8 @@ class CalculationController
 
         $eventHelper = new EventsHelper($eventRepository->getAll());
 
+        $cancelledEventIndex = $eventHelper->getIndexOfCanceledEvent();
+
         $poolHelper = new PoolHelper();
 
         $toto = $totoRepository->getToto();
@@ -89,19 +91,11 @@ class CalculationController
 
                 foreach (ArrayHelper::fillCombination($bet, $combination) as $betItem) {
 
-                    $key = implode(",", $betItem);
+                    $key = implode("", $betItem);
 
                     if (!isset($map[$key])) {
 
-                        $betItem = array_map(function ($key, $value) use($eventHelper) {
-
-                            if ($eventHelper->getEvent($key + 1)->isCanceled()) {
-                                return [1, 'X', 2];
-                            }
-
-                            return $value;
-
-                        }, array_keys($betItem), $betItem);
+                        if ($cancelledEventIndex > 0) $betItem[$cancelledEventIndex - 1] = '4';
 
                         $p = $eventHelper->calculateProbabilityOfAllEvents($betItem);
 
@@ -137,6 +131,8 @@ class CalculationController
 
         $eventHelper = new EventsHelper($eventRepository->getAll());
 
+        $cancelledEventIndex = $eventHelper->getIndexOfCanceledEvent();
+
         $poolHelper = new PoolHelper();
 
         $toto = $totoRepository->getToto();
@@ -158,17 +154,9 @@ class CalculationController
 
                 $key = implode("", $betItem);
 
-                if (!isset($map[$key]) && ArrayHelper::countMatchResult($bet, $betItem) == $cat) {
+                if (!isset($map[$key]) && ArrayHelper::countMatchValues($bet, $betItem) === $cat) {
 
-                    $betItem = array_map(function ($key, $value) use($eventHelper) {
-
-                        if ($eventHelper->getEvent($key + 1)->isCanceled()) {
-                            return [1, 'X', 2];
-                        }
-
-                        return $value;
-
-                    }, array_keys($betItem), $betItem);
+                    if ($cancelledEventIndex > 0) $betItem[$cancelledEventIndex - 1] = '4';
 
                     $p = $eventHelper->calculateProbabilityOfAllEvents($betItem);
 
@@ -202,6 +190,8 @@ class CalculationController
 
         $eventHelper = new EventsHelper($eventRepository->getAll());
 
+        $cancelledEventIndex = $eventHelper->getIndexOfCanceledEvent();
+
         $map = [];
 
         $sumP = 0;
@@ -223,6 +213,8 @@ class CalculationController
                         $key = implode("", $betItem);
 
                         if (!isset($map[$key])) {
+
+                            if ($cancelledEventIndex > 0) $betItem[$cancelledEventIndex - 1] = '4';
 
                             $p = $eventHelper->calculateProbabilityOfAllEvents($betItem);
 
@@ -253,6 +245,8 @@ class CalculationController
 
         $eventHelper = new EventsHelper($eventRepository->getAll());
 
+        $cancelledEventIndex = $eventHelper->getIndexOfCanceledEvent();
+
         list($bets, $betSize, $money) = $this->getBetsFromFile($pathToFile);
 
         $commonMap = [];
@@ -279,16 +273,7 @@ class CalculationController
 
                         $key = implode("", $betItem);
 
-                        $betItem = array_map(function ($key, $value) use($eventHelper) {
-
-                            if ($eventHelper->getEvent($key + 1)->isCanceled()) {
-                                return [1, 'X', 2];
-                            }
-
-                            return $value;
-
-                        }, array_keys($betItem), $betItem);
-
+                        if ($cancelledEventIndex > 0) $betItem[$cancelledEventIndex - 1] = '4';
 
                         if (!isset($commonMap[$key])) {
 
