@@ -10,7 +10,7 @@ namespace Helpers;
 
 use Builders\EventBuilder;
 use Builders\Providers\BetCity\EventFromMixedSource;
-use Builders\Providers\Betcity\EventFromWeb;
+use Builders\Providers\BetCity\EventFromWeb;
 use Models\Event;
 
 class EventsHelper
