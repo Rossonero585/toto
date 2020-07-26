@@ -8,7 +8,6 @@
 
 namespace Controllers;
 
-use drupol\phpermutations\Generators\Combinations;
 use Helpers\ArrayHelper;
 use Helpers\EventsHelper;
 use Helpers\PoolHelper;
@@ -69,48 +68,25 @@ class CalculationController
 
         $poolHelper = new PoolHelper();
 
-        $toto = $totoRepository->getToto();
-
-        $winnerCounts = array_keys($toto->getWinnerCounts());
-
-        $range = range(1, $toto->getEventCount());
-
         $pWin = 0;
 
         $m = 0;
 
-        $map = [];
+        foreach ($totoHelper->iterateWinnerCombinations($bet) as $betItem) {
 
-        $winnerCounts = array_reverse($winnerCounts);
+            if ($cancelledEventIndex > 0) $betItem[$cancelledEventIndex - 1] = '4';
 
-        foreach ($winnerCounts as $count) {
+            $p = $eventHelper->calculateProbabilityOfAllEvents($betItem);
 
-            $combinations = new Combinations($range, $count);
+            $breakDown = $poolHelper->getWinnersBreakDown($betItem, true);
 
-            foreach ($combinations->generator() as $combination) {
+            $countMatch = ArrayHelper::countMatchValues($betItem, $bet);
 
-                foreach (ArrayHelper::fillCombination($bet, $combination) as $betItem) {
+            $ratio = $totoHelper->getRatioByWinCount($countMatch, $breakDown, $includeBet);
 
-                    $key = implode("", $betItem);
+            $m = $m + $p * ($ratio - 1) * $betSize;
 
-                    if (!isset($map[$key])) {
-
-                        if ($cancelledEventIndex > 0) $betItem[$cancelledEventIndex - 1] = '4';
-
-                        $p = $eventHelper->calculateProbabilityOfAllEvents($betItem);
-
-                        $breakDown = $poolHelper->getWinnersBreakDown($betItem, true);
-
-                        $ratio = $totoHelper->getRatioByWinCount($count, $breakDown, $includeBet);
-
-                        $m = $m + $p * ($ratio - 1) * $betSize;
-
-                        $pWin = $pWin + $p;
-
-                        $map[$key] = $pWin;
-                    }
-                }
-            }
+            $pWin = $pWin + $p;
         }
 
         $m = $m - $betSize*(1 - $pWin);
@@ -135,42 +111,25 @@ class CalculationController
 
         $poolHelper = new PoolHelper();
 
-        $toto = $totoRepository->getToto();
-
-        $range = range(1, $toto->getEventCount());
-
-        $combinations = new Combinations($range, $cat);
-
         $sumP = 0;
 
         $sumRatio = 0;
 
-        $map = [];
+        foreach ($totoHelper->iterateWinnerCombinations($bet) as $betItem) {
 
-        /** @var array $item */
-        foreach ($combinations->generator() as $comb) {
+            if (ArrayHelper::countMatchValues($bet, $betItem) === $cat) {
 
-            foreach (ArrayHelper::fillCombination($bet, $comb) as $betItem) {
+                if ($cancelledEventIndex > 0) $betItem[$cancelledEventIndex - 1] = '4';
 
-                $key = implode("", $betItem);
+                $p = $eventHelper->calculateProbabilityOfAllEvents($betItem);
 
-                if (!isset($map[$key]) && ArrayHelper::countMatchValues($bet, $betItem) === $cat) {
+                $breakDown = $poolHelper->getWinnersBreakDown($betItem);
 
-                    if ($cancelledEventIndex > 0) $betItem[$cancelledEventIndex - 1] = '4';
+                $ratio = $totoHelper->getRatioByCategory($cat, $breakDown);
 
-                    $p = $eventHelper->calculateProbabilityOfAllEvents($betItem);
+                $sumRatio += $p*$ratio;
 
-                    $breakDown = $poolHelper->getWinnersBreakDown($betItem);
-
-                    $ratio = $totoHelper->getRatioByCategory($cat, $breakDown);
-
-                    $sumRatio += $p*$ratio;
-
-                    $sumP += $p;
-
-                    $map[$key] = 1;
-                }
-
+                $sumP += $p;
             }
         }
 
@@ -183,7 +142,7 @@ class CalculationController
         /** @var TotoRepository $totoRepository */
         $totoRepository = Repository::getRepository(TotoRepository::class);
 
-        $toto = $totoRepository->getToto();
+        $totoHelper = new TotoHelper($totoRepository->getToto(), 50);
 
         /** @var EventRepository $eventRepository */
         $eventRepository = Repository::getRepository(EventRepository::class);
@@ -196,34 +155,21 @@ class CalculationController
 
         $sumP = 0;
 
-        $winnerCounts = array_keys($toto->getWinnerCounts());
-
-        $winnerCounts = array_reverse($winnerCounts);
-
         foreach ($bets as $bet) {
 
-            foreach ($winnerCounts as $count) {
+            foreach ($totoHelper->iterateWinnerCombinations($bet) as $betItem) {
 
-                $combinations = new Combinations(range(1, $toto->getEventCount()), $count);
+                $key = implode("", $betItem);
 
-                foreach ($combinations->generator() as $combination) {
+                if (!isset($map[$key])) {
 
-                    foreach (ArrayHelper::fillCombination($bet, $combination) as $betItem) {
+                    if ($cancelledEventIndex > 0) $betItem[$cancelledEventIndex - 1] = '4';
 
-                        $key = implode("", $betItem);
+                    $p = $eventHelper->calculateProbabilityOfAllEvents($betItem);
 
-                        if (!isset($map[$key])) {
+                    $sumP += $p;
 
-                            if ($cancelledEventIndex > 0) $betItem[$cancelledEventIndex - 1] = '4';
-
-                            $p = $eventHelper->calculateProbabilityOfAllEvents($betItem);
-
-                            $sumP += $p;
-
-                            $map[$key] = 1;
-                        }
-
-                    }
+                    $map[$key] = 1;
                 }
             }
         }
@@ -237,6 +183,8 @@ class CalculationController
         $totoRepository = Repository::getRepository(TotoRepository::class);
 
         $toto = $totoRepository->getToto();
+
+        $totoHelper = new TotoHelper($toto, 50);
 
         /** @var EventRepository $eventRepository */
         $eventRepository = Repository::getRepository(EventRepository::class);
@@ -255,50 +203,37 @@ class CalculationController
 
         $m = 0;
 
-        $winnerCounts = array_keys($toto->getWinnerCounts());
-
-        $winnerCounts = array_reverse($winnerCounts);
-
         foreach ($bets as $bet) {
 
             $tempMap = [];
 
-            foreach ($winnerCounts as $count) {
+            foreach ($totoHelper->iterateWinnerCombinations($bet) as $betItem) {
 
-                $combinations = new Combinations(range(1, $toto->getEventCount()), $count);
+                $key = implode("", $betItem);
 
-                foreach ($combinations->generator() as $combination) {
+                if ($cancelledEventIndex > 0) $betItem[$cancelledEventIndex - 1] = '4';
 
-                    foreach (ArrayHelper::fillCombination($bet, $combination) as $betItem) {
+                if (!isset($commonMap[$key])) {
 
-                        $key = implode("", $betItem);
+                    $p = $eventHelper->calculateProbabilityOfAllEvents($betItem);
 
-                        if ($cancelledEventIndex > 0) $betItem[$cancelledEventIndex - 1] = '4';
+                    $pWin += $p;
 
-                        if (!isset($commonMap[$key])) {
-
-                            $p = $eventHelper->calculateProbabilityOfAllEvents($betItem);
-
-                            $pWin += $p;
-
-                            $commonMap[$key] = $p;
-                        }
-
-                        if (!isset($tempMap[$key])) {
-
-                            $totoHelper = new TotoHelper($toto, $betSize);
-
-                            $breakDown = $poolHelper->getWinnersBreakDown($betItem, true);
-
-                            $ratio = $totoHelper->getRatioByWinCount($count, $breakDown);
-
-                            $m = $m + $commonMap[$key] * ($ratio - 1) * $betSize;
-
-                            $tempMap[$key] = 1;
-                        }
-
-                    }
+                    $commonMap[$key] = $p;
                 }
+
+                $count = ArrayHelper::countMatchValues($betItem, $bet);
+
+                $totoHelper = new TotoHelper($toto, $betSize);
+
+                $breakDown = $poolHelper->getWinnersBreakDown($betItem, true);
+
+                $ratio = $totoHelper->getRatioByWinCount($count, $breakDown);
+
+                $m = $m + $commonMap[$key] * ($ratio - 1) * $betSize;
+
+                $tempMap[$key] = 1;
+
             }
         }
 
