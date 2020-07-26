@@ -38,16 +38,16 @@ class ScheduleHelper
     private function getTimeToRunInMinutes(float $pot)
     {
         if ($pot < 500000) {
-            return 4;
+            return 2;
         }
         else if ($pot >= 500000 && $pot < 700000) {
-            return 5;
+            return 2;
         }
         else if ($pot >= 700000 && $pot < 900000) {
-            return 7;
+            return 3;
         }
         else {
-            return 8;
+            return 4;
         }
     }
 

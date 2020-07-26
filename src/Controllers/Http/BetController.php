@@ -19,7 +19,7 @@ use Models\Event;
 
 class BetController extends Controller
 {
-    const MIN_DEVIATION = 0.0205;
+    const MIN_DEVIATION = 0.0;
 
     public function makeBet() : void
     {

@@ -66,7 +66,7 @@ class CheckController
 
                     $timeToRunToto = $startTime->format('H:i');
 
-                    $startTime->modify("-2 minutes");
+                    $startTime->modify("-3 minutes");
 
                     if ($this->compareMinutes($startTime, $this->getCurrentDateTime())) {
                         $timeToRunScript = $startTime->format('H:i');
@@ -78,12 +78,12 @@ class CheckController
 
                         $timeToRunScript = $startTime->format("H:i");
 
-                        $startTime->modify("+2 minutes");
+                        $startTime->modify("+3 minutes");
 
                         $timeToRunToto = $startTime->format("H:i");
                     }
 
-                    $cloneStartTime->modify("+2 minutes");
+                    $cloneStartTime->modify("+5 minutes");
 
                     $totoStartTime = $cloneStartTime->format("H:i");
 
