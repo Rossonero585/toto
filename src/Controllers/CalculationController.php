@@ -8,6 +8,7 @@
 
 namespace Controllers;
 
+use Helpers\Arguments;
 use Helpers\ArrayHelper;
 use Helpers\EventsHelper;
 use Helpers\PoolHelper;
@@ -15,6 +16,7 @@ use Helpers\TotoHelper;
 use Repositories\EventRepository;
 use Repositories\Repository;
 use Repositories\TotoRepository;
+use \DateTime;
 
 class CalculationController
 {
@@ -68,11 +70,33 @@ class CalculationController
 
         $poolHelper = new PoolHelper();
 
+        $totoId = Arguments::getArguments()->get('t');
+
         $pWin = 0;
 
         $m = 0;
 
+        $countAllCombinations = 0;
+
         foreach ($totoHelper->iterateWinnerCombinations($bet) as $betItem) {
+
+            $countAllCombinations++;
+
+            if ($cancelledEventIndex > 0) $betItem[$cancelledEventIndex - 1] = '4';
+
+            $p = $eventHelper->calculateProbabilityOfAllEvents($betItem);
+
+            $pWin = $pWin + $p;
+        }
+
+        $minus = $betSize * (1 - $pWin);
+
+        $tempCount = 0;
+
+
+        foreach ($totoHelper->iterateWinnerCombinations($bet) as $betItem) {
+
+            $tempCount++;
 
             if ($cancelledEventIndex > 0) $betItem[$cancelledEventIndex - 1] = '4';
 
@@ -87,6 +111,18 @@ class CalculationController
             $m = $m + $p * ($ratio - 1) * $betSize;
 
             $pWin = $pWin + $p;
+
+            if ($tempCount % 10000 === 0) {
+
+                $percent = ($tempCount / $countAllCombinations) * 100;
+
+                $betAsString = implode($bet);
+
+                $str = "$totoId;$betAsString;$tempCount/$countAllCombinations;$m/$minus;$percent";
+
+                $this->log($str);
+            }
+
         }
 
         $m = $m - $betSize*(1 - $pWin);
@@ -267,5 +303,12 @@ class CalculationController
         );
 
         return [$bets, $betSize, $money];
+    }
+
+    private function log($str)
+    {
+        $str  = (new DateTime())->format(DATE_ISO8601)." - ".$str.PHP_EOL;
+
+        file_put_contents(ROOT_DIR."/perfomance.log", $str, FILE_APPEND);
     }
 }
