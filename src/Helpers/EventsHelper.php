@@ -8,8 +8,6 @@
 
 namespace Helpers;
 
-use Builders\EventBuilder;
-use Builders\Providers\BetCity\EventFromWeb;
 use Models\Event;
 use \Exception;
 
@@ -114,25 +112,6 @@ class EventsHelper
         return $deviation / $count;
     }
 
-    /**
-     * @param $json
-     * @return Event[]
-     */
-    public static function getEventsFromJson($json)
-    {
-        $out = [];
-
-        $totoEvents = $json->reply->toto->out;
-
-        foreach ($totoEvents as $key => $jsonEvent)
-        {
-            $event = EventBuilder::createEvent(new EventFromWeb($jsonEvent, ++$key));
-
-            array_push($out, $event);
-        }
-
-        return $out;
-    }
 
     public function getIndexOfCanceledEvent()
     {

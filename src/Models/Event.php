@@ -9,7 +9,7 @@ namespace Models;
 
 class Event
 {
-    const cancelledType = 4;
+    const cancelledTypes = [0,4];
 
     const PINACLE = 'pin';
 
@@ -81,7 +81,7 @@ class Event
         $this->source = $source;
         $this->result = $result;
         $this->id = $id;
-        $this->isCanceled = $this->result == self::cancelledType;
+        $this->isCanceled = !is_null($result) && ($result !== "") && !in_array($result, [1, 2, "X", "x"]);
     }
 
     /**

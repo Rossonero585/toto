@@ -238,7 +238,7 @@ class UpdateController
         return $poloRepository->getPoolItem($bet);
     }
 
-    public function updateTotoResult(string $totoId)
+    public function updateTotoResult(string $totoId, string $bookMaker)
     {
         /** @var EventRepository $eventRepository */
         $eventRepository = Repository::getRepository(EventRepository::class);
@@ -252,11 +252,20 @@ class UpdateController
         /** @var BetItemRepository $betItemsRepository */
         $betItemsRepository = Repository::getRepository(BetItemRepository::class);
 
-        $poolHelper = new PoolHelper();
+        $dataProvider  = DataProviderFactory::createDataProvider($bookMaker, $totoId);
 
-        $totoJson = TotoHelper::getJsonToto($totoId);
+        $eventsJson = $dataProvider->getEvents();
 
-        $actualEvents = EventsHelper::getEventsFromJson($totoJson);
+        $actualEvents = [];
+
+        foreach ($eventsJson as $key => $item) {
+
+            $eventProvider = EventProviderFactory::createEventProvider($bookMaker, $item, 'en', $key + 1);
+
+            $event = EventBuilder::createEvent($eventProvider);
+
+            array_push($actualEvents, $event);
+        }
 
         $events = $eventRepository->getAll();
 
@@ -275,6 +284,8 @@ class UpdateController
         foreach ($events as $key => $event) {
             $eventRepository->updateEventResultById($event->getId(), $actualEvents[$key]->getResult());
         }
+
+        $poolHelper = new PoolHelper();
 
         $totoRepository->updateDeviation($eventHelper->getAverageDeviation());
 

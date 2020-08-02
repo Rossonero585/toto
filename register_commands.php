@@ -99,7 +99,7 @@ $commandManager->registerCommand('update_result', function () use ($arguments) {
 
     $cu = new UpdateController();
 
-    $cu->updateTotoResult($totoId);
+    $cu->updateTotoResult($totoId, $bookmaker);
 
 });
 
