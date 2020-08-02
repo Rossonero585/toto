@@ -1,0 +1,59 @@
+TotoDecision Fonbet v. 1.6
+
+<no prox>
+Ваш ключ доступа: 3ZStky3lGHLtmsy...
+Номер активного тиража: 616
+Нажмите ENTER для продолжения работы с №616 или введите другой номер тиража:
+Получаем данные тиража...
+{'params': {'totoId': '616', 'status': 'active', 'ended': '2020-08-02T10:00:00.000000Z', 'jackpot': '81562538', 'poolSum': '19346576'}, 'prizfond': [5571813.888000001, 3134145.3120000004, 1741191.8400000003, 1741191.8400000003, 1741191.8400000003, 1741191.8400000003, 1741191.8400000003], 'events': [{'name': 'Минск - Рух Брест', 'name_en': 'Minsk - Ruch Brest', 'order': '0', 'date': '2020-08-02 18:00:00', 'resultCode': None, 'win1': 0.314, 'draw': 0.28382, 'win2': 0.40218, 'calc': 'pin', 'win1Pool': 0.3155, 'drawPool': 0.2759, 'win2Pool': 0.4086}, {'name': 'Старт - Мьондален', 'name_en': 'Start - Mjondalen', 'order': '1', 'date': '2020-08-02 19:00:00', 'resultCode': None, 'win1': 0.43885, 'draw': 0.27811, 'win2': 0.28304, 'calc': 'pin', 'win1Pool': 0.4761, 'drawPool': 0.2611, 'win2Pool': 0.2629}, {'name': 'Викинг - Кристиансунд БК', 'name_en': 'Viking - Kristiansund BK', 'order': '2', 'date': '2020-08-02 19:00:00', 'resultCode': None, 'win1': 0.4527, 'draw': 0.25608, 'win2': 0.29122, 'calc': 'pin', 'win1Pool': 0.501, 'drawPool': 0.2327, 'win2Pool': 0.2663}, {'name': 'Одд-Гренланд - Русенборг', 'name_en': 'Odd Grenland - Rosenborg', 'order': '3', 'date': '2020-08-02 21:30:00', 'resultCode': None, 'win1': 0.37163, 'draw': 0.29207, 'win2': 0.3363, 'calc': 'pin', 'win1Pool': 0.3225, 'drawPool': 0.2969, 'win2Pool': 0.3805}, {'name': 'Кальмар - АИК Стокгольм', 'name_en': 'Kalmar FF - AIK Stockholm', 'order': '4', 'date': '2020-08-02 15:30:00', 'resultCode': None, 'win1': 0.29588, 'draw': 0.29317, 'win2': 0.41095, 'calc': 'pin', 'win1Pool': 0.2676, 'drawPool': 0.2555, 'win2Pool': 0.4769}, {'name': 'Норрбю - Йончепинг Содра', 'name_en': 'Norrby - Jonkoping Sodra', 'order': '5', 'date': '2020-08-02 15:30:00', 'resultCode': None, 'win1': 0.33204, 'draw': 0.28545, 'win2': 0.38251, 'calc': 'pin', 'win1Pool': 0.3547, 'drawPool': 0.2627, 'win2Pool': 0.3826}, {'name': 'СЯК Акатемия - Гнистан', 'name_en': 'SJK Akatemia - Gnistan', 'order': '6', 'date': '2020-08-02 15:00:00', 'resultCode': None, 'win1': 0.35918, 'draw': 0.26466, 'win2': 0.37615, 'calc': 'pin', 'win1Pool': 0.3481, 'drawPool': 0.2778, 'win2Pool': 0.374}, {'name': 'МиПа - МуСа', 'name_en': 'Mikkelin Palloilijat - Musan Salama Pori', 'order': '7', 'date': '2020-08-02 18:30:00', 'resultCode': None, 'win1': 0.33316, 'draw': 0.2634, 'win2': 0.40344, 'calc': 'pin', 'win1Pool': 0.3768, 'drawPool': 0.2762, 'win2Pool': 0.347}, {'name': 'Левен - Беерскот-Вилрейк', 'name_en': '0-1 OH Leuven - Beerschot-Wilrijk', 'order': '8', 'date': '2020-08-02 20:00:00', 'resultCode': None, 'win1': 0.39892, 'draw': 0.27433, 'win2': 0.32676, 'calc': 'pin', 'win1Pool': 0.4647, 'drawPool': 0.2502, 'win2Pool': 0.2851}, {'name': 'Арджеш Питешти - УТА Арад', 'name_en': 'Arges Pitesti - UTA Arad', 'order': '9', 'date': '2020-08-02 18:30:00', 'resultCode': None, 'win1': 0.39178, 'draw': 0.29801, 'win2': 0.31021, 'calc': 'pin', 'win1Pool': 0.4415, 'drawPool': 0.29, 'win2Pool': 0.2685}, {'name': 'Канвон - Санчжу Сангму', 'name_en': 'Gangwon - Sangju Sangmu', 'order': '10', 'date': '2020-08-02 13:00:00', 'resultCode': None, 'win1': 0.41378, 'draw': 0.28279, 'win2': 0.30344, 'calc': 'pin', 'win1Pool': 0.4203, 'drawPool': 0.2603, 'win2Pool': 0.3194}, {'name': 'Сувон Блюуингс - Дэгу', 'name_en': 'Suwon Bluewings - Daegu', 'order': '11', 'date': '2020-08-02 13:00:00', 'resultCode': None, 'win1': 0.281, 'draw': 0.28864, 'win2': 0.43036, 'calc': 'pin', 'win1Pool': 0.2725, 'drawPool': 0.2549, 'win2Pool': 0.4727}, {'name': 'Сеул Е-Лэнд - Пучхон', 'name_en': 'Seoul E-Land - Bucheon 1995', 'order': '12', 'date': '2020-08-02 13:00:00', 'resultCode': None, 'win1': 0.33665, 'draw': 0.30256, 'win2': 0.36079, 'calc': 'pin', 'win1Pool': 0.3791, 'drawPool': 0.2798, 'win2Pool': 0.3411}, {'name': 'Мито - Канадзава Цвайген', 'name_en': 'Mito Hollyhock - Zweigen Kanazawa', 'order': '13', 'date': '2020-08-02 13:00:00', 'resultCode': None, 'win1': 0.38064, 'draw': 0.27936, 'win2': 0.34, 'calc': 'pin', 'win1Pool': 0.4778, 'drawPool': 0.2592, 'win2Pool': 0.2629}, {'name': 'Толука - Атлетико Сан-Луис', 'name_en': 'Toluca - Atletico San Luis', 'order': '14', 'date': '2020-08-02 20:00:00', 'resultCode': None, 'win1': 0.37443, 'draw': 0.28554, 'win2': 0.34003, 'calc': 'pin', 'win1Pool': 0.4515, 'drawPool': 0.2516, 'win2Pool': 0.2969}]}
+valid_coupon: []
+Данные тиража:
+  totoId  status    ended                          jackpot    poolSum
+--------  --------  ---------------------------  ---------  ---------
+     616  active    2020-08-02T10:00:00.000000Z   81562538   19346576
+
+Призовой фонд тиража:
+          0            1            2            3            4            5            6
+-----------  -----------  -----------  -----------  -----------  -----------  -----------
+5.57181e+06  3.13415e+06  1.74119e+06  1.74119e+06  1.74119e+06  1.74119e+06  1.74119e+06
+
+События тиража:
+name                        name_en                                     order  date                 resultCode       win1     draw     win2  calc      win1Pool    drawPool    win2Pool
+--------------------------  ----------------------------------------  -------  -------------------  ------------  -------  -------  -------  ------  ----------  ----------  ----------
+Минск - Рух Брест           Minsk - Ruch Brest                              0  2020-08-02 18:00:00                0.314    0.28382  0.40218  pin         0.3155      0.2759      0.4086
+Старт - Мьондален           Start - Mjondalen                               1  2020-08-02 19:00:00                0.43885  0.27811  0.28304  pin         0.4761      0.2611      0.2629
+Викинг - Кристиансунд БК    Viking - Kristiansund BK                        2  2020-08-02 19:00:00                0.4527   0.25608  0.29122  pin         0.501       0.2327      0.2663
+Одд-Гренланд - Русенборг    Odd Grenland - Rosenborg                        3  2020-08-02 21:30:00                0.37163  0.29207  0.3363   pin         0.3225      0.2969      0.3805
+Кальмар - АИК Стокгольм     Kalmar FF - AIK Stockholm                       4  2020-08-02 15:30:00                0.29588  0.29317  0.41095  pin         0.2676      0.2555      0.4769
+Норрбю - Йончепинг Содра    Norrby - Jonkoping Sodra                        5  2020-08-02 15:30:00                0.33204  0.28545  0.38251  pin         0.3547      0.2627      0.3826
+СЯК Акатемия - Гнистан      SJK Akatemia - Gnistan                          6  2020-08-02 15:00:00                0.35918  0.26466  0.37615  pin         0.3481      0.2778      0.374
+МиПа - МуСа                 Mikkelin Palloilijat - Musan Salama Pori        7  2020-08-02 18:30:00                0.33316  0.2634   0.40344  pin         0.3768      0.2762      0.347
+Левен - Беерскот-Вилрейк    0-1 OH Leuven - Beerschot-Wilrijk               8  2020-08-02 20:00:00                0.39892  0.27433  0.32676  pin         0.4647      0.2502      0.2851
+Арджеш Питешти - УТА Арад   Arges Pitesti - UTA Arad                        9  2020-08-02 18:30:00                0.39178  0.29801  0.31021  pin         0.4415      0.29        0.2685
+Канвон - Санчжу Сангму      Gangwon - Sangju Sangmu                        10  2020-08-02 13:00:00                0.41378  0.28279  0.30344  pin         0.4203      0.2603      0.3194
+Сувон Блюуингс - Дэгу       Suwon Bluewings - Daegu                        11  2020-08-02 13:00:00                0.281    0.28864  0.43036  pin         0.2725      0.2549      0.4727
+Сеул Е-Лэнд - Пучхон        Seoul E-Land - Bucheon 1995                    12  2020-08-02 13:00:00                0.33665  0.30256  0.36079  pin         0.3791      0.2798      0.3411
+Мито - Канадзава Цвайген    Mito Hollyhock - Zweigen Kanazawa              13  2020-08-02 13:00:00                0.38064  0.27936  0.34     pin         0.4778      0.2592      0.2629
+Толука - Атлетико Сан-Луис  Toluca - Atletico San Luis                     14  2020-08-02 20:00:00                0.37443  0.28554  0.34003  pin         0.4515      0.2516      0.2969
+
+Получаем поставленные купоны других игроков...
+Items len 100000
+Items len 83066
+Items len 0
+Items len 0
+Items len 0
+Поставлено пул: 20053249.990127563
+Всего поставленных вариантов: 392428
+
+Поставлено пул: 20053249.990127563
+Пул по данным тиража 19346576
+Elapsed time: 31.550 sec
+[[0, 2], [0], [0, 2], [0, 1, 2], [0, 1, 2], [0, 2], [0, 2], [0, 2], [0, 2], [0, 1, 2], [0, 2], [2], [0, 1, 2], [0, 2], [0, 2]]
+Составляем теоретически возможные комбинации...
+Всего теоретически возможных вариантов: 41472
+Составляем результирующий файл. CPU...
+Elapsed time: 27.264 sec
+Сохранение результатов...
+Elapsed time: 0.076 sec
+Результаты сохранены в папку tirazh/616
+Press ENTER to exit

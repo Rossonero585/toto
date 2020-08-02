@@ -9,9 +9,9 @@
 namespace Helpers;
 
 use Builders\EventBuilder;
-use Builders\Providers\BetCity\EventFromMixedSource;
 use Builders\Providers\BetCity\EventFromWeb;
 use Models\Event;
+use \Exception;
 
 class EventsHelper
 {
@@ -52,7 +52,7 @@ class EventsHelper
         $event = $this->events[$eventId];
 
         if (!$event) {
-            throw new \Exception("Unknown event with id $eventId");
+            throw new Exception("Unknown event with id $eventId");
         }
 
         if ($event->isCanceled()) {
@@ -72,7 +72,7 @@ class EventsHelper
             return 1;
         }
 
-        throw new \Exception("Unknown result $result");
+        throw new Exception("Unknown result $result");
     }
 
 
@@ -127,24 +127,6 @@ class EventsHelper
         foreach ($totoEvents as $key => $jsonEvent)
         {
             $event = EventBuilder::createEvent(new EventFromWeb($jsonEvent, ++$key));
-
-            array_push($out, $event);
-        }
-
-        return $out;
-    }
-
-    public static function getEventsFromMixedProvider($json, array $array)
-    {
-        $out = [];
-
-        $totoEvents = $json->reply->toto->out;
-
-        foreach ($totoEvents as $key => $jsonEvent)
-        {
-            $id = $key + 1;
-
-            $event = EventBuilder::createEvent(new EventFromMixedSource($jsonEvent, $array[$key], $id));
 
             array_push($out, $event);
         }

@@ -11,11 +11,10 @@ namespace Controllers\Http;
 use Builders\BetRequestBuilder;
 use Builders\Providers\BetRequestFromTotoDecision;
 use Helpers\BetRequestHelper;
-use Helpers\EventsHelper;
-use Helpers\Http\BetCityClient;
+use Helpers\Http\ClientFactory;
 use Helpers\Logger;
 use Models\Input\BetRequest;
-use Models\Event;
+use Throwable;
 
 class BetController extends Controller
 {
@@ -31,6 +30,7 @@ class BetController extends Controller
 
         $betRequest = $betBuilder->createBetRequest(new BetRequestFromTotoDecision(
             $totoId,
+            $book,
             $this->getBetsContent(),
             $this->getEventsContent(),
             (bool)$_REQUEST['is_test']
@@ -40,70 +40,41 @@ class BetController extends Controller
 
         if (!$this->checkEvents($betRequest)) {
 
-            $this->sendRequest(400, 'do not pass conditions');
+            $this->sendResponse(400, 'do not pass conditions');
 
             return;
         }
 
-        $betCityClient = new BetCityClient($betRequest->getTotoId());
+        $client = ClientFactory::getClient($book, $totoId, $betRequest->isTest());
 
         try {
-            $betCityClient->makeBet($betRequest->getBets(), $betRequest->isTest());
+            $client->makeBet($betRequest->getBets());
         }
-        catch (\Throwable $exception) {
+        catch (Throwable $exception) {
             $logger->log('main', 'Bet was not successful', $exception->getMessage());
-            $this->sendRequest(500, $exception->getMessage());
+            $this->sendResponse(500, $exception->getMessage());
         }
 
         $betRequestHelper = new BetRequestHelper();
 
         try {
-            $betRequestHelper->saveBetRequest($betRequest);
+            $betRequestHelper->saveBetRequest($betRequest, $book);
         }
-        catch (\Throwable $exception) {
+        catch (Throwable $exception) {
             $logger->log(
                 'main',
                 'Can\'t save bet request into database',
                 $exception->getMessage()
             );
-            $this->sendRequest(500, $exception->getMessage());
+            $this->sendResponse(500, $exception->getMessage());
         }
 
-        $this->sendRequest(200, 'success');
+        $this->sendResponse(200, 'success');
     }
 
 
     private function checkEvents(BetRequest $betRequest)
     {
-        $logger = Logger::getInstance();
-
-        $events = $betRequest->getEvents();
-
-        $eventHelper = new EventsHelper($events);
-
-        if (($deviation = $eventHelper->getAverageDeviation()) < self::MIN_DEVIATION) {
-
-            $logger->log("bet", "Refuse to make bet", "Deviation is not acceptable $deviation");
-
-            return false;
-        }
-
-        /** @var Event $event */
-        foreach ($events as $event) {
-
-            $id = $event->getNumber();
-
-            if ($event->isCanceled()) {
-                $logger->log("bet", "Refuse to make bet", "Event $id is canceled");
-                return false;
-            }
-
-            if (!$event->isPinnacle()) {
-                $logger->log("bet", "Refuse to make bet", "Event $id is taken not from pinnacle");
-                return false;
-            }
-        }
-
         return true;
     }
 

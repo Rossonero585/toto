@@ -6,32 +6,26 @@
  * Time: 21:46
  */
 
-namespace Builders\Providers\BetCity;
-
-use Builders\Providers\EventInterface;
+namespace Builders\Providers;
 
 class EventFromMixedSource implements EventInterface
 {
-    /**
-     * @var \stdClass
-     */
-    private $toto;
+    /** @var EventInterface */
+    private $eventFromWeb;
 
-    /**
-     * @var array
-     */
-    private $assoc;
+    /** @var EventFromArray */
+    private $eventFromArray;
 
     /**
      * @var int
      */
     private $number;
 
-    public function __construct(\stdClass $toto, array $assoc, int $number)
+    public function __construct(EventInterface $eventFromWeb, EventFromArray $eventFromArray, int $number)
     {
-        $this->toto  = $toto;
-        $this->assoc = $assoc;
-        $this->number = $number;
+        $this->eventFromWeb   = $eventFromWeb;
+        $this->eventFromArray = $eventFromArray;
+        $this->number         = $number;
     }
 
     public function getNumber(): int
@@ -41,47 +35,47 @@ class EventFromMixedSource implements EventInterface
 
     public function getP1(): float
     {
-        return $this->assoc['p1'];
+        return $this->eventFromArray->getP1();
     }
 
     public function getPx(): float
     {
-        return $this->assoc['px'];
+        return $this->eventFromArray->getPx();
     }
 
     public function getP2(): float
     {
-        return $this->assoc['p2'];
+        return $this->eventFromArray->getP2();
     }
 
     public function getS1(): float
     {
-        return $this->toto->pwin_first / 100;
+        return $this->eventFromWeb->getS1();
     }
 
     public function getSx(): float
     {
-        return $this->toto->pdraw / 100;
+        return $this->eventFromWeb->getSx();
     }
 
     public function getS2(): float
     {
-        return $this->toto->pwin_second / 100;
+        return $this->eventFromWeb->getS2();
     }
 
     public function getLeague(): string
     {
-        return $this->toto->name_ch;
+        return $this->eventFromWeb->getLeague();
     }
 
     public function getTile(): string
     {
-        return $this->assoc['title'];
+        return $this->eventFromWeb->getTile();
     }
 
     public function getResult(): ?string
     {
-        $win = $this->toto->win;
+        $win = $this->eventFromWeb->getResult();
 
         if (!$win) return null;
 
@@ -90,7 +84,7 @@ class EventFromMixedSource implements EventInterface
 
     public function getSource(): ?string
     {
-        return isset($this->assoc['source']) ? $this->assoc['source'] : '';
+        return $this->eventFromArray->getSource();
     }
 
     public function getId(): ?int
