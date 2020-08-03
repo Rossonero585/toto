@@ -35,7 +35,7 @@ class BetRequestHelper
         /** @var EventRepository $eventsRepository */
         $eventsRepository = Repository::getRepository(EventRepository::class);
 
-        foreach ($betRequest->getEvents() as $event) $eventsRepository->addEvent($event);
+        foreach ($betRequest->getEvents() as $event) $eventsRepository->addEvent($event, true);
 
         /** @var BetItemRepository $betItemRepository */
         $betItemRepository = Repository::getRepository(BetItemRepository::class);

@@ -11,6 +11,7 @@ namespace Repositories;
 use Builders\EventBuilder;
 use Builders\Providers\EventFromArray;
 use Models\Event;
+use \PDO;
 
 class EventRepository extends Repository
 {
@@ -26,7 +27,7 @@ class EventRepository extends Repository
 
         $events = [];
 
-        while($row = $st->fetch(\Pdo::FETCH_ASSOC)) {
+        while($row = $st->fetch(PDO::FETCH_ASSOC)) {
 
             $event = EventBuilder::createEvent(new EventFromArray($row));
 
@@ -46,23 +47,28 @@ class EventRepository extends Repository
 
         $st->execute(["id" => $id, "toto_id" => $this->getTotoId()]);
 
-        $row = $st->fetch(\PDO::FETCH_ASSOC);
+        $row = $st->fetch(PDO::FETCH_ASSOC);
 
         return EventBuilder::createEvent(new EventFromArray($row));
     }
 
-    public function addEvent(Event $event)
+    public function addEvent(Event $event, $rewrite = false)
     {
         $tableName = self::TABLE_NAME;
+
         $insertQuery = <<<EOD
 INSERT INTO `{$tableName}` (number, title, p1, px, p2, s1, sx, s2, league, toto_id)
-VALUES (:number, :title, :p1, :px, :p2, :s1, :sx, :s2, :league, :toto_id)
-ON DUPLICATE KEY UPDATE
-p1 = VALUES(p1),
-px = VALUES(px),
-p2 = VALUES(p2),
-league = VALUES(league)
+VALUES (:number, :title, :p1, :px, :p2, :s1, :sx, :s2, :league, :toto_id) ON DUPLICATE KEY UPDATE
 EOD;
+
+        if ($rewrite) {
+
+            $insertQuery .= " p1 = VALUES(p1), px = VALUES(px), p2 = VALUES(p2), league = VALUES(league), ";
+            $insertQuery .= "title = VALUES(title)";
+        }
+        else {
+            $insertQuery .= " p1 = p1";
+        }
 
         $st = $this->getCachedStatement($insertQuery);
 
