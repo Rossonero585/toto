@@ -102,7 +102,7 @@ class CalculationController
 
             $ratio = $totoHelper->getRatioByWinCount($countMatch, $breakDown, $includeBet);
 
-            $m = $m + $p * ($ratio - 1) * $betSize;
+            $m = $m + $p * $ratio * $betSize;
 
             $pWin = $pWin + $p;
 
@@ -175,8 +175,6 @@ class CalculationController
 
         $eventHelper = new EventsHelper($eventRepository->getAll());
 
-        $cancelledEventIndex = $eventHelper->getIndexOfCanceledEvent();
-
         $map = [];
 
         $sumP = 0;
@@ -188,8 +186,6 @@ class CalculationController
                 $key = implode("", $betItem);
 
                 if (!isset($map[$key])) {
-
-                    if ($cancelledEventIndex > 0) $betItem[$cancelledEventIndex - 1] = '4';
 
                     $p = $eventHelper->calculateProbabilityOfAllEvents($betItem);
 
@@ -252,7 +248,7 @@ class CalculationController
 
                 $ratio = $totoHelper->getRatioByWinCount($count, $breakDown);
 
-                $m = $m + $commonMap[$key] * ($ratio - 1) * $betSize;
+                $m = $m + $commonMap[$key] * $ratio * $betSize;
 
                 $tempMap[$key] = 1;
 
