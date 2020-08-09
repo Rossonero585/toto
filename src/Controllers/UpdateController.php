@@ -309,7 +309,7 @@ class UpdateController
 
                     $ratio = $totoHelper->getRatioByWinCount($countMatch, $breakDown);
 
-                    $income = ($ratio - 1) * $bet->getMoney();
+                    $income = $ratio * $bet->getMoney();
                 }
                 else {
                     $income = 0;
