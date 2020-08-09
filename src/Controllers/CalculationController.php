@@ -66,8 +66,6 @@ class CalculationController
 
         $eventHelper = new EventsHelper($eventRepository->getAll());
 
-        $cancelledEventIndex = $eventHelper->getIndexOfCanceledEvent();
-
         $poolHelper = new PoolHelper();
 
         $totoId = Arguments::getArguments()->get('t');
@@ -82,8 +80,6 @@ class CalculationController
 
             $countAllCombinations++;
 
-            if ($cancelledEventIndex > 0) $betItem[$cancelledEventIndex - 1] = '4';
-
             $p = $eventHelper->calculateProbabilityOfAllEvents($betItem);
 
             $pWin = $pWin + $p;
@@ -97,8 +93,6 @@ class CalculationController
         foreach ($totoHelper->iterateWinnerCombinations($bet) as $betItem) {
 
             $tempCount++;
-
-            if ($cancelledEventIndex > 0) $betItem[$cancelledEventIndex - 1] = '4';
 
             $p = $eventHelper->calculateProbabilityOfAllEvents($betItem);
 
@@ -143,8 +137,6 @@ class CalculationController
 
         $eventHelper = new EventsHelper($eventRepository->getAll());
 
-        $cancelledEventIndex = $eventHelper->getIndexOfCanceledEvent();
-
         $poolHelper = new PoolHelper();
 
         $sumP = 0;
@@ -154,8 +146,6 @@ class CalculationController
         foreach ($totoHelper->iterateWinnerCombinations($bet) as $betItem) {
 
             if (ArrayHelper::countMatchValues($bet, $betItem) === $cat) {
-
-                if ($cancelledEventIndex > 0) $betItem[$cancelledEventIndex - 1] = '4';
 
                 $p = $eventHelper->calculateProbabilityOfAllEvents($betItem);
 
@@ -229,8 +219,6 @@ class CalculationController
 
         $eventHelper = new EventsHelper($eventRepository->getAll());
 
-        $cancelledEventIndex = $eventHelper->getIndexOfCanceledEvent();
-
         list($bets, $betSize, $money) = $this->getBetsFromFile($pathToFile);
 
         $commonMap = [];
@@ -246,8 +234,6 @@ class CalculationController
             foreach ($totoHelper->iterateWinnerCombinations($bet) as $betItem) {
 
                 $key = implode("", $betItem);
-
-                if ($cancelledEventIndex > 0) $betItem[$cancelledEventIndex - 1] = '4';
 
                 if (!isset($commonMap[$key])) {
 

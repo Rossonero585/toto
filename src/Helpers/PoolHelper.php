@@ -30,7 +30,7 @@ class PoolHelper
         $this->betPackageRepository = Repository::getRepository(BetPackageRepository::class);
     }
 
-    public function getWinnersBreakDown(array $results, bool $includeTest = false)
+    public function getWinnersBreakDown(array $results, bool $includeTest = false, $fastMatch = true)
     {
         $pool = $this->poolRepository->getAllPool();
 
@@ -38,11 +38,22 @@ class PoolHelper
 
         $outArray = [];
 
+        if ($fastMatch) {
+            $compareFunction = function (array $a, array $b) {
+                return ArrayHelper::countMatchValues($a, $b);
+            };
+        }
+        else {
+            $compareFunction = function (array $a, array $b) {
+                return ArrayHelper::countMatchResult($a, $b);
+            };
+        }
+
         foreach ($pool as $poolItem) {
 
             $money = (float)$poolItem['money'];
 
-            $matched = ArrayHelper::countMatchValues($results, str_split($poolItem['result']));
+            $matched = $compareFunction($results, str_split($poolItem['result']));
 
             if (!isset($outArray[$matched])) {
                 $outArray[$matched] = [
