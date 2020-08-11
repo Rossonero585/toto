@@ -291,7 +291,7 @@ class UpdateController
 
         $toto = $totoRepository->getToto();
 
-        $breakDown = $poolHelper->getWinnersBreakDown($results, true, false);
+        $breakDown = $poolHelper->getWinnersBreakDownUsingCanceled($results, true);
 
         $betPackages = $betPackageRepository->getAllPackages();
 

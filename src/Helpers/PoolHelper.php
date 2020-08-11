@@ -30,7 +30,7 @@ class PoolHelper
         $this->betPackageRepository = Repository::getRepository(BetPackageRepository::class);
     }
 
-    public function getWinnersBreakDown(array $results, bool $includeTest = false, $fastMatch = true)
+    public function getWinnersBreakDown(array $results, bool $includeTest = false)
     {
         $pool = $this->poolRepository->getAllPool();
 
@@ -38,22 +38,12 @@ class PoolHelper
 
         $outArray = [];
 
-        if ($fastMatch) {
-            $compareFunction = function (array $a, array $b) {
-                return ArrayHelper::countMatchValues($a, $b);
-            };
-        }
-        else {
-            $compareFunction = function (array $a, array $b) {
-                return ArrayHelper::countMatchResult($a, $b);
-            };
-        }
 
         foreach ($pool as $poolItem) {
 
             $money = (float)$poolItem['money'];
 
-            $matched = $compareFunction($results, str_split($poolItem['result']));
+            $matched = ArrayHelper::countMatchValues($results, str_split($poolItem['result']));
 
             if (!isset($outArray[$matched])) {
                 $outArray[$matched] = [
@@ -69,6 +59,37 @@ class PoolHelper
 
         return $breakDown;
     }
+
+    public function getWinnersBreakDownUsingCanceled(array $results, bool $includeTest = false)
+    {
+        $pool = $this->poolRepository->getAllPool();
+
+        $pool = array_merge($pool, $includeTest ? $this->getTestBets() : []);
+
+        $outArray = [];
+
+        foreach ($pool as $poolItem) {
+
+            $money = (float)$poolItem['money'];
+
+            $matched =  ArrayHelper::countMatchResult($results, str_split($poolItem['result']));
+
+            if (!isset($outArray[$matched])) {
+                $outArray[$matched] = [
+                    'amount' => $matched,
+                    'pot' => 0
+                ];
+            }
+
+            $outArray[$matched]['pot'] += $money;
+        }
+
+        $breakDown = BreakDownBuilder::createBreakDownFromArray($outArray);
+
+        return $breakDown;
+    }
+
+
 
     private function getTestBets()
     {
