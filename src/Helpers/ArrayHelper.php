@@ -8,6 +8,8 @@
 
 namespace Helpers;
 
+use \Exception;
+
 class ArrayHelper
 {
     public static function array_combination(array $arr) {
@@ -75,7 +77,7 @@ class ArrayHelper
         $needToAdd = count($bet) - count($win);
 
         if ($needToAdd < 0) {
-            throw new \Exception("Illegal arguments");
+            throw new Exception("Illegal arguments");
         }
 
         if ($needToAdd == 0) {
@@ -110,7 +112,7 @@ class ArrayHelper
     public static function countMatchValues(array $arr1, array $arr2)
     {
         if (count($arr1) !== count($arr2)) {
-            throw new \Exception("Arrays should have equal size");
+            throw new Exception("Arrays should have equal size");
         }
 
         $k = 0;
@@ -125,7 +127,7 @@ class ArrayHelper
     public static function countMatchResult(array $arr1, array $arr2)
     {
         if (count($arr1) != count($arr2)) {
-            throw new \Exception("Arrays should have equal size");
+            throw new Exception("Arrays should have equal size");
         }
 
         $k = 0;
@@ -156,14 +158,14 @@ class ArrayHelper
     public static function array_combine(array $lines)
     {
         if (!count($lines)) {
-            throw new \Exception("Incorrect argument");
+            throw new Exception("Incorrect argument");
         }
 
         $count = count($lines[0]);
 
         foreach ($lines as $line) {
             if ($count !== count($line)) {
-                throw new \Exception("Arrays should have equal size");
+                throw new Exception("Arrays should have equal size");
             }
         }
 
@@ -180,5 +182,22 @@ class ArrayHelper
         }
 
         return $firstLine;
+    }
+
+    public static function convertToFonBetFormat(array $bet, $mask) : int
+    {
+        if (!in_array($mask, ['1', 'X', '2'])) {
+            throw new Exception("Incorrect argument");
+        }
+
+        $binaryString = '';
+
+        $bet = array_reverse($bet);
+
+        for ($i = 0; $i < count($bet); $i++) {
+            $binaryString .= $mask == $bet[$i] ? '1' : '0';
+        }
+
+        return bindec($binaryString);
     }
 }

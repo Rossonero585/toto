@@ -96,4 +96,17 @@ class ArrayHelperTest extends TestCase
 
         $this->assertEquals(2, $countMatch);
     }
+
+    public function testFonBetFormat()
+    {
+        $bet = str_split("2X12X2X21XX1XX2");
+
+        $drawMask = ArrayHelper::convertToFonBetFormat($bet, 'X');
+        $win1Mask = ArrayHelper::convertToFonBetFormat($bet, '1');
+        $win2Mask = ArrayHelper::convertToFonBetFormat($bet, '2');
+
+        $this->assertEquals(13906, $drawMask);
+        $this->assertEquals(2308, $win1Mask);
+        $this->assertEquals(16553, $win2Mask);
+    }
 }

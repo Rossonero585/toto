@@ -30,7 +30,7 @@ class BetCityClient implements ClientInterface
     ];
 
     /**
-     * Guzzle clinet object
+     * Guzzle client object
      * @var Client
      */
     private $client;
