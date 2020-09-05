@@ -1,0 +1,9 @@
+{
+  "__type": "WinCoupon:#FonbetEntity",
+  "Cnt": 32,
+  "CouponCode": "100229",
+  "MaxResult": 15,
+  "Options": "1-(1X); 2-(2); 3-(12); 4-(X2); 5-(X); 6-(12); 7-(2); 8-(X); 9-(12); 10-(2); 11-(X); 12-(2); 13-(X); 14-(2); 15-(X)",
+  "TotalPrizeValue": 0,
+  "TotalStakeValue": 1605
+}

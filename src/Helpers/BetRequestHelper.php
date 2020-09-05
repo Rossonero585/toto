@@ -2,7 +2,8 @@
 
 namespace Helpers;
 
-use Builders\Providers\TotoFromWeb;
+use Builders\Providers\Factory\DataProviderFactory;
+use Builders\Providers\Factory\TotoProviderFactory;
 use Builders\TotoBuilder;
 use Models\BetPackage;
 use Models\Input\Bet;
@@ -12,24 +13,29 @@ use Repositories\BetPackageRepository;
 use Repositories\EventRepository;
 use Repositories\Repository;
 use Repositories\TotoRepository;
+use \DateTime;
 
 class BetRequestHelper
 {
-    public function saveBetRequest(BetRequest $betRequest)
+    public function saveBetRequest(BetRequest $betRequest, string $bookMaker)
     {
-        $totoFromWeb = new TotoFromWeb(TotoHelper::getJsonToto($betRequest->getTotoId()));
-
-        $toto = TotoBuilder::createToto($totoFromWeb);
+        $dataProvider  = DataProviderFactory::createDataProvider($bookMaker, $betRequest->getTotoId());
 
         /** @var TotoRepository $totoRepository */
         $totoRepository = Repository::getRepository(TotoRepository::class);
+
+        $totoJson = $dataProvider->getTotoJson();
+
+        $totoProvider  = TotoProviderFactory::createTotoProvider($bookMaker, $totoJson);
+
+        $toto = TotoBuilder::createToto($totoProvider);
 
         $totoRepository->addToto($toto);
 
         /** @var EventRepository $eventsRepository */
         $eventsRepository = Repository::getRepository(EventRepository::class);
 
-        foreach ($betRequest->getEvents() as $event) $eventsRepository->addEvent($event);
+        foreach ($betRequest->getEvents() as $event) $eventsRepository->addEvent($event, true);
 
         /** @var BetItemRepository $betItemRepository */
         $betItemRepository = Repository::getRepository(BetItemRepository::class);
@@ -58,7 +64,7 @@ class BetRequestHelper
         /** @var BetPackageRepository $betPackageRepository */
         $betPackageRepository = Repository::getRepository(BetPackageRepository::class);
 
-        return $betPackageRepository->addNewPackage($money, new \DateTime(), $isTest);
+        return $betPackageRepository->addNewPackage($money, new DateTime(), $isTest);
 
     }
 }

@@ -6,43 +6,45 @@
  * Time: 22:35
  */
 
-namespace Tests\Builders\Providers;
+namespace Tests\Builders\Providers\FonBet;
 
-use Builders\Providers\TotoFromWeb;
+use Builders\Providers\FonBet\TotoFromWeb;
 use PHPUnit\Framework\TestCase;
 
 class TotoFromWebTest extends TestCase
 {
     private function createMockTotoProvider()
     {
-        return new TotoFromWeb(json_decode(file_get_contents(__DIR__."./../../samples/toto.json")));
+        $json = json_decode(file_get_contents(__DIR__ . "./../../../samples/fonbet/toto.json"));
+
+        return new TotoFromWeb($json->d);
     }
 
     public function testGetPot()
     {
         $provider = $this->createMockTotoProvider();
 
-        $this->assertEquals(243631.12, $provider->getPot());
+        $this->assertEquals(3590667, $provider->getPot());
     }
 
     public function testGetJackPot()
     {
         $provider = $this->createMockTotoProvider();
 
-        $this->assertEquals(4208340.9, $provider->getJackPot());
+        $this->assertEquals(13694406, $provider->getJackPot());
     }
 
     public function testGetStartDate()
     {
         $provider = $this->createMockTotoProvider();
 
-        $this->assertEquals("2017-10-14 21:00:00", $provider->getDateTime()->format("Y-m-d H:i:s"));
+        $this->assertEquals("2020-06-30 17:00:00", $provider->getDateTime()->format("Y-m-d H:i:s"));
     }
 
     public function testEventCount()
     {
         $provider = $this->createMockTotoProvider();
 
-        $this->assertEquals(14, $provider->getEventCount());
+        $this->assertEquals(15, $provider->getEventCount());
     }
 }

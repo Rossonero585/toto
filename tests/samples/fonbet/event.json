@@ -1,0 +1,60 @@
+{
+  "__type": "Event:#FonbetEntity",
+  "Championships": [
+    {
+      "Key": "ru",
+      "Value": "Футбол. Россия. Премьер-Лига"
+    },
+    {
+      "Key": "en",
+      "Value": "Football. Russia. Premier League"
+    }
+  ],
+  "Date": "\/Date(1593538200000)\/",
+  "Draw": {
+    "__type": "EventStatItem:#FonbetEntity",
+    "Percentage": 26.8424310113,
+    "Probability": 28.0000000000
+  },
+  "GroupCode": 1,
+  "Id": 56161,
+  "Names": [
+    {
+      "Key": "ru",
+      "Value": "ЦСКА - Спартак М"
+    },
+    {
+      "Key": "en",
+      "Value": "CSKA Moscow - Spartak Moscow"
+    }
+  ],
+  "Order": 0,
+  "ResultCode": null,
+  "Score": null,
+  "Url": null,
+  "UserDraw": {
+    "__type": "EventStatItem:#FonbetEntity",
+    "Percentage": 26.8424310113,
+    "Probability": 28.0000000000
+  },
+  "UserWin1": {
+    "__type": "EventStatItem:#FonbetEntity",
+    "Percentage": 30.9123579427,
+    "Probability": 33.0000000000
+  },
+  "UserWin2": {
+    "__type": "EventStatItem:#FonbetEntity",
+    "Percentage": 42.2452110460,
+    "Probability": 39.0000000000
+  },
+  "Win1": {
+    "__type": "EventStatItem:#FonbetEntity",
+    "Percentage": 30.9123579427,
+    "Probability": 33.0000000000
+  },
+  "Win2": {
+    "__type": "EventStatItem:#FonbetEntity",
+    "Percentage": 42.2452110460,
+    "Probability": 39.0000000000
+  }
+}

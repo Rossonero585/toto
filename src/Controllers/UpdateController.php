@@ -7,11 +7,16 @@
  */
 namespace Controllers;
 
-use Builders\Providers\TotoFromWeb;
+use Builders\EventBuilder;
+use Builders\Providers\Factory\TotoProviderFactory;
+use Builders\Providers\Factory\DataProviderFactory;
+use Builders\Providers\Factory\EventProviderFactory;
+use Builders\Providers\Factory\PoolProviderFactory;
 use Builders\TotoBuilder;
 use Helpers\ArrayHelper;
 use Helpers\EventsHelper;
 use Helpers\Http\BetCityClient;
+use Helpers\Logger;
 use Helpers\PoolHelper;
 use Helpers\TotoHelper;
 use Models\Bet;
@@ -26,50 +31,68 @@ use Repositories\TotoRepository;
 
 class UpdateController
 {
-
-    const BET_CITY = "https://hdr.betcity.ru";
-
-    public function insertEventAction($totoId)
+    public function insertTotoAction($bookmaker, $totoId)
     {
-        if (!$totoId) {
-            throw new \Exception("totoId is not defined");
+        try {
+
+            $dataProvider  = DataProviderFactory::createDataProvider($bookmaker, $totoId);
+
+            /** @var TotoRepository $totoRepository */
+            $totoRepository = Repository::getRepository(TotoRepository::class);
+
+            $totoJson = $dataProvider->getTotoJson();
+
+            $totoProvider  = TotoProviderFactory::createTotoProvider($bookmaker, $totoJson);
+
+            $toto = TotoBuilder::createToto($totoProvider);
+
+            $totoRepository->addToto($toto);
+
+        }
+        catch (\Exception $exception) {
+            Logger::getInstance()->log('error', 'Exception', $exception->getMessage());
         }
 
-        $jsonToto = TotoHelper::getJsonToto($totoId);
+    }
 
-        $totoEvents = EventsHelper::getEventsFromJson($jsonToto);
+    public function insertEventsAction($bookmaker, $totoId)
+    {
+        try {
 
-        /** @var TotoRepository $totoRepository */
-        $totoRepository = Repository::getRepository(TotoRepository::class);
+            $dataProvider  = DataProviderFactory::createDataProvider($bookmaker, $totoId);
 
-        $toto = TotoBuilder::createToto(new TotoFromWeb($jsonToto));
+            /** @var EventRepository $eventRepository */
+            $eventRepository = Repository::getRepository(EventRepository::class);
 
-        $totoRepository->addToto($toto);
+            $eventsJson = $dataProvider->getEvents();
 
-        /** @var EventRepository $eventRepository */
-        $eventRepository = Repository::getRepository(EventRepository::class);
+            foreach ($eventsJson as $key => $item) {
 
-        $currentEvents = $eventRepository->getAll();
+                $eventProvider = EventProviderFactory::createEventProvider($bookmaker, $item, 'en', $key + 1);
 
-        if (count($currentEvents) == 0) {
-            foreach ($totoEvents as $event) {
+                $event = EventBuilder::createEvent($eventProvider);
+
                 $eventRepository->addEvent($event);
             }
         }
-    }
-
-    public function insertBetsAction($totoId)
-    {
-        if (!$totoId) {
-            throw new \Exception("totoId is not defined");
+        catch (\Exception $exception) {
+            Logger::getInstance()->log('error', 'Exception', $exception->getMessage());
         }
 
-        $text = file_get_contents(self::BET_CITY."/supex/dump/$totoId.txt");
+    }
 
-        /** @var PoolRepository $poolRepository */
-        $poolRepository = Repository::getRepository(PoolRepository::class);
+    public function insertBetsAction($bookmaker, $totoId)
+    {
+        try {
+            $poolProvider = PoolProviderFactory::createPoolProvider($bookmaker, $totoId);
+            /** @var PoolRepository $poolRepository */
+            $poolRepository = PoolRepository::getRepository(PoolRepository::class);
 
-        $poolRepository->insertFromFile($text);
+            $poolRepository->insertFromProvider($poolProvider);
+        }
+        catch (\Exception $exception) {
+            Logger::getInstance()->log('error', 'Exception', $exception->getMessage());
+        }
     }
 
 
@@ -215,7 +238,7 @@ class UpdateController
         return $poloRepository->getPoolItem($bet);
     }
 
-    public function updateTotoResult(string $totoId)
+    public function updateTotoResult(string $totoId, string $bookMaker)
     {
         /** @var EventRepository $eventRepository */
         $eventRepository = Repository::getRepository(EventRepository::class);
@@ -229,11 +252,20 @@ class UpdateController
         /** @var BetItemRepository $betItemsRepository */
         $betItemsRepository = Repository::getRepository(BetItemRepository::class);
 
-        $poolHelper = new PoolHelper();
+        $dataProvider  = DataProviderFactory::createDataProvider($bookMaker, $totoId);
 
-        $totoJson = TotoHelper::getJsonToto($totoId);
+        $eventsJson = $dataProvider->getEvents();
 
-        $actualEvents = EventsHelper::getEventsFromJson($totoJson);
+        $actualEvents = [];
+
+        foreach ($eventsJson as $key => $item) {
+
+            $eventProvider = EventProviderFactory::createEventProvider($bookMaker, $item, 'en', $key + 1);
+
+            $event = EventBuilder::createEvent($eventProvider);
+
+            array_push($actualEvents, $event);
+        }
 
         $events = $eventRepository->getAll();
 
@@ -253,11 +285,13 @@ class UpdateController
             $eventRepository->updateEventResultById($event->getId(), $actualEvents[$key]->getResult());
         }
 
+        $poolHelper = new PoolHelper();
+
         $totoRepository->updateDeviation($eventHelper->getAverageDeviation());
 
         $toto = $totoRepository->getToto();
 
-        $breakDown = $poolHelper->getWinnersBreakDown($results, true);
+        $breakDown = $poolHelper->getWinnersBreakDownUsingCanceled($results, true);
 
         $betPackages = $betPackageRepository->getAllPackages();
 
@@ -275,7 +309,7 @@ class UpdateController
 
                     $ratio = $totoHelper->getRatioByWinCount($countMatch, $breakDown);
 
-                    $income = ($ratio - 1) * $bet->getMoney();
+                    $income = $ratio * $bet->getMoney();
                 }
                 else {
                     $income = 0;

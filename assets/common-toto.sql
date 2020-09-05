@@ -39,6 +39,7 @@ CREATE TABLE IF NOT EXISTS `pool` (
   `money` decimal(8,2) DEFAULT NULL,
   `code` varchar(20) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `toto_id` varchar(255) NOT NULL,
+  `bet_date` datetime DEFAULT NULL,
   PRIMARY KEY (code, toto_id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 

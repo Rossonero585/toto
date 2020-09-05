@@ -6,10 +6,12 @@
  * Time: 22:36
  */
 
-namespace Tests\Builders\Providers;
+namespace Tests\Builders\Providers\BetCity;
 
 use Builders\EventBuilder;
 use Builders\Providers\EventFromMixedSource;
+use Builders\Providers\BetCity\EventFromWeb;
+use Builders\Providers\EventFromArray;
 use PHPUnit\Framework\TestCase;
 
 class EventFromMixedProviderTest extends TestCase
@@ -17,16 +19,16 @@ class EventFromMixedProviderTest extends TestCase
     private function createMockEventFromWeb()
     {
         $provider = new EventFromMixedSource(
-            json_decode(file_get_contents(__DIR__."./../../samples/totoItem.json")),
-            [
+            new EventFromWeb(json_decode(file_get_contents(__DIR__ . "./../../samples/betcity/totoItem.json")), 1),
+            new EventFromArray([
                 'p1' => 0.65,
                 'px' => 0.05,
                 'p2' => 0.3,
                 'title' => 'Milan - Inter',
-                'id' => 1,
+                'number' => 1,
                 'source' => 'pin'
-            ],
-            0
+            ]),
+            1
         );
 
         return EventBuilder::createEvent($provider);

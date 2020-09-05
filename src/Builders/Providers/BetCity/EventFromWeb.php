@@ -6,7 +6,9 @@
  * Time: 18:57
  */
 
-namespace  Builders\Providers;
+namespace Builders\Providers\BetCity;
+
+use Builders\Providers\EventInterface;
 
 class EventFromWeb implements EventInterface
 {

@@ -9,7 +9,7 @@ namespace Models;
 
 class Event
 {
-    const cancelledType = 4;
+    const cancelledTypes = [0,4];
 
     const PINACLE = 'pin';
 
@@ -49,6 +49,9 @@ class Event
     /** @var  string */
     private $source;
 
+    /** @var bool */
+    private $isCanceled;
+
     /**
      * Event constructor.
      * @param $number
@@ -78,6 +81,7 @@ class Event
         $this->source = $source;
         $this->result = $result;
         $this->id = $id;
+        $this->isCanceled = !is_null($result) && ($result !== "") && !in_array($result, [1, 2, "X", "x"]);
     }
 
     /**
@@ -174,7 +178,7 @@ class Event
      */
     public function isCanceled(): bool
     {
-        return $this->result == self::cancelledType;
+        return $this->isCanceled;
     }
 
     /**

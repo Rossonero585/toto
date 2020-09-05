@@ -95,12 +95,18 @@ class ArrayHelperTest extends TestCase
         $countMatch = ArrayHelper::countMatchResult($a, $b);
 
         $this->assertEquals(2, $countMatch);
+    }
 
-        $b = [[1,2,3], [2], [0]];
+    public function testFonBetFormat()
+    {
+        $bet = str_split("2X12X2X21XX1XX2");
 
-        $countMatch = ArrayHelper::countMatchResult($a, $b);
+        $drawMask = ArrayHelper::convertToFonBetFormat($bet, 'X');
+        $win1Mask = ArrayHelper::convertToFonBetFormat($bet, '1');
+        $win2Mask = ArrayHelper::convertToFonBetFormat($bet, '2');
 
-        $this->assertEquals(2, $countMatch);
-
+        $this->assertEquals(13906, $drawMask);
+        $this->assertEquals(2308, $win1Mask);
+        $this->assertEquals(16553, $win2Mask);
     }
 }

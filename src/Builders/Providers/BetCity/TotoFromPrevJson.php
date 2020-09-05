@@ -6,7 +6,9 @@
  * Time: 23:12
  */
 
-namespace Builders\Providers;
+namespace Builders\Providers\BetCity;
+
+use Builders\Providers\TotoInterface;
 
 class TotoFromPrevJson implements TotoInterface
 {

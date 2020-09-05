@@ -6,8 +6,9 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Promise;
 use Helpers\Logger;
 use Models\Input\Bet;
+use \Throwable;
 
-class BetCityClient
+class BetCityClient implements ClientInterface
 {
     const bet_city_cache_file = 'token.txt';
 
@@ -29,7 +30,7 @@ class BetCityClient
     ];
 
     /**
-     * Guzzle clinet object
+     * Guzzle client object
      * @var Client
      */
     private $client;
@@ -123,7 +124,7 @@ class BetCityClient
             $this->writeTokensToFile($this->token, $this->totoHash);
 
         }
-        catch (\Throwable $exception) {
+        catch (Throwable $exception) {
             Logger::getInstance()->log('http', "Auth request to betcity failed {$this->totoId}", $exception->getMessage());
             throw $exception;
         }
@@ -132,10 +133,9 @@ class BetCityClient
 
     /**
      * @param array $bets
-     * @param bool $isTest
      * @throws \Throwable
      */
-    public function makeBet(array $bets, $isTest = false)
+    public function makeBet(array $bets)
     {
         $this->setTokens();
 
@@ -153,34 +153,29 @@ class BetCityClient
             $betContent .= PHP_EOL;
         }
 
-        if (!$isTest) {
-            $result = $this->client->post(self::bet, [
-                "query" => [
-                    "ver" => self::ver,
-                    "csn" => self::csn,
-                    "token" => $this->token,
-                    "id" => $this->totoId
-                ],
-                "form_params" => [
-                    "hash" => $this->totoHash,
-                    "content" => $betContent
-                ]
-            ]);
+        $result = $this->client->post(self::bet, [
+            "query" => [
+                "ver" => self::ver,
+                "csn" => self::csn,
+                "token" => $this->token,
+                "id" => $this->totoId
+            ],
+            "form_params" => [
+                "hash" => $this->totoHash,
+                "content" => $betContent
+            ]
+        ]);
 
-            $content = $result->getBody()->getContents();
+        $content = $result->getBody()->getContents();
 
-            /** @var \stdClass $reply */
-            $reply = \GuzzleHttp\json_decode($content)->reply;
+        /** @var \stdClass $reply */
+        $reply = \GuzzleHttp\json_decode($content)->reply;
 
-            if ($reply->errors_count > 0) {
-                Logger::getInstance()->log('http', "Fail to bet {$this->totoId}", $content);
-            }
-            else {
-                Logger::getInstance()->log('http', "Successfully bet {$this->totoId}", $content);
-            }
+        if ($reply->errors_count > 0) {
+            Logger::getInstance()->log('http', "Fail to bet {$this->totoId}", $content);
         }
         else {
-            Logger::getInstance()->log('test_bets', "Successfully test bet {$this->totoId}", $betContent);
+            Logger::getInstance()->log('http', "Successfully bet {$this->totoId}", $content);
         }
 
     }

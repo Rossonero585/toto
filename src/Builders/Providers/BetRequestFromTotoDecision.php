@@ -8,9 +8,10 @@
 
 namespace Builders\Providers;
 
-use Helpers\EventsHelper;
+use Builders\EventBuilder;
+use Builders\Providers\Factory\DataProviderFactory;
+use Builders\Providers\Factory\EventProviderFactory;
 use Helpers\FileParser;
-use Helpers\TotoHelper;
 use Models\Input\Bet;
 
 class BetRequestFromTotoDecision implements BetRequestInterface
@@ -19,6 +20,11 @@ class BetRequestFromTotoDecision implements BetRequestInterface
      * @var string
      */
     private $totoId;
+
+    /**
+     * @var string
+     */
+    private $bookMaker;
 
     /**
      * @var string
@@ -38,13 +44,15 @@ class BetRequestFromTotoDecision implements BetRequestInterface
     /**
      * BetRequestFromTotoDecision constructor.
      * @param string $totoId
+     * @param string $bookMaker
      * @param string $betsFile
      * @param string $eventsFile
      * @param bool $isTest
      */
-    public function __construct(string $totoId, string $betsFile, string $eventsFile, bool $isTest = false)
+    public function __construct(string $totoId, string $bookMaker, string $betsFile, string $eventsFile, bool $isTest = false)
     {
         $this->totoId     = $totoId;
+        $this->bookMaker  = $bookMaker;
         $this->betsFile   = $betsFile;
         $this->eventsFile = $eventsFile;
         $this->isTest     = $isTest;
@@ -72,24 +80,29 @@ class BetRequestFromTotoDecision implements BetRequestInterface
 
     private function getBetsArray()
     {
-        $betAssoc = FileParser::parseFileWithBets($this->betsFile);
+        $betAssoc = FileParser::parseFileWithBets($this->betsFile, $this->bookMaker);
 
         $betsCount = $_ENV['BETS_COUNT'];
 
-        $betsCountForSelecting = $betsCount * 3;
+        if ($this->bookMaker == 'fonbet') {
+            $betsArray = array_slice($betAssoc, 0, $betsCount);
+        }
+        else {
+            $betsCountForSelecting = $betsCount * 3;
 
-        $selectedBets = array_slice($betAssoc, 0, $betsCountForSelecting);
+            $selectedBets = array_slice($betAssoc, 0, $betsCountForSelecting);
 
-        usort($selectedBets, function ($arr1, $arr2) {
-            $chance9_1 = (float)$arr1['chance_9'];
-            $chance9_2 = (float)$arr2['chance_9'];
+            usort($selectedBets, function ($arr1, $arr2) {
+                $chance9_1 = (float)$arr1['chance_9'];
+                $chance9_2 = (float)$arr2['chance_9'];
 
-            if ($chance9_1 === $chance9_2) return 0;
+                if ($chance9_1 === $chance9_2) return 0;
 
-            return $chance9_1 < $chance9_2 ? 1 : -1;
-        });
+                return $chance9_1 < $chance9_2 ? 1 : -1;
+            });
 
-        $betsArray = array_slice($selectedBets, 0, $betsCount);
+            $betsArray = array_slice($selectedBets, 0, $betsCount);
+        }
 
         return array_map(function (array $arr) {
             return new Bet(
@@ -103,9 +116,24 @@ class BetRequestFromTotoDecision implements BetRequestInterface
     {
         $eventsAssoc = FileParser::parseFileWithEvents($this->eventsFile);
 
-        $totoJson = TotoHelper::getJsonToto($this->getTotoId());
+        $dataProvider  = DataProviderFactory::createDataProvider($this->bookMaker, $this->totoId);
 
-        return EventsHelper::getEventsFromMixedProvider($totoJson, $eventsAssoc);
+        $out = [];
+
+        foreach ($dataProvider->getEvents() as $key => $jsonEvent)
+        {
+            $number = $key + 1;
+
+            $event = EventBuilder::createEvent(new EventFromMixedSource(
+                EventProviderFactory::createEventProvider($this->bookMaker, $jsonEvent, 'ru', $number),
+                new EventFromArray($eventsAssoc[$key]),
+                $number
+            ));
+
+            array_push($out, $event);
+        }
+
+        return $out;
     }
 
 }

@@ -7,7 +7,9 @@
     },
     "require": {
         "drupol/phpermutations": "^1.2",
-        "guzzlehttp/guzzle": "~6.0"
+        "guzzlehttp/guzzle": "~6.0",
+        "ext-json": "*",
+        "ext-pdo": "*"
     },
     "scripts": {
         "test": "@php ./vendor/phpunit/phpunit/phpunit tests"

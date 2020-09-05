@@ -8,6 +8,8 @@
 
 namespace Helpers;
 
+use \Exception;
+
 class FileParser
 {
 
@@ -37,7 +39,7 @@ class FileParser
 
             $l = [];
 
-            preg_match('/.+\s\-\s.+\s+/U', $m, $l);
+            preg_match('/.+\s\-\s.+\s{2,}/U', $m, $l);
 
             $title = trim(array_shift($l));
 
@@ -62,7 +64,7 @@ class FileParser
         return $eventsAssoc;
     }
 
-    public static function parseFileWithBets(string $file) : array
+    public static function parseFileWithBets(string $file, string $bookMaker) : array
     {
         $lines = explode(PHP_EOL, $file);
 
@@ -72,11 +74,20 @@ class FileParser
 
         $out = [];
 
+        if ('fonbet' == $bookMaker) {
+            $regexp = "/\"(\d{2}\;(\d+\-\([1|X|2]\)[;|\.])+)\"/";
+        } elseif ('betcity' == $bookMaker) {
+            $regexp = "/\"((?:\d|=|;|X|Х)+)\"/";
+        }
+        else {
+            throw new Exception("Unknown bookmaker $bookMaker");
+        }
+
         foreach ($lines as $line) {
 
             if ($line) {
 
-                if (preg_match_all("/\"((?:\d|=|;|X|Х)+)\"/", $line, $bet)) {
+                if (preg_match_all($regexp, $line, $bet)) {
 
                     $betString = $bet[1][0];
 

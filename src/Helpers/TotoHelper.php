@@ -94,21 +94,18 @@ class TotoHelper
 
         $winnerCounts = array_keys($this->toto->getWinnerCounts());
 
+        $minWinCount = min($winnerCounts);
+
         $range = range(1, $this->toto->getEventCount());
 
-        $winnerCounts = array_reverse($winnerCounts);
+        $combinations = new Combinations($range, $minWinCount);
 
-        $map = [];
-
-        foreach ($winnerCounts as $count) {
-            $combinations = new Combinations($range, $count);
-            foreach ($combinations->generator() as $combination) {
-                foreach (ArrayHelper::fillCombination($bet, $combination) as $betItem) {
-                    $key = implode(",", $betItem);
-                    if (!isset($map[$key])) {
-                        $map[$key] = 1;
-                        yield $count => $betItem;
-                    }
+        foreach ($combinations->generator() as $combination) {
+            foreach (ArrayHelper::fillCombination($bet, $combination) as $betItem) {
+                $key = implode(",", $betItem);
+                if (!isset($map[$key])) {
+                    $map[$key] = 1;
+                    yield $betItem;
                 }
             }
         }
