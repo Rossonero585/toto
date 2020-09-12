@@ -10,6 +10,7 @@ namespace Controllers;
 
 use Helpers\Arguments;
 use Helpers\ArrayHelper;
+use Helpers\BetGenerator;
 use Helpers\EventsHelper;
 use Helpers\PoolHelper;
 use Helpers\TotoHelper;
@@ -259,6 +260,18 @@ class CalculationController
 
         return [$pWin,$m];
 
+    }
+
+    public function testBetGenerator()
+    {
+        /** @var EventRepository $eventRepository */
+        $eventRepository = Repository::getRepository(EventRepository::class);
+
+        $eventHelper = new EventsHelper($eventRepository->getAll());
+
+        $betGenerator = new BetGenerator($eventHelper);
+
+        $betGenerator->generateBets();
     }
 
     private function getBetsFromFile($pathToFile)

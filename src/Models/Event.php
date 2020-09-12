@@ -209,4 +209,13 @@ class Event
     {
         return $this->source == self::PINACLE;
     }
+
+    public function getMargins(): array
+    {
+        return [
+            $this->getP1() - $this->getS1(),
+            $this->getPx() - $this->getSx(),
+            $this->getP2() - $this->getS2()
+        ];
+    }
 }

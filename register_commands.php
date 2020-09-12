@@ -145,6 +145,14 @@ $commandManager->registerCommand('calculate_ratio', function () use($arguments) 
 });
 
 
+$commandManager->registerCommand('test_bet_generator', function () use ($arguments) {
+
+    $cu = new CalculationController();
+
+    $cu->testBetGenerator();
+
+});
+
 function test_log($str) {
 
     $str  = (new DateTime())->format(DATE_ISO8601)." - ".$str." - ".PHP_EOL;

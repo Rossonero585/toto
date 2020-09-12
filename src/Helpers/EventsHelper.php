@@ -121,4 +121,42 @@ class EventsHelper
 
         return -1;
     }
+
+    /**
+     * @return Event[]
+     */
+    public function getEvents() : array
+    {
+        return $this->events;
+    }
+
+    public function getProbabilityMatrix(float $minP)
+    {
+        return array_map(function (Event $event) use ($minP) {
+
+            $itemArray = [];
+
+            if ($event->getP1() > $minP) $itemArray['1'] = $event->getP1();
+            if ($event->getPx() > $minP) $itemArray['X'] = $event->getPx();
+            if ($event->getP2() > $minP) $itemArray['2'] = $event->getP2();
+
+            return $itemArray;
+
+        }, $this->getEvents());
+    }
+
+    public function getMarginAMatrix(float $minP)
+    {
+        return array_map(function (Event $event) use ($minP) {
+
+            $itemArray = [];
+
+            if ($event->getP1() > $minP) $itemArray['1'] = $event->getP1() - $event->getS1();
+            if ($event->getPx() > $minP) $itemArray['X'] = $event->getPx() - $event->getSx();
+            if ($event->getP2() > $minP) $itemArray['2'] = $event->getP2() - $event->getS2();
+
+            return $itemArray;
+
+        }, $this->getEvents());
+    }
 }
