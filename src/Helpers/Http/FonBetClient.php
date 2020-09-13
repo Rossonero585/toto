@@ -74,6 +74,12 @@ class FonBetClient implements ClientInterface
 
             $response = $register->getBody()->getContents();
 
+            Logger::getInstance()->log(
+                'http',
+                "Bet register response {$this->totoId}",
+                $response
+            );
+
             $jsonRegisterResponse = json_decode($response);
 
             $registerId = $jsonRegisterResponse->requestId;
@@ -95,6 +101,12 @@ class FonBetClient implements ClientInterface
 
             /** @var \stdClass $reply */
             $reply = \GuzzleHttp\json_decode($betResponseContent);
+
+            Logger::getInstance()->log(
+                'http',
+                "Bet request response {$this->totoId}",
+                $betResponseContent
+            );
 
             if ($reply->resultCode != 0) {
                 Logger::getInstance()->log('http',
