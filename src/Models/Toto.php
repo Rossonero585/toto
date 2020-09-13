@@ -10,6 +10,8 @@ namespace Models;
 
 class Toto
 {
+    /** @var string */
+    private $id;
     /** @var  \DateTime */
     private $startTime;
 
@@ -30,6 +32,7 @@ class Toto
 
     /**
      * Toto constructor.
+     * @param string $id
      * @param \DateTime $startTime
      * @param float $pot
      * @param float $jackPot
@@ -37,8 +40,9 @@ class Toto
      * @param array $winnerCounts
      * @param string $bookMaker
      */
-    public function __construct(\DateTime $startTime, $pot, $jackPot, $count, array $winnerCounts, string $bookMaker)
+    public function __construct(string $id, \DateTime $startTime, $pot, $jackPot, $count, array $winnerCounts, string $bookMaker)
     {
+        $this->id = $id;
         $this->startTime = $startTime;
         $this->pot = $pot;
         $this->jackPot = $jackPot;
@@ -46,6 +50,7 @@ class Toto
         $this->winnerCounts = $winnerCounts;
         $this->bookMaker = $bookMaker;
     }
+
 
     /**
      * @return \DateTime
@@ -109,6 +114,14 @@ class Toto
     public function setBookMaker(string $bookMaker): void
     {
         $this->bookMaker = $bookMaker;
+    }
+
+    /**
+     * @return string
+     */
+    public function getId(): string
+    {
+        return $this->id;
     }
 
 }

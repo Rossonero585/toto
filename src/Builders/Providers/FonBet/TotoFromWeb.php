@@ -17,6 +17,13 @@ class TotoFromWeb implements TotoInterface
         $this->toto = $json;
     }
 
+    public function getTotoId(): string
+    {
+        $id = $this->toto->Id;
+
+        return $id."_fonbet";
+    }
+
     public function getPot(): float
     {
         return $this->toto->Pool;

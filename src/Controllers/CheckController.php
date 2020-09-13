@@ -7,9 +7,9 @@
  */
 namespace Controllers;
 
-use Builders\Providers\BetCity\TotoFromPrevJson;
-use Builders\TotoBuilder;
+use Builders\Providers\Factory\NextTotoProviderFactory;
 use Helpers\ScheduleHelper;
+use Models\Toto;
 
 class CheckController
 {
@@ -22,87 +22,76 @@ class CheckController
 
         set_time_limit(40);
 
-        $betcityUrl = $_ENV['BET_CITY_URL'];
+        $nextTotoProviderFactory = new NextTotoProviderFactory();
 
-        $content = file_get_contents($betcityUrl."/d/supex/list/cur?page=1&rev=2&ver=54&csn=ooca9s");
+        $nextTotoProvider = $nextTotoProviderFactory::getNextTotoProvider('fonbet');
 
-        $obj = json_decode($content);
+        $nextToto = $nextTotoProvider->getToto();
 
-        $toto = null;
+        if ($nextToto->getId() == $this->getLastBetTotoId($nextToto->getBookMaker())) {
+            return;
+        }
 
-        foreach ($obj->reply->totos as $totoObj) {
+        $scheduleHelper = new ScheduleHelper();
 
-            $name = $totoObj->name_tt;
+        $remainMinutes = $scheduleHelper->getTimeForRun($nextToto);
 
-            if (mb_strpos($name,"утбол") !== false) {
-
-                $totoId = $totoObj->id_tt;
-
-                $toto = TotoBuilder::createToto(new TotoFromPrevJson($totoObj));
-
-                preg_match('|Суперэкспресс ЕвроФутбол \(№(\d+)\)|', $name, $matches);
-
-                $totoNumber = $matches[1];
-
-                if ($totoId == $this->getLastBetTotoId()) {
-                    continue 1;
-                }
-
-                $scheduleHelper = new ScheduleHelper();
-
-                $remainMinutes = $scheduleHelper->getTimeForRun($toto);
-
-                if ($remainMinutes !== -1) {
-
-                    $this->updateLastBetTotoId($totoId);
-
-                    $startTime = $toto->getStartTime();
-
-                    $startTime->setTimezone(new \DateTimeZone('UTC'));
-
-                    $cloneStartTime = clone $startTime;
-
-                    $startTime->modify("-$remainMinutes minutes");
-
-                    $timeToRunToto = $startTime->format('H:i');
-
-                    $startTime->modify("-3 minutes");
-
-                    if ($this->compareMinutes($startTime, $this->getCurrentDateTime())) {
-                        $timeToRunScript = $startTime->format('H:i');
-                    }
-                    else {
-                        $startTime = $this->getCurrentDateTime();
-
-                        $startTime->modify("+1 minutes");
-
-                        $timeToRunScript = $startTime->format("H:i");
-
-                        $startTime->modify("+3 minutes");
-
-                        $timeToRunToto = $startTime->format("H:i");
-                    }
-
-                    $cloneStartTime->modify("+5 minutes");
-
-                    $totoStartTime = $cloneStartTime->format("H:i");
-
-                    echo "$totoStartTime $timeToRunScript $timeToRunToto $totoNumber $totoId"."_betcity";
-
-                    break;
-                }
-            }
+        if ($remainMinutes !== -1) {
+            $this->updateLastBetTotoId($nextToto->getBookMaker(), $nextToto->getId());
+            $this->printOutput($nextToto, $remainMinutes);
         }
     }
 
-    private function getLastBetTotoId()
+    private function printOutput(Toto $toto, int $remainMinutes)
     {
-        return (int)file_get_contents(self::CACHE_FILE);
+        $this->updateLastBetTotoId($toto->getBookMaker(), $toto->getId());
+
+        $startTime = $toto->getStartTime();
+
+        $startTime->setTimezone(new \DateTimeZone('UTC'));
+
+        $cloneStartTime = clone $startTime;
+
+        $startTime->modify("-$remainMinutes minutes");
+
+        $timeToRunToto = $startTime->format('H:i');
+
+        $startTime->modify("-3 minutes");
+
+        if ($this->compareMinutes($startTime, $this->getCurrentDateTime())) {
+            $timeToRunScript = $startTime->format('H:i');
+        }
+        else {
+            $startTime = $this->getCurrentDateTime();
+
+            $startTime->modify("+1 minutes");
+
+            $timeToRunScript = $startTime->format("H:i");
+
+            $startTime->modify("+3 minutes");
+
+            $timeToRunToto = $startTime->format("H:i");
+        }
+
+        $cloneStartTime->modify("+5 minutes");
+
+        $totoStartTime = $cloneStartTime->format("H:i");
+
+        $totoId = $toto->getId();
+
+        list($totoNumber, $bookMaker) = explode("_", $totoId);
+
+        echo "$totoStartTime $timeToRunScript $timeToRunToto $bookMaker $totoNumber $totoId";
     }
 
-    private function updateLastBetTotoId(string $totoId)
+    private function getLastBetTotoId(string $bookMaker)
     {
-        file_put_contents(self::CACHE_FILE, $totoId);
+        return (int)file_get_contents($bookMaker."_".self::CACHE_FILE);
+    }
+
+    private function updateLastBetTotoId(string $bookMaker, string $totoId)
+    {
+        file_put_contents($bookMaker."_".self::CACHE_FILE, $totoId);
     }
 
     private function getCurrentDateTime()

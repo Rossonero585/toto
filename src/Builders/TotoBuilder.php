@@ -16,6 +16,7 @@ class TotoBuilder
     public static function createToto(TotoInterface $totoProvider)
     {
         return new Toto(
+            $totoProvider->getTotoId(),
             $totoProvider->getDateTime(),
             $totoProvider->getPot(),
             $totoProvider->getJackPot(),

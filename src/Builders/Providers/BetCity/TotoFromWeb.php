@@ -9,6 +9,8 @@
 namespace Builders\Providers\BetCity;
 
 use Builders\Providers\TotoInterface;
+use \stdClass;
+use \DateTime;
 
 class TotoFromWeb implements TotoInterface
 {
@@ -16,11 +18,19 @@ class TotoFromWeb implements TotoInterface
 
     private $itemsCount;
 
-    public function __construct(\stdClass $toto)
+    public function __construct(stdClass $toto)
     {
         $this->toto = $toto->reply->toto;
         $this->itemsCount = count($toto->reply->toto->out);
     }
+
+    public function getTotoId(): string
+    {
+        $id = $this->toto->id_tt;
+
+        return $id."_betcity";
+    }
+
 
     public function getPot(): float
     {
@@ -32,9 +42,9 @@ class TotoFromWeb implements TotoInterface
         return $this->toto->jackpot;
     }
 
-    public function getDateTime(): \DateTime
+    public function getDateTime(): DateTime
     {
-        return \DateTime::createFromFormat('Y-m-d H:i:s', $this->toto->dt_tt);
+        return DateTime::createFromFormat('Y-m-d H:i:s', $this->toto->dt_tt);
     }
 
     public function getEventCount(): int

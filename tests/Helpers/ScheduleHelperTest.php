@@ -21,30 +21,33 @@ class ScheduleHelperTest extends TestCase
         $scheduleHelper = new ScheduleHelper();
 
         $toto = new Toto(
+            '500_fonbet',
             $this->getMockStartTime(10),
             300000,
             1300000,
             14,
             [],
-            'test'
+            'fonbet'
         );
 
         $this->assertEquals(2, $scheduleHelper->getTimeForRun($toto));
 
 
         $toto = new Toto(
+            '500_betcity',
             $this->getMockStartTime(10),
             3000000,
             1300000,
             14,
             [],
-            'test'
+            'betcity'
         );
 
         $this->assertEquals(4, $scheduleHelper->getTimeForRun($toto));
 
 
         $toto = new Toto(
+            '500_betcity',
             $this->getMockStartTime(13),
             3000000,
             1300000,

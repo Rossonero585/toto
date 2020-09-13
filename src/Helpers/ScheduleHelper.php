@@ -9,6 +9,8 @@
 namespace Helpers;
 
 use Models\Toto;
+use \DateTimeZone;
+use \DateTime;
 
 class ScheduleHelper
 {
@@ -17,38 +19,48 @@ class ScheduleHelper
     {
         $totoStart = $toto->getStartTime();
 
-        $totoStart->setTimezone(new \DateTimeZone('UTC'));
+        $totoStart->setTimezone(new DateTimeZone('UTC'));
 
         $timeToToto = $this->getTimeToTotoInSeconds($totoStart);
 
         if ($timeToToto < $_ENV['TIME_BEFORE_RUN'] * 60) {
-            return $this->getTimeToRunInMinutes($toto->getPot());
+            return $this->getTimeToRunInMinutes($toto);
         }
 
         return -1;
     }
 
-    private function getTimeToTotoInSeconds(\DateTime $dateTime)
+    private function getTimeToTotoInSeconds(DateTime $dateTime)
     {
-        $current = new \DateTime('now', new \DateTimeZone('UTC'));
+        $current = new DateTime('now', new DateTimeZone('UTC'));
 
         return $dateTime->getTimestamp() - $current->getTimestamp();
     }
 
-    private function getTimeToRunInMinutes(float $pot)
+    private function getTimeToRunInMinutes(Toto $toto)
     {
-        if ($pot < 500000) {
-            return 2;
-        }
-        else if ($pot >= 500000 && $pot < 700000) {
-            return 2;
-        }
-        else if ($pot >= 700000 && $pot < 900000) {
-            return 3;
+        $pot = $toto->getPot();
+
+        $bookMaker = $toto->getBookMaker();
+
+        if ($bookMaker == 'betcity') {
+            if ($pot < 500000) {
+                return 2;
+            }
+            else if ($pot >= 500000 && $pot < 700000) {
+                return 2;
+            }
+            else if ($pot >= 700000 && $pot < 900000) {
+                return 3;
+            }
+            else {
+                return 4;
+            }
         }
         else {
-            return 4;
+            return 2;
         }
+
     }
 
 

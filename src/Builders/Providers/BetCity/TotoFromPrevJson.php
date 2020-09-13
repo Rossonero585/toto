@@ -9,16 +9,27 @@
 namespace Builders\Providers\BetCity;
 
 use Builders\Providers\TotoInterface;
+use \stdClass;
+use \DateTime;
+use \DateTimeZone;
 
 class TotoFromPrevJson implements TotoInterface
 {
-    /** @var  \stdClass */
+    /** @var  stdClass */
     private $obj;
 
-    public function __construct(\stdClass $obj)
+    public function __construct(stdClass $obj)
     {
         $this->obj = $obj;
     }
+
+    public function getTotoId(): string
+    {
+        $id = $this->obj->id_tt;
+
+        return $id."_betcity";
+    }
+
 
     public function getPot(): float
     {
@@ -30,12 +41,12 @@ class TotoFromPrevJson implements TotoInterface
         return $this->obj->jackpot;
     }
 
-    public function getDateTime(): \DateTime
+    public function getDateTime(): DateTime
     {
-        return \DateTime::createFromFormat(
+        return DateTime::createFromFormat(
             "Y-m-d H:i:s",
             $this->obj->dt_tt,
-            new \DateTimeZone('Europe/Moscow')
+            new DateTimeZone('Europe/Moscow')
         );
     }
 

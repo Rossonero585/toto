@@ -18,6 +18,13 @@ class TotoFromWebTest extends TestCase
         return new TotoFromWeb(json_decode(file_get_contents(__DIR__ . "./../../../samples/betcity/toto.json")));
     }
 
+    public function testGetId()
+    {
+        $provider = $this->createMockTotoProvider();
+
+        $this->assertEquals("4444884_betcity", $provider->getTotoId());
+    }
+
     public function testGetPot()
     {
         $provider = $this->createMockTotoProvider();

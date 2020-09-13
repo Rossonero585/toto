@@ -26,6 +26,7 @@ class TotoHelperTest extends TestCase
     protected function setUp()
     {
         $toto = new Toto(
+            '500_betcity',
             new \DateTime(),
             1000000,
             500000,

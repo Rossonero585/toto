@@ -7,14 +7,17 @@
  */
 
 namespace Builders\Providers;
+use \DateTime;
 
 interface TotoInterface
 {
+    public function getTotoId() : string ;
+
     public function getPot() : float;
 
     public function getJackPot() : float;
 
-    public function getDateTime() : \DateTime;
+    public function getDateTime() : DateTime;
 
     public function getEventCount() : int;
 

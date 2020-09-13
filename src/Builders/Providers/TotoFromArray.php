@@ -16,6 +16,11 @@ class TotoFromArray implements TotoInterface
         $this->row = $row;
     }
 
+    public function getTotoId(): string
+    {
+        return $this->row['id'];
+    }
+
     public function getPot(): float
     {
         return $this->row['pot'];

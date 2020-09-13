@@ -20,6 +20,13 @@ class TotoFromWebTest extends TestCase
         return new TotoFromWeb($json->d);
     }
 
+    public function testGetId()
+    {
+        $provider = $this->createMockTotoProvider();
+
+        $this->assertEquals("591_fonbet", $provider->getTotoId());
+    }
+
     public function testGetPot()
     {
         $provider = $this->createMockTotoProvider();
