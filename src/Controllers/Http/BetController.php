@@ -10,6 +10,7 @@ namespace Controllers\Http;
 
 use Builders\BetRequestBuilder;
 use Builders\Providers\BetRequestFromTotoDecision;
+use Builders\Providers\Factory\NextTotoProviderFactory;
 use Helpers\BetRequestHelper;
 use Helpers\Http\ClientFactory;
 use Helpers\Logger;
@@ -18,7 +19,6 @@ use Throwable;
 
 class BetController extends Controller
 {
-    const MIN_DEVIATION = 0.0;
 
     public function makeBet() : void
     {
@@ -37,6 +37,11 @@ class BetController extends Controller
         ));
 
         $this->logBet($betRequest);
+
+        if ($book == "fonbet" && !$this->checkPoolForFonBet($this->getEventsContent())) {
+            $this->sendResponse(400, 'do not pass conditions');
+            return;
+        }
 
         if (!$this->checkEvents($betRequest)) {
 
@@ -75,6 +80,32 @@ class BetController extends Controller
 
     private function checkEvents(BetRequest $betRequest)
     {
+        return true;
+    }
+
+    private function checkPoolForFonBet(string $eventsFile)
+    {
+        $matches = [];
+
+        preg_match_all("/Поставлено пул: (\d+\.\d+)/mu", $eventsFile, $matches);
+
+        $pools = $matches[1];
+
+        $lastPool = (float)array_pop($pools);
+
+        $nextPoolProvider = NextTotoProviderFactory::getNextTotoProvider("fonbet");
+
+        $toto = $nextPoolProvider->getToto();
+
+        if ((($toto->getPot() - $lastPool) / $toto->getPot()) > 0.1) {
+
+            $logger = Logger::getInstance();
+
+            $logger->log("bet", "Refuse to make bet", "Pot is not correct: ".$lastPool." of real pot at the moment: ".$toto->getPot());
+
+            return false;
+        }
+
         return true;
     }
 
