@@ -88,12 +88,12 @@ class FonBetClient implements ClientInterface
                 "json" => $clientInfo + [
                     "coupon" => [
                         "amount" => $bet->getMoney(),
-                        "totoId" => $this->totoId,
+                        "totoId" => (int)$this->totoId,
                         "win1Mask" => ArrayHelper::convertToFonBetFormat($bet->getResults(), "1"),
                         "win2Mask" => ArrayHelper::convertToFonBetFormat($bet->getResults(), "2"),
                         "drawMask" => ArrayHelper::convertToFonBetFormat($bet->getResults(), "X")
                     ],
-                    "requestId" => $registerId
+                    "requestId" => (int)$registerId
                 ]
             ]);
 
@@ -169,18 +169,18 @@ class FonBetClient implements ClientInterface
 
     private function writeResponseToFile(string $response)
     {
-        file_put_contents(self::fon_bet_token_file, $response);
+        file_put_contents(ROOT_DIR."/".self::fon_bet_token_file, $response);
     }
 
     private function readTokensFromFile()
     {
-        if (file_exists(self::fon_bet_token_file)) {
+        if (file_exists(ROOT_DIR."/".self::fon_bet_token_file)) {
 
-            $content = file_get_contents(self::fon_bet_token_file);
+            $content = file_get_contents(ROOT_DIR."/".self::fon_bet_token_file);
 
             if ($content) {
 
-                $updateTime = filemtime(self::fon_bet_token_file);
+                $updateTime = filemtime(ROOT_DIR."/".self::fon_bet_token_file);
 
                 if ((time() - $updateTime) < 3600) {
                     return $content;

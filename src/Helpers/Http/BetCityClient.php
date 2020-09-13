@@ -182,19 +182,19 @@ class BetCityClient implements ClientInterface
 
     public function writeTokensToFile($token, $totoHash) : void
     {
-        file_put_contents(self::bet_city_cache_file, $token.PHP_EOL);
-        file_put_contents(self::bet_city_cache_file, $totoHash, FILE_APPEND);
+        file_put_contents(ROOT_DIR."/".self::bet_city_cache_file, $token.PHP_EOL);
+        file_put_contents(ROOT_DIR."/".self::bet_city_cache_file, $totoHash, FILE_APPEND);
     }
 
     public function readTokensFromFile() : ?array
     {
-        if (file_exists(self::bet_city_cache_file)) {
+        if (file_exists(ROOT_DIR."/".self::bet_city_cache_file)) {
 
-            $content = file_get_contents(self::bet_city_cache_file);
+            $content = file_get_contents(ROOT_DIR."/".self::bet_city_cache_file);
 
             if ($content) {
 
-                $updateTime = filemtime(self::bet_city_cache_file);
+                $updateTime = filemtime(ROOT_DIR."/".self::bet_city_cache_file);
 
                 if ((time() - $updateTime) < 3600) {
                     return explode(PHP_EOL, $content);
