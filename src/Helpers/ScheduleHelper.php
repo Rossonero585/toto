@@ -58,7 +58,7 @@ class ScheduleHelper
             }
         }
         else {
-            return 2;
+            return 4;
         }
 
     }
