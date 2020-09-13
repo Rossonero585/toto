@@ -20,7 +20,7 @@ class ClientFactory
         }
 
         if ('fonbet' == $bookMaker) {
-            return new FonBetClient();
+            return new FonBetClient($totoId);
         }
         elseif ('betcity' == $bookMaker) {
             return new BetCityClient($totoId);

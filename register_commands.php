@@ -112,15 +112,13 @@ $commandManager->registerCommand('make_bet', function () {
 
 });
 
-$commandManager->registerCommand('betcity_tokens', function () use($arguments) {
+$commandManager->registerCommand('save_tokens', function () use($arguments) {
 
     $totoId = $arguments->get('t');
 
-    list($totoId, $bookmaker) = explode("_", $totoId);
-
     $cu = new UpdateController();
 
-    $cu->setBetCityTokens($totoId);
+    $cu->saveTokens($totoId);
 
 });
 

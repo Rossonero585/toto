@@ -15,7 +15,7 @@ use Builders\Providers\Factory\PoolProviderFactory;
 use Builders\TotoBuilder;
 use Helpers\ArrayHelper;
 use Helpers\EventsHelper;
-use Helpers\Http\BetCityClient;
+use Helpers\Http\ClientFactory;
 use Helpers\Logger;
 use Helpers\PoolHelper;
 use Helpers\TotoHelper;
@@ -334,10 +334,12 @@ class UpdateController
         $totoRepository->updateDeviation($eventHelper->getAverageDeviation());
     }
 
-    public function setBetCityTokens($totoId)
+    public function saveTokens($totoId)
     {
-        $betCityClient = new BetCityClient($totoId);
+        list($totoId, $bookMaker) = explode("_", $totoId);
 
-        $betCityClient->setTokens();
+        $client = ClientFactory::getClient($bookMaker, $totoId);
+
+        $client->setTokens();
     }
 }
