@@ -37,4 +37,10 @@ class TestClient implements ClientInterface
         Logger::getInstance()->log('test_bets', "Successfully test bet {$this->totoId} in {$this->bookMaker}", $betContent);
     }
 
+    public function setTokens(): void
+    {
+        return;
+    }
+
+
 }
