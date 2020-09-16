@@ -28,7 +28,7 @@ class CheckController
 
         $nextToto = $nextTotoProvider->getToto();
 
-        if ($nextToto->getId() == $this->getLastBetTotoId($nextToto->getBookMaker())) {
+        if (!$nextToto || $nextToto->getId() == $this->getLastBetTotoId($nextToto->getBookMaker())) {
             return;
         }
 

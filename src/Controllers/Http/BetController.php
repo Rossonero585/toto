@@ -97,6 +97,15 @@ class BetController extends Controller
 
         $toto = $nextPoolProvider->getToto();
 
+        if (!$toto) {
+
+            $logger = Logger::getInstance();
+
+            $logger->log("bet", "Refuse to make bet", "Can't receive next toto");
+
+            return false;
+        }
+
         if ((($toto->getPot() - $lastPool) / $toto->getPot()) > 0.1) {
 
             $logger = Logger::getInstance();
