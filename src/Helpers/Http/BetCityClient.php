@@ -196,7 +196,7 @@ class BetCityClient implements ClientInterface
 
                 $updateTime = filemtime(ROOT_DIR."/".self::bet_city_cache_file);
 
-                if ((time() - $updateTime) < 3600) {
+                if ((time() - $updateTime) < 900) {
                     return explode(PHP_EOL, $content);
                 }
             }

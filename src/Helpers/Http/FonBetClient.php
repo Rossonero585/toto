@@ -182,7 +182,7 @@ class FonBetClient implements ClientInterface
 
                 $updateTime = filemtime(ROOT_DIR."/".self::fon_bet_token_file);
 
-                if ((time() - $updateTime) < 3600) {
+                if ((time() - $updateTime) < 900) {
                     return $content;
                 }
             }
