@@ -91,6 +91,17 @@ $commandManager->registerCommand('update_random_bet_ev', function () use ($argum
 });
 
 
+$commandManager->registerCommand('update_temp', function () use ($arguments) {
+
+    $totoId = $arguments->get('t');
+
+    $cu = new UpdateController();
+
+    $cu->updateAvgPAndDeviation($totoId);
+
+});
+
+
 $commandManager->registerCommand('update_result', function () use ($arguments) {
 
     $totoId = $arguments->get('t');

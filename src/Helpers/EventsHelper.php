@@ -145,7 +145,7 @@ class EventsHelper
         }, $this->getEvents());
     }
 
-    public function getMarginAMatrix(float $minP)
+    public function getMarginMatrix(float $minP)
     {
         return array_map(function (Event $event) use ($minP) {
 
@@ -158,5 +158,49 @@ class EventsHelper
             return $itemArray;
 
         }, $this->getEvents());
+    }
+
+    public function getAverageProbability(array $bet)
+    {
+        $bet = array_map(function ($s) {
+            return strtoupper((string)$s);
+        }, $bet);
+
+        $p = $this->calculateProbabilityOfAllEvents($bet);
+
+        return pow($p, 1 / count($bet));
+    }
+
+    public function getAverageDeviationOfBet(array $bet)
+    {
+        if (count($bet) !== count($this->events)) {
+            throw new Exception("Bet length is not correct");
+        }
+
+        $d = 0;
+
+        foreach ($bet as $key => $i) {
+
+            $tempD = 0;
+
+            $eventId = $key + 1;
+
+            $event = $this->events[$eventId];
+
+
+            if ('1' == $i) {
+                $tempD = $event->getP1() * ($event->getP1() - $event->getS1());
+            }
+            elseif ('2' == $i) {
+                $tempD = $event->getP2() * ($event->getP2() - $event->getS2());
+            }
+            elseif ('X' == $i || 'x' == $i) {
+                $tempD = $event->getPx() * ($event->getPx() - $event->getSx());
+            }
+
+            $d = $d + $tempD;
+        }
+
+        return $d;
     }
 }

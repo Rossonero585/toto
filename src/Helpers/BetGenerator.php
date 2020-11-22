@@ -2,12 +2,8 @@
 
 namespace Helpers;
 
-use Models\Event;
-
-
 class BetGenerator
 {
-    const MIN_P = 0.285;
 
     private $eventsHelper;
 
@@ -18,21 +14,75 @@ class BetGenerator
 
     public function generateBets()
     {
-        $margins = $this->eventsHelper->getMarginAMatrix(self::MIN_P);
+        $minP = (float)$_ENV['MIN_P'];
+        $minAvgP = (float)$_ENV['MIN_AVG_P'];
+        $maxDeviation = (float)$_ENV['MAX_D'];
+        $maxPackageSize = (int)$_ENV['MAX_PACKAGE_SIZE'];
+
+        $matrix = $this->getRelativeMatrix($minP);
+
+        $optimalOutcomes = $this->convertToPlainArray($matrix);
+
+        arsort($optimalOutcomes);
+
+        $requiredOutcomes = $this->getRequiredOutcomes($minP);
+
+        $bestMarginOutcomes = [];
+
+        $output = array_merge($requiredOutcomes, $bestMarginOutcomes);
+
+        $count = 0;
+
+        foreach ($optimalOutcomes as $key => $outcome) {
+            if (!isset($output[$key])) {
+                $output[$key] = $outcome;
+                $count++;
+            }
+
+            if ($count > 8) break;
+        }
+
+        $outcomes = $this->plainArrayToMultiArray($output);
+
+        ksort($outcomes);
+
+        $resultArray = $this->convertMultiArrayToResult($outcomes);
+
+        $allBets =  ArrayHelper::array_combination($resultArray);
+
+        $i = 0;
+
+        $out = [];
+
+        /** @var array $bet */
+        foreach ($allBets as $bet) {
+            $p = $this->eventsHelper->getAverageProbability($bet);
+            $deviation = $this->eventsHelper->getAverageDeviationOfBet($bet);
+
+            if ($p >= $minAvgP && $deviation >= $maxDeviation) {
+                $i++;
+                array_push($out, $bet);
+            }
+
+            if ($i >= $maxPackageSize) break;
+        }
+
+        return $out;
+    }
+
+    private function getRelativeMatrix($minP)
+    {
+        $margins = $this->eventsHelper->getMarginMatrix($minP);
 
         $maxMargin = $this->getMaxOfArrays($margins);
 
         $relativeMargins = $this->getRelativeArray($margins, $maxMargin);
 
-        $this->dumpArrayToFile($relativeMargins);
-
-        $probabilities = $this->eventsHelper->getProbabilityMatrix(self::MIN_P);
+        $probabilities = $this->eventsHelper->getProbabilityMatrix($minP);
 
         $maxP = $this->getMaxOfArrays($probabilities);
 
         $relativeProbabilities = $this->getRelativeArray($probabilities, $maxP);
-
-        $this->dumpArrayToFile($relativeProbabilities);
 
         $priorityArray = [];
 
@@ -47,49 +97,40 @@ class BetGenerator
             array_push($priorityArray, $eventArray);
         }
 
-        $this->dumpArrayToFile($probabilities);
-        $this->dumpArrayToFile($priorityArray);
+        return $priorityArray;
+    }
 
-        $plainPriorityArray = $this->convertToPlainArray($priorityArray);
+    private function getBestMarginOutcomes()
+    {
+        $margins = $this->eventsHelper->getMarginMatrix(0);
 
-        $requiredOutcomes = $this->getPlainArrayOfMaxOfEachSubArray($priorityArray);
+        $plainArray = $this->convertToPlainArray($margins);
 
-        arsort($plainPriorityArray);
+        arsort($plainArray);
 
-        $bestOutcomes = $requiredOutcomes;
+        return array_slice($plainArray, 0,4);
+    }
 
-        $count = 0;
+    private function getRequiredOutcomes($minP) : array
+    {
+        $items = $this->getRelativeMatrix($minP);
 
-        foreach ($plainPriorityArray as $key => $outcome) {
-            if (!isset($requiredOutcomes[$key])) {
-                $bestOutcomes[$key] = $outcome;
-                $count++;
+        $plainArray = [];
+
+        foreach ($items as $key => $subItem) {
+            $multiKey = $key."_";
+            $max = -10e10;
+            $maxKey = 0;
+            foreach ($subItem as $subKey => $item) {
+                if ($item > $max) {
+                    $max = $item;
+                    $maxKey = $multiKey.$subKey;
+                }
             }
-
-            if ($count > 6) break;
+            $plainArray[$maxKey] = $max;
         }
 
-        $outcomes = $this->plainArrayToMultiArray($bestOutcomes);
-
-        ksort($outcomes);
-
-        $resultArray = $this->convertMultiArrayToResult($outcomes);
-
-//        var_dump($resultArray);
-
-        $this->dumpArrayToFile($resultArray);
-
-        $comb = ArrayHelper::array_combination($resultArray);
-
-        $this->dumpArrayToFile($comb);
-
-
-//
-//        do {
-//
-//
-//        } while ($i < 10e10);
-
+        return $plainArray;
     }
 
     private function getMaxOfArrays(array $items) : float
@@ -107,25 +148,6 @@ class BetGenerator
         return $max;
     }
 
-    private function getPlainArrayOfMaxOfEachSubArray(array $items) : array
-    {
-        $plainArray = [];
-
-        foreach ($items as $key => $subItem) {
-            $multiKey = $key."_";
-            $max = -1;
-            $maxKey = 0;
-            foreach ($subItem as $subKey => $item) {
-                if ($item > $max) {
-                    $max = $item;
-                    $maxKey = $multiKey.$subKey;
-                }
-            }
-            $plainArray[$maxKey] = $max;
-        }
-
-        return $plainArray;
-    }
 
     private function getRelativeArray(array $items, $max) : array
     {

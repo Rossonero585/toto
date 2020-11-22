@@ -9,8 +9,14 @@
 namespace Controllers\Http;
 
 use Builders\BetRequestBuilder;
+use Builders\EventBuilder;
+use Builders\Providers\BetRequestFromGenerator;
 use Builders\Providers\BetRequestFromTotoDecision;
+use Builders\Providers\Factory\DataProviderFactory;
+use Builders\Providers\Factory\EventProviderFactory;
+use Helpers\BetGenerator;
 use Helpers\BetRequestHelper;
+use Helpers\EventsHelper;
 use Helpers\Http\ClientFactory;
 use Helpers\Logger;
 use Models\Input\BetRequest;
@@ -18,8 +24,6 @@ use Throwable;
 
 class BetController extends Controller
 {
-    const MIN_DEVIATION = 0.0;
-
     public function makeBet() : void
     {
         $logger = Logger::getInstance();
@@ -28,13 +32,45 @@ class BetController extends Controller
 
         list($totoId, $book) = explode("_", $_REQUEST['toto_id']);
 
-        $betRequest = $betBuilder->createBetRequest(new BetRequestFromTotoDecision(
-            $totoId,
-            $book,
-            $this->getBetsContent(),
-            $this->getEventsContent(),
-            (bool)$_REQUEST['is_test']
-        ));
+        if ($_REQUEST['is_bet_generator']) {
+
+            $dataProvider  = DataProviderFactory::createDataProvider($book, $totoId);
+
+            $eventsJson = $dataProvider->getEvents();
+
+            $events = [];
+
+            foreach ($eventsJson as $key => $item) {
+
+                $eventProvider = EventProviderFactory::createEventProvider($book, $item, 'en', $key + 1);
+
+                $event = EventBuilder::createEvent($eventProvider);
+
+                array_push($events, $event);
+            }
+
+            $eventHelper = new EventsHelper($events);
+
+            $betGenerator = new BetGenerator($eventHelper);
+
+            $betRequestProvider = new BetRequestFromGenerator(
+                $totoId,
+                $book,
+                $betGenerator->generateBets(),
+                (bool)$_REQUEST['is_test']
+            );
+        }
+        else {
+            $betRequestProvider = new BetRequestFromTotoDecision(
+                $totoId,
+                $book,
+                $this->getBetsContent(),
+                $this->getEventsContent(),
+                (bool)$_REQUEST['is_test']
+            );
+        }
+
+        $betRequest = $betBuilder->createBetRequest($betRequestProvider);
 
         $this->logBet($betRequest);
 
