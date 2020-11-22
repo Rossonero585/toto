@@ -17,7 +17,7 @@ class BetGenerator
         $minP = (float)$_ENV['MIN_P'];
         $minAvgP = (float)$_ENV['MIN_AVG_P'];
         $maxDeviation = (float)$_ENV['MAX_D'];
-        $maxPackageSize = (int)$_ENV['MAX_PACKAGE_SIZE'];
+        $maxPackageSize = (int)$_ENV['BETS_COUNT'];
 
         $matrix = $this->getRelativeMatrix($minP);
 
