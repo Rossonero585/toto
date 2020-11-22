@@ -44,7 +44,7 @@ class DataProvider implements DataProviderInterface
 
     private function loadJsonData()
     {
-        $content = $this->client->get("/d/se/one?id={$this->totoId}")->getBody()->getContents();
+        $content = $this->client->get("/d/supers/one?id={$this->totoId}")->getBody()->getContents();
 
         $this->json = json_decode($content);
     }

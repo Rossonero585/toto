@@ -9,7 +9,7 @@
 namespace Builders\Providers;
 
 use Models\Event;
-use Models\Bet;
+use Models\Input\Bet;
 
 interface BetRequestInterface
 {

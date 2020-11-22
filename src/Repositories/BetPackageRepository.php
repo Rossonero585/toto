@@ -63,7 +63,7 @@ EOD;
             return new BetPackage(
                 $arr['id'],
                 $arr['money'],
-                $arr['probability'],
+                $arr['p'],
                 $arr['ev'],
                 $arr['income'],
                 (bool)$arr['is_test']
@@ -84,7 +84,7 @@ EOD;
         $sql = <<<EOD
 UPDATE {$tableName}
 SET ev = :ev,
-    probability = :p
+    p = :p
 WHERE id =:id
 EOD;
         $st = $this->getCachedStatement($sql);
