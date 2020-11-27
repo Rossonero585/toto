@@ -39,7 +39,7 @@ class BetGenerator
                 $count++;
             }
 
-            if ($count > 8) break;
+            if ($count > 12) break;
         }
 
         $outcomes = $this->plainArrayToMultiArray($output);
