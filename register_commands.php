@@ -156,6 +156,17 @@ $commandManager->registerCommand('calculate_ratio', function () use($arguments) 
 });
 
 
+$commandManager->registerCommand('calculate_package_by_categories', function () use($arguments) {
+
+    $cu = new CalculationController();
+
+    $p = $cu->calculateProbabilityOfPackageByCategories($arguments->get('id'));
+
+    var_dump($p);
+});
+
+
+
 $commandManager->registerCommand('test_bet_generator', function () use ($arguments) {
 
     $cu = new CalculationController();
