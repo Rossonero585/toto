@@ -216,6 +216,36 @@ class UpdateController
         $this->updateBetEv($bet);
     }
 
+    public function updateAvgPAndDeviation($totoId)
+    {
+        /** @var BetPackageRepository $betPackageRepository */
+        $betPackageRepository = Repository::getRepository(BetPackageRepository::class);
+
+        /** @var BetItemRepository $betItemsRepository */
+        $betItemsRepository = Repository::getRepository(BetItemRepository::class);
+
+        /** @var EventRepository $eventsRepository */
+        $eventsRepository = Repository::getRepository(EventRepository::class);
+
+        $eventHelper = new EventsHelper($eventsRepository->getAll());
+
+        $betPackages = $betPackageRepository->getAllPackages();
+
+        foreach ($betPackages as $package) {
+
+            $bets = $betItemsRepository->getBetsOfPackageWithNotNullEv($package->getId());
+
+            foreach ($bets as $i => $bet) {
+
+                $betItemsRepository->updateBetItemDev(
+                    $bet->getId(),
+                    $eventHelper->getAverageProbability($bet->getResults()),
+                    $eventHelper->getAverageDeviationOfBet($bet->getResults())
+                );
+            }
+        }
+    }
+
     private function updateBetEv(Bet $bet)
     {
         $cc = new CalculationController();
@@ -307,7 +337,7 @@ class UpdateController
 
                 if ($countMatch >= $toto->getMinWinnerCount()) {
 
-                    $ratio = $totoHelper->getRatioByWinCount($countMatch, $breakDown);
+                    $ratio = $totoHelper->getRatioByWinCount($countMatch, $breakDown, true, true);
 
                     $income = $ratio * $bet->getMoney();
                 }

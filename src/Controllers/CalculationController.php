@@ -13,6 +13,7 @@ use Helpers\ArrayHelper;
 use Helpers\EventsHelper;
 use Helpers\PoolHelper;
 use Helpers\TotoHelper;
+use Repositories\BetItemRepository;
 use Repositories\EventRepository;
 use Repositories\Repository;
 use Repositories\TotoRepository;
@@ -103,8 +104,6 @@ class CalculationController
             $ratio = $totoHelper->getRatioByWinCount($countMatch, $breakDown, $includeBet);
 
             $m = $m + $p * $ratio * $betSize;
-
-            $pWin = $pWin + $p;
 
             if ($tempCount % 10000 === 0) {
 
@@ -197,6 +196,71 @@ class CalculationController
         }
 
         return $sumP;
+    }
+
+
+    public function calculateProbabilityOfPackageByCategories(int $packageId)
+    {
+        /** @var BetItemRepository $betItemRepository */
+        $betItemRepository = Repository::getRepository(BetItemRepository::class);
+
+        $bets = $betItemRepository->geBetsOfPackage($packageId);
+
+        /** @var TotoRepository $totoRepository */
+        $totoRepository = Repository::getRepository(TotoRepository::class);
+
+        $toto = $totoRepository->getToto();
+
+        $totoHelper = new TotoHelper($toto, 50);
+
+        /** @var EventRepository $eventRepository */
+        $eventRepository = Repository::getRepository(EventRepository::class);
+
+        $eventHelper = new EventsHelper($eventRepository->getAll());
+
+        $winnerCombinations = array_keys($toto->getWinnerCounts());
+
+        $map = [];
+
+        $probabilities = [];
+
+        foreach ($winnerCombinations as $count) {
+            $probabilities[$count] = 0;
+        }
+
+        foreach ($bets as $betModel) {
+
+            $bet = $betModel->getResults();
+
+            foreach ($totoHelper->iterateWinnerCombinations($bet) as $betItem) {
+
+                $countMatch = ArrayHelper::countMatchValues($betItem, $bet);
+
+                $p = $eventHelper->calculateProbabilityOfAllEvents($betItem);
+
+                $key = implode("", $betItem);
+
+                if (!isset($map[$key])) {
+
+                    $map[$key] = $countMatch;
+
+                    while(isset($probabilities[$countMatch])) {
+                        $probabilities[$countMatch] += $p;
+                        $countMatch--;
+                    }
+                }
+                else {
+                    if ($map[$key] < $countMatch) {
+                        for ($i = $map[$key] + 1; $i <= $countMatch; $i++) {
+                            $probabilities[$i] += $p;
+                        }
+                        $map[$key] = $countMatch;
+                    }
+                }
+            }
+        }
+
+        return $probabilities;
     }
 
     public function calculateEvOfPackage($pathToFile)

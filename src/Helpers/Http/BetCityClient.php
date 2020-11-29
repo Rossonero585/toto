@@ -17,9 +17,9 @@ class BetCityClient implements ClientInterface
     const csn = "ooca9s";
 
     const authUrl = "/d/user/auth";
-    const check = "/d/supex/check";
-    const bet = "/d/supex/check_cmx";
-    const getToto = "/d/supex/one";
+    const check = "/d/supers/check";
+    const bet = "/d/supers/check_cmx";
+    const getToto = "/d/supers/one";
 
     const mainHeaders = [
         "Accept" => "application/json, text/plain, */*",

@@ -91,6 +91,17 @@ $commandManager->registerCommand('update_random_bet_ev', function () use ($argum
 });
 
 
+$commandManager->registerCommand('update_temp', function () use ($arguments) {
+
+    $totoId = $arguments->get('t');
+
+    $cu = new UpdateController();
+
+    $cu->updateAvgPAndDeviation($totoId);
+
+});
+
+
 $commandManager->registerCommand('update_result', function () use ($arguments) {
 
     $totoId = $arguments->get('t');
@@ -142,6 +153,25 @@ $commandManager->registerCommand('calculate_ratio', function () use($arguments) 
     echo ($end - $start);
 });
 
+
+$commandManager->registerCommand('calculate_package_by_categories', function () use($arguments) {
+
+    $cu = new CalculationController();
+
+    $p = $cu->calculateProbabilityOfPackageByCategories($arguments->get('id'));
+
+    var_dump($p);
+});
+
+
+
+$commandManager->registerCommand('test_bet_generator', function () use ($arguments) {
+
+    $cu = new CalculationController();
+
+    $cu->testBetGenerator();
+
+});
 
 function test_log($str) {
 

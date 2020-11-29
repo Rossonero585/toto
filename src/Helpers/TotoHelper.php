@@ -11,6 +11,7 @@ namespace Helpers;
 use drupol\phpermutations\Generators\Combinations;
 use Models\BreakDown;
 use Models\Toto;
+use \Exception;
 
 class TotoHelper
 {
@@ -28,7 +29,7 @@ class TotoHelper
         $this->bet = $bet;
     }
 
-    public function getRatioByWinCount(int $count, BreakDown $breakDown, $includeBet = true)
+    public function getRatioByWinCount(int $count, BreakDown $breakDown, $includeBet = true, $includeJackPot = false)
     {
         $winCounts = array_keys($this->toto->getWinnerCounts());
 
@@ -37,7 +38,7 @@ class TotoHelper
         $minWinCount = min($winCounts);
 
         if ($count <= 0 || $count > $maxWinCount) {
-            throw new \Exception("The count of events is out of range");
+            throw new Exception("The count of events is out of range");
         }
 
         if (!in_array($count, $winCounts)) {
@@ -51,7 +52,7 @@ class TotoHelper
 
             $betPot = $breakDownItem ? $breakDownItem->getPot() : 0;
 
-            $pot = $this->getPotForWinCount($count);
+            $pot = $this->getPotForWinCount($count, $includeJackPot);
 
             $ratio = $ratio + $pot / ($includeBet ? $this->bet + $betPot : $betPot);
 
@@ -69,7 +70,7 @@ class TotoHelper
         $maxWinCount = max($winCounts);
 
         if ($cat <= 0 || $cat > $maxWinCount) {
-            throw new \Exception("The count of events is out of range");
+            throw new Exception("The count of events is out of range");
         }
 
         if (!in_array($cat, $winCounts)) {
@@ -80,7 +81,7 @@ class TotoHelper
 
         $betPot = $breakDownItem ? $breakDownItem->getPot() : 0;
 
-        $pot = $this->getPotForWinCount($cat);
+        $pot = $this->getPotForWinCount($cat, true);
 
         return ($pot + $this->bet) / ($betPot + $this->bet);
 
@@ -89,7 +90,7 @@ class TotoHelper
     public function iterateWinnerCombinations(array $bet)
     {
         if (count($bet) != $this->toto->getEventCount()) {
-            throw new \Exception("Count of events doesn't match toto");
+            throw new Exception("Count of events doesn't match toto");
         }
 
         $winnerCounts = array_keys($this->toto->getWinnerCounts());
@@ -111,7 +112,7 @@ class TotoHelper
         }
     }
 
-    private function getPotForWinCount(int $count)
+    private function getPotForWinCount(int $count, bool $includeJackPot)
     {
         $winCounts = $this->toto->getWinnerCounts();
 
@@ -121,7 +122,7 @@ class TotoHelper
 
         $pot = $winCounts[$count] * ($this->toto->getPot() + $this->bet);
 
-        if ($this->toto->getEventCount() == $count) {
+        if ($includeJackPot && $this->toto->getEventCount() == $count) {
             $pot = $pot + $this->toto->getJackPot();
         }
 

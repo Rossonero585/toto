@@ -14,7 +14,7 @@ class PoolProvider implements PoolProviderInterface
 
     public function __construct(int $totoId)
     {
-        $this->dump = file_get_contents($_ENV['BET_CITY_URL']."/supex/dump/$totoId.txt");
+        $this->dump = file_get_contents($_ENV['BET_CITY_URL']."/supers/dump/$totoId.txt");
     }
 
     public function getPoolItem() : Generator

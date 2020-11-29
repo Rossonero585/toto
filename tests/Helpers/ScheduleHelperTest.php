@@ -30,7 +30,7 @@ class ScheduleHelperTest extends TestCase
             'fonbet'
         );
 
-        $this->assertEquals(2, $scheduleHelper->getTimeForRun($toto));
+        $this->assertEquals(4, $scheduleHelper->getTimeForRun($toto));
 
 
         $toto = new Toto(
@@ -43,7 +43,7 @@ class ScheduleHelperTest extends TestCase
             'betcity'
         );
 
-        $this->assertEquals(4, $scheduleHelper->getTimeForRun($toto));
+        $this->assertEquals(1, $scheduleHelper->getTimeForRun($toto));
 
 
         $toto = new Toto(

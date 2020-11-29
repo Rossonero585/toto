@@ -8,23 +8,11 @@
 
 namespace Builders\Providers;
 
-use Builders\EventBuilder;
-use Builders\Providers\Factory\DataProviderFactory;
-use Builders\Providers\Factory\EventProviderFactory;
 use Helpers\FileParser;
 use Models\Input\Bet;
 
-class BetRequestFromTotoDecision implements BetRequestInterface
+class BetRequestFromTotoDecision extends BetRequest implements BetRequestInterface
 {
-    /**
-     * @var string
-     */
-    private $totoId;
-
-    /**
-     * @var string
-     */
-    private $bookMaker;
 
     /**
      * @var string
@@ -37,11 +25,6 @@ class BetRequestFromTotoDecision implements BetRequestInterface
     private $eventsFile;
 
     /**
-     * @var bool
-     */
-    private $isTest;
-
-    /**
      * BetRequestFromTotoDecision constructor.
      * @param string $totoId
      * @param string $bookMaker
@@ -51,11 +34,10 @@ class BetRequestFromTotoDecision implements BetRequestInterface
      */
     public function __construct(string $totoId, string $bookMaker, string $betsFile, string $eventsFile, bool $isTest = false)
     {
-        $this->totoId     = $totoId;
-        $this->bookMaker  = $bookMaker;
+        parent::__construct($totoId, $bookMaker, $isTest);
+
         $this->betsFile   = $betsFile;
         $this->eventsFile = $eventsFile;
-        $this->isTest     = $isTest;
     }
 
     public function getTotoId() : string
@@ -70,7 +52,7 @@ class BetRequestFromTotoDecision implements BetRequestInterface
 
     public function getEvents() : array
     {
-        return $this->getEventsArray();
+        return $this->getEventsArray($this->eventsFile);
     }
 
     public function isTest() : bool
@@ -110,30 +92,6 @@ class BetRequestFromTotoDecision implements BetRequestInterface
                 str_split($arr['cupon'])
             );
         }, $betsArray);
-    }
-
-    private function getEventsArray()
-    {
-        $eventsAssoc = FileParser::parseFileWithEvents($this->eventsFile);
-
-        $dataProvider  = DataProviderFactory::createDataProvider($this->bookMaker, $this->totoId);
-
-        $out = [];
-
-        foreach ($dataProvider->getEvents() as $key => $jsonEvent)
-        {
-            $number = $key + 1;
-
-            $event = EventBuilder::createEvent(new EventFromMixedSource(
-                EventProviderFactory::createEventProvider($this->bookMaker, $jsonEvent, 'ru', $number),
-                new EventFromArray($eventsAssoc[$key]),
-                $number
-            ));
-
-            array_push($out, $event);
-        }
-
-        return $out;
     }
 
 }

@@ -9,6 +9,8 @@ namespace Controllers;
 
 use Builders\Providers\Factory\NextTotoProviderFactory;
 use Helpers\ScheduleHelper;
+use \DateTime;
+use \DateTimeZone;
 use Models\Toto;
 
 class CheckController
@@ -48,7 +50,7 @@ class CheckController
 
         $startTime = $toto->getStartTime();
 
-        $startTime->setTimezone(new \DateTimeZone('UTC'));
+        $startTime->setTimezone(new DateTimeZone('UTC'));
 
         $cloneStartTime = clone $startTime;
 
@@ -96,10 +98,10 @@ class CheckController
 
     private function getCurrentDateTime()
     {
-        return new \DateTime('now', new \DateTimeZone('UTC'));
+        return new DateTime('now', new DateTimeZone('UTC'));
     }
 
-    private function compareMinutes(\DateTime $dateTime1, \DateTime $dateTime2)
+    private function compareMinutes(DateTime $dateTime1, DateTime $dateTime2)
     {
         $h1 = (int)$dateTime1->format('H');
         $m1 = (int)$dateTime1->format('i');

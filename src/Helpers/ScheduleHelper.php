@@ -45,16 +45,16 @@ class ScheduleHelper
 
         if ($bookMaker == 'betcity') {
             if ($pot < 500000) {
-                return 2;
+                return 1;
             }
             else if ($pot >= 500000 && $pot < 700000) {
-                return 2;
+                return 1;
             }
             else if ($pot >= 700000 && $pot < 900000) {
-                return 3;
+                return 1;
             }
             else {
-                return 4;
+                return 1;
             }
         }
         else {

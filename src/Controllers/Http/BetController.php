@@ -9,6 +9,7 @@
 namespace Controllers\Http;
 
 use Builders\BetRequestBuilder;
+use Builders\Providers\BetRequestFromGenerator;
 use Builders\Providers\BetRequestFromTotoDecision;
 use Builders\Providers\Factory\NextTotoProviderFactory;
 use Helpers\BetRequestHelper;
@@ -28,13 +29,27 @@ class BetController extends Controller
 
         list($totoId, $book) = explode("_", $_REQUEST['toto_id']);
 
-        $betRequest = $betBuilder->createBetRequest(new BetRequestFromTotoDecision(
-            $totoId,
-            $book,
-            $this->getBetsContent(),
-            $this->getEventsContent(),
-            (bool)$_REQUEST['is_test']
-        ));
+        $isTest = isset($_REQUEST['is_test']) ? (bool)$_REQUEST['is_test'] : false;
+
+        if ($_REQUEST['is_bet_generator']) {
+            $betRequestProvider = new BetRequestFromGenerator(
+                $totoId,
+                $book,
+                $this->getEventsContent(),
+                $isTest
+            );
+        }
+        else {
+            $betRequestProvider = new BetRequestFromTotoDecision(
+                $totoId,
+                $book,
+                $this->getBetsContent(),
+                $this->getEventsContent(),
+                $isTest
+            );
+        }
+
+        $betRequest = $betBuilder->createBetRequest($betRequestProvider);
 
         $this->logBet($betRequest);
 
@@ -133,11 +148,19 @@ class BetController extends Controller
 
     private function getEventsContent()
     {
-        return file_get_contents($_FILES['events_file']['tmp_name']);
+        if (isset($_FILES['events_file']['tmp_name'])) {
+            return file_get_contents($_FILES['events_file']['tmp_name']);
+        }
+
+        return '';
     }
 
     private function getBetsContent()
     {
-        return file_get_contents($_FILES['bets_file']['tmp_name']);
+        if (isset($_FILES['bets_file']['tmp_name'])) {
+            return file_get_contents($_FILES['bets_file']['tmp_name']);
+        }
+
+        return '';
     }
 }
