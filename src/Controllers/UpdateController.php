@@ -337,7 +337,7 @@ class UpdateController
 
                 if ($countMatch >= $toto->getMinWinnerCount()) {
 
-                    $ratio = $totoHelper->getRatioByWinCount($countMatch, $breakDown);
+                    $ratio = $totoHelper->getRatioByWinCount($countMatch, $breakDown, true, true);
 
                     $income = $ratio * $bet->getMoney();
                 }

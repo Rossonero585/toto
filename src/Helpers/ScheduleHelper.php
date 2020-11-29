@@ -9,6 +9,8 @@
 namespace Helpers;
 
 use Models\Toto;
+use \DateTime;
+use \DateTimeZone;
 
 class ScheduleHelper
 {
@@ -17,7 +19,7 @@ class ScheduleHelper
     {
         $totoStart = $toto->getStartTime();
 
-        $totoStart->setTimezone(new \DateTimeZone('UTC'));
+        $totoStart->setTimezone(new DateTimeZone('UTC'));
 
         $timeToToto = $this->getTimeToTotoInSeconds($totoStart);
 
@@ -28,9 +30,9 @@ class ScheduleHelper
         return -1;
     }
 
-    private function getTimeToTotoInSeconds(\DateTime $dateTime)
+    private function getTimeToTotoInSeconds(DateTime $dateTime)
     {
-        $current = new \DateTime('now', new \DateTimeZone('UTC'));
+        $current = new DateTime('now', new DateTimeZone('UTC'));
 
         return $dateTime->getTimestamp() - $current->getTimestamp();
     }
@@ -38,16 +40,16 @@ class ScheduleHelper
     private function getTimeToRunInMinutes(float $pot)
     {
         if ($pot < 500000) {
-            return 2;
+            return 1;
         }
         else if ($pot >= 500000 && $pot < 700000) {
-            return 2;
+            return 1;
         }
         else if ($pot >= 700000 && $pot < 900000) {
-            return 3;
+            return 1;
         }
         else {
-            return 4;
+            return 1;
         }
     }
 

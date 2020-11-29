@@ -87,7 +87,7 @@ class TotoHelperTest extends TestCase
 
         $this->assertEquals((0.3*1000000 / 30000 + 0.2*1000000 / 20000 + 0.15*1000000 / 10000), $ratio);
 
-        $ratio = $this->totoHelper->getRatioByWinCount(14, $breakDown);
+        $ratio = $this->totoHelper->getRatioByWinCount(14, $breakDown, true, true);
 
         $this->assertEquals(
             (
