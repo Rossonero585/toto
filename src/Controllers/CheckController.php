@@ -10,6 +10,8 @@ namespace Controllers;
 use Builders\Providers\BetCity\TotoFromPrevJson;
 use Builders\TotoBuilder;
 use Helpers\ScheduleHelper;
+use \DateTime;
+use \DateTimeZone;
 
 class CheckController
 {
@@ -24,7 +26,7 @@ class CheckController
 
         $betcityUrl = $_ENV['BET_CITY_URL'];
 
-        $content = file_get_contents($betcityUrl."/d/supex/list/cur?page=1&rev=2&ver=54&csn=ooca9s");
+        $content = file_get_contents($betcityUrl."/d/supers/list/cur?page=1&rev=2&ver=54&csn=ooca9s");
 
         $obj = json_decode($content);
 
@@ -58,7 +60,7 @@ class CheckController
 
                     $startTime = $toto->getStartTime();
 
-                    $startTime->setTimezone(new \DateTimeZone('UTC'));
+                    $startTime->setTimezone(new DateTimeZone('UTC'));
 
                     $cloneStartTime = clone $startTime;
 
@@ -107,10 +109,10 @@ class CheckController
 
     private function getCurrentDateTime()
     {
-        return new \DateTime('now', new \DateTimeZone('UTC'));
+        return new DateTime('now', new DateTimeZone('UTC'));
     }
 
-    private function compareMinutes(\DateTime $dateTime1, \DateTime $dateTime2)
+    private function compareMinutes(DateTime $dateTime1, DateTime $dateTime2)
     {
         $h1 = (int)$dateTime1->format('H');
         $m1 = (int)$dateTime1->format('i');
