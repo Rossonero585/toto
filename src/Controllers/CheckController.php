@@ -18,7 +18,7 @@ class CheckController
 
     const CACHE_FILE = "last_bet_toto.txt";
 
-    public function scheduleToto()
+    public function scheduleToto(string $bookmaker)
     {
         ini_set("display_errors", 0);
 
@@ -26,7 +26,7 @@ class CheckController
 
         $nextTotoProviderFactory = new NextTotoProviderFactory();
 
-        $nextTotoProvider = $nextTotoProviderFactory::getNextTotoProvider('betcity');
+        $nextTotoProvider = $nextTotoProviderFactory::getNextTotoProvider($bookmaker);
 
         $nextToto = $nextTotoProvider->getToto();
 

@@ -30,11 +30,13 @@ $commandManager->registerCommand('insertion', function () use ($arguments) {
 
 });
 
-$commandManager->registerCommand('schedule', function () {
+$commandManager->registerCommand('schedule', function () use ($arguments) {
 
     $cc = new CheckController();
 
-    $cc->scheduleToto();
+    $bookmaker = $arguments->get('b');
+
+    $cc->scheduleToto($bookmaker);
 
 });
 
