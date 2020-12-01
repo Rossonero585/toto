@@ -26,7 +26,7 @@ class CheckController
 
         $nextTotoProviderFactory = new NextTotoProviderFactory();
 
-        $nextTotoProvider = $nextTotoProviderFactory::getNextTotoProvider('fonbet');
+        $nextTotoProvider = $nextTotoProviderFactory::getNextTotoProvider('betcity');
 
         $nextToto = $nextTotoProvider->getToto();
 
@@ -40,11 +40,11 @@ class CheckController
 
         if ($remainMinutes !== -1) {
             $this->updateLastBetTotoId($nextToto->getBookMaker(), $nextToto->getId());
-            $this->printOutput($nextToto, $remainMinutes);
+            $this->printOutput($nextToto, $remainMinutes, $nextTotoProvider->getTotoNumber());
         }
     }
 
-    private function printOutput(Toto $toto, int $remainMinutes)
+    private function printOutput(Toto $toto, int $remainMinutes, $totoNumber)
     {
         $this->updateLastBetTotoId($toto->getBookMaker(), $toto->getId());
 
@@ -81,7 +81,7 @@ class CheckController
 
         $totoId = $toto->getId();
 
-        list($totoNumber, $bookMaker) = explode("_", $totoId);
+        list($id, $bookMaker) = explode("_", $totoId);
 
         echo "$totoStartTime $timeToRunScript $timeToRunToto $bookMaker $totoNumber $totoId";
     }
