@@ -49,7 +49,7 @@ class NextTotoProvider implements NextTotoInterface
     {
         $date = new DateTime();
 
-        $dateStr = $date->format('jny');
+        $dateStr = $date->format('jmy');
 
         return $this->totoNumber ? $dateStr.$this->totoNumber : '';
     }
