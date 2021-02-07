@@ -21,9 +21,13 @@ class FileParser
      */
     public static function parseFileWithEvents(string $file) : array
     {
-        $lines = explode("\n", $file);
+        $lines = explode(PHP_EOL, $file);
 
-        $matches = preg_grep('/\d{1,2}\s{2}\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}/', $lines);
+        $matches = preg_grep('/(?:pin|preset)$/', $lines);
+
+        if (!$matches) {
+            $matches = preg_grep('/\d{1,2}\s{2}\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}/', $lines);
+        }
 
         $eventsAssoc = [];
 
@@ -33,19 +37,19 @@ class FileParser
 
             $l = []; $i++;
 
-            preg_match('/\s+(\d{1,2})\s+\d{4}-/i', $m, $l);
+            preg_match('/\s+(\d{1,2})\s+/i', $m, $l);
 
             $number = (int)$l[1];
 
             $l = [];
 
-            preg_match('/.+\s\-\s.+\s{2,}/U', $m, $l);
+            preg_match('/.+\s-\s.+\s{2,}/U', $m, $l);
 
             $title = trim(array_shift($l));
 
             $p = [];
 
-            preg_match('/(0\.\d{1,})\s{1,}(0\.\d{1,})\s{1,}(0\.\d{1,})\s{1,}(\w{1,})/', $m, $p);
+            preg_match('/(0\.\d+)\s+(0\.\d+)\s+(0\.\d+)\s+(\w+)/', $m, $p);
 
             array_shift($p);
 
