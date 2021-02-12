@@ -95,6 +95,10 @@ class BetController extends Controller
 
     private function checkEvents(BetRequest $betRequest)
     {
+        foreach ($betRequest->getEvents() as $event) {
+            if ($event->isCanceled()) return false;
+        }
+
         return true;
     }
 
