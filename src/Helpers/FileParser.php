@@ -29,6 +29,10 @@ class FileParser
             $matches = preg_grep('/\d{1,2}\s{2}\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}/', $lines);
         }
 
+        if (count($matches) == 0) {
+            Logger::getInstance()->log('events_parsing_problem', 'no matches', $file);
+        }
+
         $eventsAssoc = [];
 
         $i = 0;

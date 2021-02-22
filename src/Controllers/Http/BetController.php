@@ -25,9 +25,11 @@ class BetController extends Controller
     {
         $logger = Logger::getInstance();
 
-        $betBuilder = new BetRequestBuilder();
-
         list($totoId, $book) = explode("_", $_REQUEST['toto_id']);
+
+        $this->logBet($totoId);
+
+        $betBuilder = new BetRequestBuilder();
 
         $isTest = isset($_REQUEST['is_test']) ? (bool)$_REQUEST['is_test'] : false;
 
@@ -50,8 +52,6 @@ class BetController extends Controller
         }
 
         $betRequest = $betBuilder->createBetRequest($betRequestProvider);
-
-        $this->logBet($betRequest);
 
         if ($book == "fonbet" && !$this->checkPoolForFonBet($this->getEventsContent())) {
             $this->sendResponse(400, 'do not pass conditions');
@@ -139,9 +139,9 @@ class BetController extends Controller
 
 
 
-    private function logBet(BetRequest $betRequest)
+    private function logBet(string $totoId)
     {
-        $pathToLogs = ROOT_DIR."/log/bet_requests/".$betRequest->getTotoId();
+        $pathToLogs = ROOT_DIR."/log/bet_requests/".$totoId;
 
         if (!is_dir($pathToLogs)) mkdir($pathToLogs,0777, true);
 
