@@ -18,7 +18,7 @@ name                                         name_en                            
 Ланс - Ренн                                  Lens - Rennais                                    9          0.35202  0.30581  0.34217  pin
 Гвинея - Камерун                             Guinea - Cameroon                                10          0.32114  0.35445  0.32441  pin
 Эвертон ВМ - Палестино                       Everton Vina del Mar - Palestino                 11          0.36418  0.26324  0.37258  pin
-Унив. де Чили - Унион Эспаньола              Universidad de Chile - Union Espanola            12          0.42026  0.28683  0.29291  pin
+Унив. де Чили - Унион Эспаньола              Universidad de Chile - Union Espanola 21         12          0.42026  0.28683  0.29291  pin
 Вадуц - Цюрих                                Vaduz - Zurich                                   13          0.32159  0.28809  0.39032  pin
 Скачивание поставленных купонов: 200
 Coupons placed  Last Update: 2021-02-06 18:28:02

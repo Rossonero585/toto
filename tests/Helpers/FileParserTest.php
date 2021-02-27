@@ -20,6 +20,7 @@ class FileParserTest extends TestCase
 
         $arr = $fileParser->parseFileWithEvents(file_get_contents(__DIR__."./../samples/betcity/out2.txt"));
 
+
         $this->assertArraySubset([
             6 => ['p1' => "0.45259", 'px' => "0.29134", 'p2' => "0.25607", 'title' => 'Легия - Ракув', 'source' => 'pin', 'number' => 6],
         ], $arr);
