@@ -67,12 +67,17 @@ class BetController extends Controller
 
         $client = ClientFactory::getClient($book, $totoId, $betRequest->isTest());
 
-        try {
-            $client->makeBet($betRequest->getBets());
+        if (count($betRequest->getBets()) > 0) {
+            try {
+                $client->makeBet($betRequest->getBets());
+            }
+            catch (Throwable $exception) {
+                $logger->log('main', 'Bet was not successful', $exception->getMessage());
+                $this->sendResponse(500, $exception->getMessage());
+            }
         }
-        catch (Throwable $exception) {
-            $logger->log('main', 'Bet was not successful', $exception->getMessage());
-            $this->sendResponse(500, $exception->getMessage());
+        else {
+            $logger->log('main', 'No bets found', 'No bets found');
         }
 
         $betRequestHelper = new BetRequestHelper();
